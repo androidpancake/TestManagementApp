@@ -7,6 +7,7 @@
    <title>Test Management</title>
    <script src="https://unpkg.com/@phosphor-icons/web"></script>
    @vite('resources/js/darkmode.js')
+   @vite(['resources/css/datatables.min.css','resources/js/datatables.min.js'])
    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
    <script src="flowbite/dist/datepicker.js"></script>
 
@@ -22,6 +23,8 @@
       @yield('content')
    </div>
    @stack('test-chart')
+   @stack('add-form')
+
 </body>
 
 </html>

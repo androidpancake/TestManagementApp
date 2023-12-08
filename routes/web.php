@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/', function(){
+Route::get('/', function () {
     return view('dashboard.index');
 });
 
@@ -33,5 +33,16 @@ Route::get('/form3', function () {
     return view('forms.form3');
 });
 
+Route::get('/form4', function () {
+    return view('forms.form4');
+});
+
+Route::get('/form5', function () {
+    return view('forms.form5');
+});
+
+Route::get('/form6', function () {
+    return view('forms.form6');
+});
 
 
