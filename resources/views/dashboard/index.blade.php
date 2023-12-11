@@ -28,7 +28,7 @@
 
                 <div>
 
-                    <button id="dropdownFilter" data-dropdown-toggle="dropdown" class="text-black hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-teal-300 font-base rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Filter
+                    <button id="dropdownFilter" data-dropdown-toggle="dropdown" class="text-black hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-teal-300 font-base rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:text-white dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-blue-800" type="button">Filter
                         <i class="ph ph-faders ms-2"></i>
                     </button>
 
@@ -77,7 +77,7 @@
                                 1
                             </th>
                             <td class="px-6 py-4">
-                                <div class="bg-gray-100 text-center rounded-lg p-2">Silver</div>
+                                <div class="bg-gray-100 text-center rounded-lg p-2 text-gray-900">Silver</div>
                             </td>
                             <td class="px-6 py-4">
                                 Laptop
@@ -120,7 +120,7 @@
             <div class="flex justify-between items-center">
                 <div class="text-md font-medium text-gray-900 dark:text-white">User List</div>
                 <div>
-                    <button id="dropdownFilterUser" data-dropdown-toggle="dropdown-2" class="text-black hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-teal-300 font-base rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:text-gray-100 dark:bg-[#019B95] dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Filter
+                    <button id="dropdownFilterUser" data-dropdown-toggle="dropdown-2" class="text-black hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-teal-300 font-base rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:text-gray-100 dark:bg-[#019B95] dark:hover:bg-teal-700 dark:focus:ring-blue-800" type="button">Filter
                         <i class="ph ph-faders ms-2"></i>
                     </button>
 
@@ -169,7 +169,7 @@
                                 1
                             </th>
                             <td class="px-6 py-4">
-                                <div class="bg-gray-100 text-center rounded-lg p-2">Silver</div>
+                                <div class="bg-gray-100 text-center text-gray-900 rounded-lg p-2">Silver</div>
                             </td>
                             <td class="px-6 py-4">
                                 Laptop

@@ -31,6 +31,62 @@
                         -
                     </td>
                 </tr>
+                <tr class="bg-white dark:bg-gray-800">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Updated UAT
+                    </th>
+                    <td class="px-6 py-4">
+                        <select name="" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-4 focus:ring-teal-300">Select
+                            <option value="" selected>Not Available</option>
+                            <option value="">Available</option>
+                        </select>
+                    </td>
+                    <td class="px-6 py-4">
+                        -
+                    </td>
+                </tr>
+                <tr class="bg-white dark:bg-gray-800">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        UAT Result
+                    </th>
+                    <td class="px-6 py-4">
+                        <select name="" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-4 focus:ring-teal-300">Select
+                            <option value="" selected>Not Available</option>
+                            <option value="">Available</option>
+                        </select>
+                    </td>
+                    <td class="px-6 py-4">
+                        -
+                    </td>
+                </tr>
+                <tr class="bg-white dark:bg-gray-800">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        UAT Attendance
+                    </th>
+                    <td class="px-6 py-4">
+                        <select name="" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-4 focus:ring-teal-300">Select
+                            <option value="" selected>Not Available</option>
+                            <option value="">Available</option>
+                        </select>
+                    </td>
+                    <td class="px-6 py-4">
+                        -
+                    </td>
+                </tr>
+                <tr class="bg-white dark:bg-gray-800">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        Other
+                    </th>
+                    <td class="px-6 py-4">
+                        <select name="" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-4 focus:ring-teal-300">Select
+                            <option value="" selected>Not Available</option>
+                            <option value="">Available</option>
+                        </select>
+                    </td>
+                    <td class="px-6 py-4">
+                        -
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

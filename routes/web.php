@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\auth\AuthUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+
+Route::get('/login', [AuthUserController::class, 'index']);
 
 Route::get('/', function () {
     return view('dashboard.index');
@@ -45,4 +49,12 @@ Route::get('/form6', function () {
     return view('forms.form6');
 });
 
+Route::get('/projects', function () {
+    return view('project.index');
+});
 
+Route::get('/users', function () {
+    return view('user.index');
+});
+
+require __DIR__ . '/auth.php';

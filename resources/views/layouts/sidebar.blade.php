@@ -18,6 +18,14 @@
             </a>
          </li>
          <li>
+            <a href="#" class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-[#F5AB2E] hover:text-gray-900 dark:hover:bg-gray-700 group">
+               <div>
+                  <i class="ph ph-users"></i>
+               </div>
+               <span class="ms-3">Users</span>
+            </a>
+         </li>
+         <li>
             <a href="#" aria-controls="dropdown-sit" data-collapse-toggle="dropdown-sit" class="flex items-center justify-between p-2 text-white rounded-lg dark:text-white hover:bg-[#F5AB2E] hover:text-gray-900 dark:hover:bg-gray-700 group">
                <div>
                   <i class="ph ph-puzzle-piece"></i>
