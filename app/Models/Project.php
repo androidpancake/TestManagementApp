@@ -16,6 +16,20 @@ class Project extends Model
         'jira_code',
         'start_date',
         'end_date',
+        'desc',
+        'scope',
+        'sat_process',
+        'retesting',
+        'tmp',
+        'uat_result',
+        'other',
+        'env',
+        'type',
         'user_id'
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

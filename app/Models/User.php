@@ -46,27 +46,35 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function roles(){
+    public function roles()
+    {
         return $this->belongsToMany(Roles::class, 'roles_user', 'id', 'role_id');
     }
 
-    public function authorizeRoles($roles){
-        if($this->hasAnyRole($roles)){
+    public function project()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function authorizeRoles($roles)
+    {
+        if ($this->hasAnyRole($roles)) {
             return true;
         }
 
         abort(401, 'This action is unauthorized');
     }
 
-    public function hasAnyRole($roles){
-        if(is_array($roles)){
-            foreach($roles as $role){
-                if($this->hasRole($role)){
+    public function hasAnyRole($roles)
+    {
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if ($this->hasRole($role)) {
                     return true;
                 }
             }
         } else {
-            if($this->hasRole($roles)){
+            if ($this->hasRole($roles)) {
                 return true;
             }
         }
@@ -74,8 +82,9 @@ class User extends Authenticatable
         return false;
     }
 
-    public function hasRole($role){
-        if($this->roles()->where('name', $role)->first()){
+    public function hasRole($role)
+    {
+        if ($this->roles()->where('name', $role)->first()) {
             return true;
         }
 

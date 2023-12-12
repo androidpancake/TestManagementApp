@@ -47,8 +47,11 @@ class Form extends Component
     public function submit()
     {
         $validated = $this->validate([
-            'status' => 'required',
-            'gender' => 'required',
+            'name' => 'required',
+            'jira_code' => 'required',
+            'test_level' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required'
         ]);
 
         /*
