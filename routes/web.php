@@ -19,34 +19,10 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::get('/login', [AuthUserController::class, 'index']);
-
-Route::get('/', function () {
-    return view('dashboard.index');
-});
-
-Route::get('/form1', function () {
-    return view('forms.form1');
-});
-
-Route::get('/form2', function () {
-    return view('forms.form2');
-});
-
-Route::get('/form3', function () {
-    return view('forms.form3');
-});
-
-Route::get('/form4', function () {
-    return view('forms.form4');
-});
-
-Route::get('/form5', function () {
-    return view('forms.form5');
-});
-
-Route::get('/form6', function () {
-    return view('forms.form6');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('dashboard.index');
+    });
 });
 
 Route::get('/projects', function () {
@@ -58,3 +34,5 @@ Route::get('/users', function () {
 });
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/project.php';
+require __DIR__ . '/admin.php';

@@ -13,23 +13,10 @@
         </a>
       </div>
       <div class="flex items-center">
-        <div class="flex items-center gap-3 ms-3">
-          <div>
-            <button id="theme-toggle" type="button" class="text-yellow-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
-              <i id="theme-toggle-light-icon" class="ph ph-sun-dim hidden"></i>
-              <i id="theme-toggle-dark-icon" class="ph ph-moon hidden"></i>
-            </button>
-          </div>
-
-
-          <a href="{{ url('login') }}" class="px-2 py-2.5 rounded-lg font-medium text-sm text-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-100">Login</a>
-
-        </div>
-        
         @auth
-        <div class="font-medium text-sm text-gray-800 dark:text-gray-100">{{ auth()->user()->name }}</div>
+        <div class="font-medium text-sm text-gray-800 dark:text-gray-100">{{ auth()->user()->roles->first()->name }}</div>
         <div>
-          <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+          <button type="button" class="flex ms-2 text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
             <span class="sr-only">Open user menu</span>
             <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
           </button>
@@ -45,12 +32,24 @@
           </div>
           <ul class="py-1" role="none">
             <li>
-              <a href="#" class="block px-4 py-2 text-sm text-red-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
+              <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="w-full px-4 py-2 text-sm text-red-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</button>
+              </form>
             </li>
           </ul>
         </div>
-        @endauth
-        
+        <div class="flex items-center gap-3 ms-3 order-first">
+          @else
+          <a href="{{ url('login') }}" class="px-2 py-2.5 rounded-lg font-medium text-sm text-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-100">Login</a>
+          @endauth
+          <div class="order-first">
+            <button id="theme-toggle" type="button" class="text-yellow-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+              <i id="theme-toggle-light-icon" class="ph ph-sun-dim hidden"></i>
+              <i id="theme-toggle-dark-icon" class="ph ph-moon hidden"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

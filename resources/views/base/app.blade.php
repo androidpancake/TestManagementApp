@@ -8,6 +8,8 @@
    <script src="https://unpkg.com/@phosphor-icons/web"></script>
    @vite('resources/js/darkmode.js')
    @vite(['resources/css/datatables.min.css','resources/js/datatables.min.js'])
+   @vite(['dist/datepicker.min.js'])
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
    <script src="flowbite/dist/datepicker.js"></script>
 
