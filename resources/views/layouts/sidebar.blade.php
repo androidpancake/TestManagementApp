@@ -41,7 +41,7 @@
             </a>
             <ul id="dropdown-sit" class="hidden py-2 space-y-2">
                <li>
-                  <a href="{{ url('/form1') }}" class="flex items-center w-full p-2 text-white transition duration-75 rounded-lg pl-11 group hover:bg-[#F5AB2E] hover:text-black dark:text-white dark:hover:bg-gray-700">
+                  <a href="{{ url('sit/form') }}" class="flex items-center w-full p-2 text-white transition duration-75 rounded-lg pl-11 group hover:bg-[#F5AB2E] hover:text-black dark:text-white dark:hover:bg-gray-700">
                      <i class="ph ph-file-text"></i>
                      <span class="ms-3">Form Report</span>
                   </a>

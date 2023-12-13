@@ -20,6 +20,12 @@ class ProjectSeeder extends Seeder
             'jira_code' => 'AABBCC',
             'start_date' => Carbon::parse('2023-12-11'),
             'end_date' => Carbon::parse('2023-12-13'),
+            'desc' => '',
+            'scope' => '',
+            'issue' => '',
+            'credentials' => '',
+            'sat_process' => '',
+            'retesting' => '',
             'user_id' => 1
         ]);
     }
