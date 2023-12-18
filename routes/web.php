@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\auth\AuthUserController;
+use App\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('dashboard.index');
     });
+
+    Route::get('/dashboard', Dashboard::class);
 });
 
 Route::get('/projects', function () {

@@ -4,45 +4,64 @@ namespace App\Livewire;
 
 use App\Models\Members;
 use App\Models\Project;
+use App\Models\TestLevel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
 class Form extends Component
 {
-    public $users = [];
-    public $test_lv_value = "Business Functionality";
+    public $users = [
+        'user_name', 'unit', 'telephone'
+    ];
     public $currentStep = 1;
     public $total_steps = 6;
     public $name;
     public $jira_code;
     public $test_level;
+    public $test_type;
     public $start_date;
     public $end_date;
     public $desc;
     public $scope;
     public $env;
+    public $sat_process;
     public $issue;
     public $credentials;
+    public $retesting;
     public $other;
     public $user_name;
     public $unit;
     public $telephone;
     public $project_id;
+    public $test_lv;
+    public $status;
+
 
     public function mount()
     {
-        $this->project_id = DB::table('project')->latest('id')->first();
-        $this->name = old('name');
-        $this->jira_code = old('jira_code');
-        $this->test_level = old('test_level');
-        $this->start_date = old('start_date');
-        $this->end_date = old('end_date');
-        $this->desc = old('desc');
-        $this->scope = old('scope');
-        $this->issue = old('issue');
-        $this->credentials = old('credentials');
-        $this->other = old('others');
-        $this->test_lv_value = $this->test_lv_value;
+        $this->test_lv = TestLevel::all();
+        $this->project_id;
+        $this->name;
+        $this->jira_code;
+        $this->test_level;
+        $this->test_type = 'Business Functionality';
+        $this->start_date;
+        $this->end_date;
+        $this->desc;
+        $this->scope;
+        $this->env;
+        $this->sat_process;
+        $this->issue;
+        $this->credentials;
+        $this->retesting;
+        $this->other;
+        $this->user_name;
+        $this->unit;
+        $this->telephone;
+        $this->status = 'Not Generated';
         $this->render();
     }
 
@@ -57,6 +76,7 @@ class Form extends Component
     public function incrementSteps()
     {
         $this->validateForm();
+
         if ($this->currentStep < $this->total_steps) {
             $this->currentStep++;
         }
@@ -72,7 +92,7 @@ class Form extends Component
     public function addUser()
     {
         $this->users[] = [
-            'name' => '',
+            'user_name' => '',
             'unit' => '',
             'telephone' => ''
         ];
@@ -89,10 +109,11 @@ class Form extends Component
 
     public function save_data_project()
     {
-        Project::create([
+        $project = Project::create([
             'name' => $this->name,
             'jira_code' => $this->jira_code,
             'test_level' => $this->test_level,
+            'test_type' => $this->test_type,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'user_id' => auth()->id(),
@@ -101,30 +122,46 @@ class Form extends Component
             'issue' => $this->issue,
             'credentials' => $this->credentials,
             'env' => $this->env,
-            'other' => $this->other
+            'sat_process' => $this->sat_process,
+            'retesting' => $this->retesting,
+            'other' => $this->other,
+            'status' => $this->status
         ]);
+
+        session(['project_id' => $project->id]);
 
         return $this->incrementSteps();
     }
 
-    public function submit()
+    public function save_members(Request $request)
     {
-        // $validated = $this->validate([
-        //     'name' => 'required',
-        //     'jira_code' => 'required',
-        //     'test_level' => 'required',
-        //     'start_date' => 'required',
-        //     'end_date' => 'required'
-        // ]);
+        // Log::info($user);
+        $data = [];
+        foreach ($this->users as $user) {
+            $data[] = [
+                'project_id' => session('project_id'),
+                'user_name' => $this['user_name'],
+                'unit' => $this['unit'],
+                'telephone' => $this['telephone']
+            ];
+        }
 
-        Members::create([
-            'project_id' => $this->project_id + 1,
-            'name' => $this->user_name,
-            'unit' => $this->unit,
-            'telephone' => $this->telephone
-        ]);
+        dd($data);
+        Members::create($data);
 
-        return redirect()->route('sit.index');
+        // dd($data);
+
+        return $this->incrementSteps();
+    }
+
+    public function save_test()
+    {
+        //test logic
+    }
+
+    public function generate()
+    {
+        //generate word
     }
 
     public function validateForm()
@@ -133,6 +170,7 @@ class Form extends Component
             $validated = $this->validate([
                 'name' => 'required',
                 'jira_code' => 'required',
+                'test_type' => 'required',
                 'test_level' => 'required',
                 'start_date' => 'required',
                 'end_date' => 'required'
@@ -147,14 +185,14 @@ class Form extends Component
                 'env' => 'required',
                 'issue' => 'required',
                 'credentials' => 'required',
+                'retesting' => 'required',
                 'other' => 'nullable'
             ]);
         } elseif ($this->currentStep === 4) {
             $validated = $this->validate([
-                'name' => 'required',
-                'unit' => 'required',
-                'telephone' => 'required',
-                'project_id' => 'required'
+                'users. * .user_name' => 'required',
+                'users. * .unit' => 'required',
+                'users. * .telephone' => 'required|numeric',
             ]);
         } elseif ($this->currentStep === 5) {
             $validated = $this->validate([

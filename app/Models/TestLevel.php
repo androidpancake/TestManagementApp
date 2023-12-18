@@ -5,16 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Members extends Model
+class TestLevel extends Model
 {
     use HasFactory;
 
-    protected $table = 'members';
+    protected $table = 'test_levels';
 
     protected $fillable = [
-        'user_name',
-        'unit',
-        'telephone',
-        'project_id'
+        'type'
     ];
 }

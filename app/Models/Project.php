@@ -14,10 +14,14 @@ class Project extends Model
     protected $fillable = [
         'name',
         'jira_code',
+        'test_level',
+        'test_type',
         'start_date',
         'end_date',
         'desc',
         'scope',
+        'issue',
+        'credentials',
         'sat_process',
         'retesting',
         'tmp',
@@ -25,6 +29,7 @@ class Project extends Model
         'other',
         'env',
         'type',
+        'members',
         'user_id'
     ];
 
