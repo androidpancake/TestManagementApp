@@ -19,10 +19,7 @@
         <div class="lg:w-full bg-white rounded-lg dark:bg-gray-800 p-4">
             <!-- header -->
             <div class="flex justify-end items-center">
-                <!-- <livewire:head title="Project" description="Selamat Datang" /> -->
-
                 <div>
-
                     <button id="dropdownFilter" data-dropdown-toggle="dropdown" class="text-black hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-teal-300 font-base rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:text-white dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-blue-800" type="button">Filter
                         <i class="ph ph-faders ms-2"></i>
                     </button>
@@ -53,6 +50,7 @@
         </div>
     </div>
 
+    @if(auth()->user()->roles->first()->name === 'ADMIN')
     <!-- section2 -->
     <div class="flex flex-col gap-2 lg:flex-row">
         <!-- summary -->
@@ -144,6 +142,7 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 <script>
     document.addEventListener('livewire:init', () => {

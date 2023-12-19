@@ -1,4 +1,4 @@
-<div class="h-screen">
+<div class="h-fit">
     <livewire:head title="Project" description="Selamat Datang" />
 
     <div class="mt-4 relative overflow-x-auto shadow-md sm:rounded-lg">

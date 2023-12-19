@@ -11,7 +11,7 @@ class DetailProject extends Component
 
     public function mount($id)
     {
-        $this->project = Project::find($id);
+        $this->project = Project::with(['members'])->find($id);
     }
     public function render()
     {

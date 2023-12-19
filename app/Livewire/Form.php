@@ -13,9 +13,8 @@ use Livewire\Component;
 
 class Form extends Component
 {
-    public $users = [
-        'user_name', 'unit', 'telephone'
-    ];
+    public $i = 0;
+    public $users;
     public $currentStep = 1;
     public $total_steps = 6;
     public $name;
@@ -38,10 +37,12 @@ class Form extends Component
     public $project_id;
     public $test_lv;
     public $status;
-
+    public $scenarios;
 
     public function mount()
     {
+        $this->users = [];
+        $this->scenarios = [];
         $this->test_lv = TestLevel::all();
         $this->project_id;
         $this->name;
@@ -96,15 +97,12 @@ class Form extends Component
             'unit' => '',
             'telephone' => ''
         ];
-
-        $this->render();
     }
 
     public function removeUser($index)
     {
         unset($this->users[$index]);
         $this->users = array_values($this->users);
-        $this->render();
     }
 
     public function save_data_project()
@@ -133,25 +131,44 @@ class Form extends Component
         return $this->incrementSteps();
     }
 
-    public function save_members(Request $request)
+    public function save_members()
     {
-        // Log::info($user);
-        $data = [];
-        foreach ($this->users as $user) {
-            $data[] = [
-                'project_id' => session('project_id'),
-                'user_name' => $this['user_name'],
-                'unit' => $this['unit'],
-                'telephone' => $this['telephone']
-            ];
+        if (is_array($this->users)) {
+            foreach ($this->users as $user) {
+                Members::create([
+                    'project_id' => session('project_id'),
+                    'user_name' => $user['user_name'],
+                    'unit' => $user['unit'],
+                    'telephone' => $user['telephone']
+                ]);
+            }
         }
 
-        dd($data);
-        Members::create($data);
-
-        // dd($data);
+        $this->users = [];
 
         return $this->incrementSteps();
+    }
+
+    public function addScenario()
+    {
+        $this->scenarios[] = [
+            'scenario_name' => '',
+        ];
+    }
+
+    public function addTestCase()
+    {
+        //
+    }
+
+    public function addTestStep()
+    {
+        //
+    }
+
+    public function removeScenario()
+    {
+        //
     }
 
     public function save_test()
@@ -190,14 +207,13 @@ class Form extends Component
             ]);
         } elseif ($this->currentStep === 4) {
             $validated = $this->validate([
-                'users. * .user_name' => 'required',
-                'users. * .unit' => 'required',
-                'users. * .telephone' => 'required|numeric',
+                'users.*.user_name' => 'required',
+                'users.*.unit' => 'required',
+                'users.*.telephone' => 'required|numeric',
             ]);
         } elseif ($this->currentStep === 5) {
             $validated = $this->validate([
                 'scenario_name' => 'required',
-                'project_id' => 'required',
             ]);
         }
     }
