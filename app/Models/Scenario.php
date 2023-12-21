@@ -15,4 +15,14 @@ class Scenario extends Model
         'scenario_name',
         'project_id'
     ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
+
+    public function case()
+    {
+        return $this->hasMany(TestCase::class, 'test_id');
+    }
 }

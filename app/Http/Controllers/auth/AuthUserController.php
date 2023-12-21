@@ -26,7 +26,7 @@ class AuthUserController extends Controller
         $remember_me = $request->has('remember') ? true : false;
 
         if (Auth::attempt($credentials, $remember_me)) {
-            return redirect()->intended('/');
+            return redirect()->intended('/dashboard');
         }
 
 

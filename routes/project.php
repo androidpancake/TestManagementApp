@@ -21,7 +21,7 @@ Route::get('sit/create', [SitController::class, 'create'])->name('sit.create');
 
 Route::middleware(['auth', 'role:user'])->group(
     function () {
-        Route::get('project', Project::class);
+        Route::get('project', Project::class)->name('project');
         Route::get('project/detail/{id}', DetailProject::class);
         Route::get('sit', [SitController::class, 'index'])->name('sit.index');
         Route::get('sit/form', Form::class);

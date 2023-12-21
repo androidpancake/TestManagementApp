@@ -174,9 +174,13 @@
             <i class="ph ph-plus"></i>
             <span>Tambah Skenario</span>
         </button>
-        <button wire:click="add" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
+        <button wire:click="addTestCase" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
             <i class="ph ph-plus"></i>
             <span>Tambah Test Case</span>
+        </button>
+        <button wire:click="addTestStep" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
+            <i class="ph ph-plus"></i>
+            <span>Tambah Test Step</span>
         </button>
     </div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -188,6 +192,9 @@
                     </th>
                     <th scope="col" class="px-16 py-3">
                         Scenario
+                    </th>
+                    <th scope="col" class="px-16 py-3">
+                        Test Case
                     </th>
                     <th scope="col" class="px-12 py-3">
                         Test Step ID
@@ -221,40 +228,52 @@
                         {{ $i++ }}
                     </th>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" />
+                        <input type="text" wire:model="scenarios.{{ $index }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" />
                     </td>
-                    <td class="px-6 py-4">
-                        <input type="text" w    ire:model="test_case_id" class="w-full rounded border border-gray-300" value="">
-                    </td>
-                    <td class="px-6 py-4">
-                        <textarea wire:model="test_step" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100"></textarea>
-                    </td>
-                    <td class="px-6 py-4">
-                        <textarea wire:model="expected" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100"></textarea>
-                    </td>
-                    <td class="px-6 py-4">
-                        <select wire:model="" id="" class="w-full bg-white border border-gray-200 rounded-lg">
-                            <option value="">Positive</option>
-                            <option value="">negative</option>
-                        </select>
-                    </td>
-                    <td class="px-6 py-4">
-                        <select wire:model="" id="" class="w-full bg-white border border-gray-200 rounded-lg">
-                            <option value="">High</option>
-                            <option value="">Medium</option>
-                            <option value="">Low</option>
-                        </select>
-                    </td>
-                    <td class="px-6 py-4">
-                        <select wire:model="" id="" class="w-full bg-white border border-gray-200 rounded-lg">
-                            <option value="">Passed</option>
-                            <option value="">Failed</option>
-                        </select>
-                    </td>
+                    @foreach($this->cases as $tc => $case)
+                    <div wire:key="{{ $tc }}">
+                        <td class="px-6 py-4">
+                            <input type="text" wire:model="cases.{{ $tc }}.case" class="w-full rounded border border-gray-300" value="">
+                        </td>
+                    </div>
+                    @endforeach
+                    @foreach($this->steps as $ts => $step)
+                    <div wire:key="{{ $ts }}">
+                        <td class="px-6 py-4">
+                            <input type="text" wire:model="steps.{{ $ts }}.test_step_id" class="w-full rounded border border-gray-300" value="">
+                        </td>
+                        <td class="px-6 py-4">
+                            <textarea wire:model="steps.{{$ts}}.test_step" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100"></textarea>
+                        </td>
+                        <td class="px-6 py-4">
+                            <textarea wire:model="steps.{{ $ts }}.expected_result" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100"></textarea>
+                        </td>
+                        <td class="px-6 py-4">
+                            <select wire:model="steps.{{ $ts }}.category" id="" class="w-full bg-white border border-gray-200 rounded-lg">
+                                <option value="">Positive</option>
+                                <option value="">negative</option>
+                            </select>
+                        </td>
+                        <td class="px-6 py-4">
+                            <select wire:model="steps.{{ $ts }}.severity" id="" class="w-full bg-white border border-gray-200 rounded-lg">
+                                <option value="">High</option>
+                                <option value="">Medium</option>
+                                <option value="">Low</option>
+                            </select>
+                        </td>
+                        <td class="px-6 py-4">
+                            <select wire:model="steps.{{ $ts }}.status" id="" class="w-full bg-white border border-gray-200 rounded-lg">
+                                <option value="">Passed</option>
+                                <option value="">Failed</option>
+                            </select>
+                        </td>
+                    </div>
+                    @endforeach
                     <td class="inline-flex gap-2 px-6 py-4">
-                        <button wire:click="" href="#" class="bg-red-400 px-2.5 py-2 rounded-full hover:bg-red-600 focus:ring-4 focus:ring-red-300">
+                        <!-- <button wire:click="removeScenario({{ $index }})" class="bg-red-400 px-2.5 py-2 rounded-full hover:bg-red-600 focus:ring-4 focus:ring-red-300 dark:bg-red-800">
                             <i class="ph ph-minus w-4 h-4 text-white"></i>
-                        </button>
+                            Del. Scenario
+                        </button> -->
                     </td>
                 </tr>
                 @endforeach
@@ -283,27 +302,27 @@
                         TMP
                     </th>
                     <td class="px-6 py-4">
-                        <select name="" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
-                            <option value="" selected>Not Available</option>
-                            <option value="">Available</option>
+                        <select wire:model="tmp" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                            <option value="Not Available" selected>Not Available</option>
+                            <option value="Available">Available</option>
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" name="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="row" wire:model="updated_uat" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         Updated UAT
                     </th>
                     <td class="px-6 py-4">
-                        <select name="" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
-                            <option value="" selected>Not Available</option>
-                            <option value="">Available</option>
+                        <select wire:model="updated_uat" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                            <option value="Not Available" selected>Not Available</option>
+                            <option value="Available">Available</option>
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" name="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -311,13 +330,13 @@
                         UAT Result
                     </th>
                     <td class="px-6 py-4">
-                        <select name="" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
-                            <option value="" selected>Not Available</option>
-                            <option value="">Available</option>
+                        <select wire:model="uat_result" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                            <option value="Not Available" selected>Not Available</option>
+                            <option value="Available">Available</option>
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" name="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -325,13 +344,13 @@
                         UAT Attendance
                     </th>
                     <td class="px-6 py-4">
-                        <select name="" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
-                            <option value="" selected>Not Available</option>
-                            <option value="">Available</option>
+                        <select wire:model="uat_attendance" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                            <option value="Not Available" selected>Not Available</option>
+                            <option value="Available">Available</option>
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" name="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -339,13 +358,13 @@
                         Other
                     </th>
                     <td class="px-6 py-4">
-                        <select name="" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
-                            <option value="" selected>Not Available</option>
-                            <option value="">Available</option>
+                        <select wire:model="other" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                            <option value="Not Available" selected>Not Available</option>
+                            <option value="Available">Available</option>
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" name="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
             </tbody>
@@ -358,9 +377,12 @@
         <button wire:click="decrementSteps" class="order-first bg-gray-800 px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Previous</button>
         @endif
 
-        @if($currentStep < $total_steps) @if($currentStep===3) <button wire:click="save_data_project" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Create Project & Next</button>
+        @if($currentStep < $total_steps) @if($currentStep===3) <button wire:click="incrementSteps" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Create Project & Next</button>
             @elseif($currentStep===4)
-            <button wire:click="save_members" type="submit" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Add Members & Next</button>
+            <button wire:click="incrementSteps" type="submit" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Add Members & Next</button>
+            @elseif($currentStep===5)
+            <button wire:click="incrementSteps" type="submit" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Save Test & Next</button>
+
             @else
             <button wire:click="incrementSteps" class="order-last bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Next</button>
             @endif
@@ -368,7 +390,7 @@
             @endif
 
             @if($currentStep === $total_steps)
-            <button wire:click="submit" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
+            <button wire:click="save_data_project" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
             @endif
     </div>
     <!-- </form> -->

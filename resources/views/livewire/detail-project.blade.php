@@ -121,10 +121,30 @@
     </section>
 
     <section>
-        <livewire:head title="Members" />
-        <div class="flex flex-col gap-2">
-            @foreach($project->members as $data)
-            <p>{{ $data->name }}</p>
+        <livewire:head title="Members" description="Anggota" />
+        <div class="flex flex-row gap-2 mt-4">
+            @foreach($members as $data)
+            <div class="mb-5 w-full">
+                <label for="name-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
+                <input type="text" value="{{ $data->user_name }}" wire:model=" id=" name-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
+                @error('user_name')
+                <span class="text-red-800">{{$message}}</span>
+                @enderror
+            </div>
+            <div class="mb-5 w-full">
+                <label for="unit-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unit</label>
+                <input type="text" value="{{ $data->unit }}" wire:model="" id="unit-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
+                @error('unit')
+                <span class="text-red-800">{{$message}}</span>
+                @enderror
+            </div>
+            <div class="mb-5 w-full">
+                <label for="telephone-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Telephone</label>
+                <input type="number" value="{{ $data->telephone }}" wire:model="" id="telephone-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
+                @error('telephone')
+                <span class="text-red-800">{{$message}}</span>
+                @enderror
+            </div>
             @endforeach
         </div>
     </section>

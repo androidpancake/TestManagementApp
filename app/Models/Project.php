@@ -24,12 +24,15 @@ class Project extends Model
         'credentials',
         'sat_process',
         'retesting',
+        'env',
+        'members',
         'tmp',
+        'expected_result',
+        'updated_uat',
+        'uat_attendance',
         'uat_result',
         'other',
-        'env',
-        'type',
-        'members',
+        'remarks',
         'user_id'
     ];
 
@@ -40,6 +43,6 @@ class Project extends Model
 
     public function members()
     {
-        return $this->hasMany(Members::class, 'project_id', 'id');
+        return $this->hasMany(Members::class, 'project_id');
     }
 }

@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use App\Models\Members;
 use App\Models\Project;
+use App\Models\Scenario;
+use App\Models\TestCase;
 use App\Models\TestLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,11 +40,36 @@ class Form extends Component
     public $test_lv;
     public $status;
     public $scenarios;
+    public $cases;
+    public $steps;
+    public $test_step_id;
+    public $test_step;
+    public $case_id;
+    public $test_id;
+    public $tmp;
+    public $updated_uat;
+
+    public $scenario_name;
+    public $case;
+    public $expected_result;
+    public $uat_attendance;
+    public $uat_result;
+    public $remarks;
+    public $category;
+    public $severity;
+    public $test_status;
+    public $row;
+
+
 
     public function mount()
     {
         $this->users = [];
+        $this->row = [];
         $this->scenarios = [];
+        $this->cases = [];
+        $this->steps = [];
+        $this->remarks = [];
         $this->test_lv = TestLevel::all();
         $this->project_id;
         $this->name;
@@ -81,6 +108,8 @@ class Form extends Component
         if ($this->currentStep < $this->total_steps) {
             $this->currentStep++;
         }
+
+        $this->save_temporary_data();
     }
 
     public function decrementSteps()
@@ -105,6 +134,79 @@ class Form extends Component
         $this->users = array_values($this->users);
     }
 
+    public function save_temporary_data()
+    {
+        //project
+        session()->put('name', $this->name);
+        session()->put('jira_code', $this->jira_code);
+        session()->put('test_level', $this->test_level);
+        session()->put('test_type', $this->name);
+        session()->put('start_date', $this->start_date);
+        session()->put('end_date', $this->end_date);
+        session()->put('desc', $this->desc);
+        session()->put('scope', $this->scope);
+        session()->put('env', $this->env);
+        session()->put('issue', $this->issue);
+        session()->put('credentials', $this->credentials);
+        session()->put('other', $this->other);
+        session()->put('sat_process', $this->sat_process);
+        session()->put('retesting', $this->retesting);
+        session()->put('tmp', $this->tmp);
+        session()->put('updated_uat', $this->updated_uat);
+        session()->put('uat_attendance', $this->uat_attendance);
+        session()->put('uat_result', $this->uat_result);
+        session()->put('other', $this->other);
+        session()->put('remarks', $this->remarks);
+
+        //members
+        if (is_array($this->users)) {
+            foreach ($this->users as $user) {
+                session()->put([
+                    'project_id' => session('project_id'),
+                    'user_name' => $user['user_name'],
+                    'unit' => $user['unit'],
+                    'telephone' => $user['telephone']
+                ]);
+            }
+        }
+
+        //test
+
+        // dd($this->scenarios);
+        if (is_array($this->scenarios)) {
+            foreach ($this->scenarios as $scenario) {
+                // $test_id = $scene['id'];
+
+                session()->put($this->scenario_name, $scenario['scenario_name']);
+
+                if (is_array($this->cases)) {
+                    foreach ($this->cases as $case) {
+                        session()->put([
+                            'case' => $case['case'],
+                        ]);
+
+                        // $caseId = $case->id;
+                        // session()->put('case_id');
+                    }
+
+
+                    if (is_array($this->steps)) {
+                        foreach ($this->steps as $step) {
+                            session()->push('steps', [
+                                'test_step_id' => $step['test_step_id'],
+                                'test_step' => $step['test_step'],
+                                'expected_result' => $step['expected_result'],
+                                'category' => $step['category'],
+                                'severity' => $step['severity'],
+                                'status' => $step['status'],
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public function save_data_project()
     {
         $project = Project::create([
@@ -123,12 +225,64 @@ class Form extends Component
             'sat_process' => $this->sat_process,
             'retesting' => $this->retesting,
             'other' => $this->other,
-            'status' => $this->status
+            'status' => $this->status,
+            'tmp' => $this->tmp,
+            'updated_uat' => $this->updated_uat,
+            'uat_attendance' => $this->uat_attendance,
+            'uat_result' => $this->uat_result,
+            'remarks' => $this->remarks,
+            'status' => 'Generated'
         ]);
 
         session(['project_id' => $project->id]);
 
-        return $this->incrementSteps();
+        if (is_array($this->users)) {
+            foreach ($this->users as $user) {
+                Members::create([
+                    'project_id' => session('project_id'),
+                    'user_name' => $user['user_name'],
+                    'unit' => $user['unit'],
+                    'telephone' => $user['telephone']
+                ]);
+            }
+        }
+
+        if (is_array($this->scenarios)) {
+            foreach ($this->scenarios as $scene) {
+
+                $newScenario = Scenario::create([
+                    'project_id' => session('project_id'),
+                    'scenario_name' => $scene['scenario_name'],
+                ]);
+
+                session(['test_id' => $newScenario->id]);
+
+                if (is_array($this->cases)) {
+                    foreach ($this->cases as $case) {
+                        $newScenario->case()->create([
+                            'case' => $case['case'],
+                            'test_id' => session('test_id')
+                        ]);
+
+                        if (is_array($this->steps)) {
+                            foreach ($this->steps as $step) {
+                                $newScenario->case()->step()->create([
+                                    'test_step_id' => $step['test_step_id'],
+                                    'test_step' => $step['test_step'],
+                                    'expected_result' => $step['expected_result'],
+                                    'category' => $step['category'],
+                                    'severity' => $step['severity'],
+                                    'status' => $step['status'],
+                                    'case_id' => session('case_id')
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return redirect()->route('project');
     }
 
     public function save_members()
@@ -144,7 +298,7 @@ class Form extends Component
             }
         }
 
-        $this->users = [];
+        // dd($this->users);
 
         return $this->incrementSteps();
     }
@@ -158,22 +312,61 @@ class Form extends Component
 
     public function addTestCase()
     {
-        //
+        $this->cases[] = [
+            'case' => ''
+        ];
     }
 
     public function addTestStep()
     {
-        //
+        $this->steps[] = [
+            'test_step' => '',
+            'expected_result' => '',
+            'category' => '',
+            'severity ' => '',
+            'test_status ' => '',
+        ];
     }
 
-    public function removeScenario()
+    public function removeScenario($index)
     {
-        //
+        unset($this->scenarios[$index]);
+        $this->scenarios = array_values($this->scenarios);
+    }
+
+    public function removeCase($tc)
+    {
+        unset($this->cases[$tc]);
+        $this->cases = array_values($this->cases);
+    }
+
+    public function removeStep($ts)
+    {
+        unset($this->steps[$ts]);
+        $this->steps = array_values($this->steps);
     }
 
     public function save_test()
     {
-        //test logic
+        if (is_array($this->scenarios)) {
+            foreach ($this->scenarios as $scene) {
+
+                $newScenario = Scenario::create([
+                    'project_id' => session('project_id'),
+                    'scenario_name' => $scene['scenario_name'],
+                ]);
+
+                if (is_array($this->cases)) {
+                    foreach ($this->cases as $case) {
+                        $newScenario->case()->create([
+                            'case' => $case['case']
+                        ]);
+                    }
+                }
+            }
+        }
+
+        return $this->incrementSteps();
     }
 
     public function generate()
@@ -213,7 +406,17 @@ class Form extends Component
             ]);
         } elseif ($this->currentStep === 5) {
             $validated = $this->validate([
-                'scenario_name' => 'required',
+                'scenarios.*.scenario_name' => 'required',
+                'cases.*.case' => 'required'
+            ]);
+        } elseif ($this->currentStep === 6) {
+            $validated = $this->validate([
+                'tmp' => 'required',
+                'updated_uat' => 'required',
+                'uat_result' => 'required',
+                'uat_attendance' => 'required',
+                'other' => 'required',
+                'remarks' => 'nullable'
             ]);
         }
     }
