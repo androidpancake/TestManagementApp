@@ -12,6 +12,7 @@ class Scenario extends Model
     protected $table = 'scenarios';
 
     protected $fillable = [
+        'id',
         'scenario_name',
         'project_id'
     ];

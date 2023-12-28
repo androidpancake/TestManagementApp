@@ -223,58 +223,79 @@
                 $i = 1;
                 @endphp
                 @foreach($this->scenarios as $index => $scenario)
-                <tr wire:key="{{ $index }}" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{ $i++ }}
-                    </th>
-                    <td class="px-6 py-4">
-                        <input type="text" wire:model="scenarios.{{ $index }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" />
-                    </td>
+                <tr>
+                    <div wire:key="{{ $index }}" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ $i++ }}
+                        </th>
+                        <td class="px-6 py-4">
+                            <input type="text" wire:model="scenarios.{{ $index }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" />
+                            @error('scenario_name')
+                            <span class="text-red-800">{{$message}}</span>
+                            @enderror
+                        </td>
+                    </div>
                     @foreach($this->cases as $tc => $case)
                     <div wire:key="{{ $tc }}">
                         <td class="px-6 py-4">
                             <input type="text" wire:model="cases.{{ $tc }}.case" class="w-full rounded border border-gray-300" value="">
                         </td>
+                        @error('case')
+                        <span class="text-red-800">{{$message}}</span>
+                        @enderror
                     </div>
-                    @endforeach
                     @foreach($this->steps as $ts => $step)
                     <div wire:key="{{ $ts }}">
                         <td class="px-6 py-4">
                             <input type="text" wire:model="steps.{{ $ts }}.test_step_id" class="w-full rounded border border-gray-300" value="">
+                            @error('test_step_id')
+                            <span class="text-red-800">{{$message}}</span>
+                            @enderror
                         </td>
                         <td class="px-6 py-4">
                             <textarea wire:model="steps.{{$ts}}.test_step" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100"></textarea>
+                            @error('test_step')
+                            <span class="text-red-800">{{$message}}</span>
+                            @enderror
                         </td>
                         <td class="px-6 py-4">
                             <textarea wire:model="steps.{{ $ts }}.expected_result" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100"></textarea>
+                            @error('expected_result')
+                            <span class="text-red-800">{{$message}}</span>
+                            @enderror
                         </td>
                         <td class="px-6 py-4">
                             <select wire:model="steps.{{ $ts }}.category" id="" class="w-full bg-white border border-gray-200 rounded-lg">
-                                <option value="">Positive</option>
-                                <option value="">negative</option>
+                                <option value="positive">Positive</option>
+                                <option value="negative">negative</option>
                             </select>
+                            @error('category')
+                            <span class="text-red-800">{{$message}}</span>
+                            @enderror
                         </td>
                         <td class="px-6 py-4">
                             <select wire:model="steps.{{ $ts }}.severity" id="" class="w-full bg-white border border-gray-200 rounded-lg">
-                                <option value="">High</option>
-                                <option value="">Medium</option>
-                                <option value="">Low</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
                             </select>
+                            @error('severity')
+                            <span class="text-red-800">{{$message}}</span>
+                            @enderror
                         </td>
                         <td class="px-6 py-4">
                             <select wire:model="steps.{{ $ts }}.status" id="" class="w-full bg-white border border-gray-200 rounded-lg">
-                                <option value="">Passed</option>
-                                <option value="">Failed</option>
+                                <option value="passed">Passed</option>
+                                <option value="failed">Failed</option>
                             </select>
+                            @error('status')
+                            <span class="text-red-800">{{$message}}</span>
+                            @enderror
                         </td>
                     </div>
+
                     @endforeach
-                    <td class="inline-flex gap-2 px-6 py-4">
-                        <!-- <button wire:click="removeScenario({{ $index }})" class="bg-red-400 px-2.5 py-2 rounded-full hover:bg-red-600 focus:ring-4 focus:ring-red-300 dark:bg-red-800">
-                            <i class="ph ph-minus w-4 h-4 text-white"></i>
-                            Del. Scenario
-                        </button> -->
-                    </td>
+                    @endforeach
                 </tr>
                 @endforeach
             </tbody>
@@ -322,7 +343,7 @@
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -336,7 +357,7 @@
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -369,6 +390,7 @@
                 </tr>
             </tbody>
         </table>
+        <input type="hidden" wire:model="status" value="Generated">
     </div>
     @endif
 

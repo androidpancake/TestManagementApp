@@ -9,7 +9,7 @@ class TestStep extends Model
 {
     use HasFactory;
 
-    protected $table = 'test_step';
+    protected $table = 'test_steps';
     protected $fillable = [
         'test_step_id',
         'test_step',
@@ -17,7 +17,11 @@ class TestStep extends Model
         'category',
         'severity',
         'status',
-        'remarks',
         'case_id'
     ];
+
+    public function case()
+    {
+        return $this->belongsTo(TestCase::class, 'case_id');
+    }
 }

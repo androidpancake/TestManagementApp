@@ -20,4 +20,9 @@ class TestCase extends Model
     {
         return $this->belongsTo(Scenario::class, 'test_id');
     }
+
+    public function step()
+    {
+        return $this->hasMany(TestStep::class, 'case_id', 'id');
+    }
 }

@@ -122,29 +122,77 @@
 
     <section>
         <livewire:head title="Members" description="Anggota" />
-        <div class="flex flex-row gap-2 mt-4">
-            @foreach($members as $data)
-            <div class="mb-5 w-full">
-                <label for="name-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
-                <input type="text" value="{{ $data->user_name }}" wire:model=" id=" name-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
-                @error('user_name')
-                <span class="text-red-800">{{$message}}</span>
-                @enderror
+        <div class="flex flex-col gap-2 mt-4">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left rounded rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Nama
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Unit
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Telephone
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($members as $data)
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="px-6 py-4">{{ $data->user_name }}</td>
+                            <td class="px-6 py-4">{{ $data->unit }}</td>
+                            <td class="px-6 py-4">{{ $data->telephone }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-            <div class="mb-5 w-full">
-                <label for="unit-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unit</label>
-                <input type="text" value="{{ $data->unit }}" wire:model="" id="unit-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
-                @error('unit')
-                <span class="text-red-800">{{$message}}</span>
-                @enderror
-            </div>
-            <div class="mb-5 w-full">
-                <label for="telephone-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Telephone</label>
-                <input type="number" value="{{ $data->telephone }}" wire:model="" id="telephone-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
-                @error('telephone')
-                <span class="text-red-800">{{$message}}</span>
-                @enderror
-            </div>
+        </div>
+    </section>
+
+    <section>
+        <livewire:head title="Scenario" description="Scenario, Cases, Steps" />
+        <div class="relative overflow-x-auto shadow-md sm:rounded-t-lg">
+
+            @foreach($scenarios as $scenario)
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-2 py-3">
+                            No.
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Scenario
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Test Case
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Test Step ID
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Test Step
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Expected Result
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Category
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Severity
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Status
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($)
+                </tbody>
+            </table>
             @endforeach
         </div>
     </section>

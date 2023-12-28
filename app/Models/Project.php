@@ -12,6 +12,7 @@ class Project extends Model
     protected $table = 'project';
 
     protected $fillable = [
+        'id',
         'name',
         'jira_code',
         'test_level',
@@ -33,6 +34,7 @@ class Project extends Model
         'uat_result',
         'other',
         'remarks',
+        'status',
         'user_id'
     ];
 
@@ -44,5 +46,10 @@ class Project extends Model
     public function members()
     {
         return $this->hasMany(Members::class, 'project_id');
+    }
+
+    public function scenarios()
+    {
+        return $this->hasMany(Scenario::class, 'project_id');
     }
 }

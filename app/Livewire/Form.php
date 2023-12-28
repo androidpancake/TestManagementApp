@@ -162,10 +162,10 @@ class Form extends Component
         if (is_array($this->users)) {
             foreach ($this->users as $user) {
                 session()->put([
-                    'project_id' => session('project_id'),
-                    'user_name' => $user['user_name'],
-                    'unit' => $user['unit'],
-                    'telephone' => $user['telephone']
+                    'users.*.project_id' => session('project_id'),
+                    'users.*.user_name' => $user['user_name'],
+                    'users.*.unit' => $user['unit'],
+                    'users.*.telephone' => $user['telephone']
                 ]);
             }
         }
@@ -182,7 +182,7 @@ class Form extends Component
                 if (is_array($this->cases)) {
                     foreach ($this->cases as $case) {
                         session()->put([
-                            'case' => $case['case'],
+                            'cases.*.case' => $case['case'],
                         ]);
 
                         // $caseId = $case->id;
@@ -193,13 +193,15 @@ class Form extends Component
                     if (is_array($this->steps)) {
                         foreach ($this->steps as $step) {
                             session()->push('steps', [
-                                'test_step_id' => $step['test_step_id'],
-                                'test_step' => $step['test_step'],
-                                'expected_result' => $step['expected_result'],
-                                'category' => $step['category'],
-                                'severity' => $step['severity'],
-                                'status' => $step['status'],
+                                'steps.*.test_step_id' => $step['test_step_id'],
+                                'steps.*.test_step' => $step['test_step'],
+                                'steps.*.expected_result' => $step['expected_result'],
+                                'steps.*.category' => $step['category'],
+                                'steps.*.severity' => $step['severity'],
+                                'steps.*.status' => $step['status'],
                             ]);
+
+                            // dd($this->steps);
                         }
                     }
                 }
@@ -230,9 +232,10 @@ class Form extends Component
             'updated_uat' => $this->updated_uat,
             'uat_attendance' => $this->uat_attendance,
             'uat_result' => $this->uat_result,
-            'remarks' => $this->remarks,
-            'status' => 'Generated'
+            // 'remarks' => $this->remarks,
         ]);
+
+        // dd($project);
 
         session(['project_id' => $project->id]);
 
@@ -245,6 +248,8 @@ class Form extends Component
                     'telephone' => $user['telephone']
                 ]);
             }
+
+            // dd($this->users);
         }
 
         if (is_array($this->scenarios)) {
@@ -259,14 +264,14 @@ class Form extends Component
 
                 if (is_array($this->cases)) {
                     foreach ($this->cases as $case) {
-                        $newScenario->case()->create([
+                        $newCase = $newScenario->case()->create([
                             'case' => $case['case'],
                             'test_id' => session('test_id')
                         ]);
 
                         if (is_array($this->steps)) {
                             foreach ($this->steps as $step) {
-                                $newScenario->case()->step()->create([
+                                $newCase->step()->create([
                                     'test_step_id' => $step['test_step_id'],
                                     'test_step' => $step['test_step'],
                                     'expected_result' => $step['expected_result'],
@@ -280,6 +285,8 @@ class Form extends Component
                     }
                 }
             }
+
+            // dd($this->steps);
         }
 
         return redirect()->route('project');
@@ -320,11 +327,12 @@ class Form extends Component
     public function addTestStep()
     {
         $this->steps[] = [
+            'test_step_id' => '',
             'test_step' => '',
             'expected_result' => '',
             'category' => '',
             'severity ' => '',
-            'test_status ' => '',
+            'status ' => '',
         ];
     }
 
@@ -407,7 +415,13 @@ class Form extends Component
         } elseif ($this->currentStep === 5) {
             $validated = $this->validate([
                 'scenarios.*.scenario_name' => 'required',
-                'cases.*.case' => 'required'
+                'cases.*.case' => 'required',
+                'steps.*.test_step_id' => 'nullable',
+                'steps.*.test_step' => 'nullable',
+                'steps.*.expected_result' => 'nullable',
+                'steps.*.category' => 'nullable',
+                'steps.*.severity' => 'nullable',
+                'steps.*.status' => 'nullable'
             ]);
         } elseif ($this->currentStep === 6) {
             $validated = $this->validate([
@@ -416,7 +430,7 @@ class Form extends Component
                 'uat_result' => 'required',
                 'uat_attendance' => 'required',
                 'other' => 'required',
-                'remarks' => 'nullable'
+                'remarks' => 'nullable',
             ]);
         }
     }
