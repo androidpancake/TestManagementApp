@@ -190,7 +190,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($)
+                    @foreach($scenarios as $scenario)
+                    @foreach($scenario->case as $case)
+                    @foreach($case->step as $step)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $scenario->scenario_name }}</td>
+                        <td>{{ $case->case }}</td>
+                        <td>{{ $step->test_step_id }}</td>
+                        <td>{{ $step->test_step }}</td>
+                        <td>{{ $step->expected_result }}</td>
+                        <td>{{ $step->category }}</td>
+                        <td>{{ $step->severity }}</td>
+                        <td>{{ $step->status }}</td>
+                    </tr>
+                    @endforeach
+                    @endforeach
+                    @endforeach
                 </tbody>
             </table>
             @endforeach
