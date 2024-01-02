@@ -21,6 +21,7 @@ class DetailProject extends Component
     {
         $this->project = Project::with(['members', 'scenarios'])->findOrFail($id);
         $this->scenarios = Scenario::with(['case.step'])->where('project_id', $this->project->id)->get();
+        // dd($this->scenarios);
         $this->members = Members::where('project_id', $this->project->id)->get();
         $this->totalStep;
 

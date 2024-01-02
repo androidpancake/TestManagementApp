@@ -156,7 +156,6 @@
         <livewire:head title="Scenario" description="Scenario, Cases, Steps" />
         <div class="relative overflow-x-auto shadow-md sm:rounded-t-lg">
 
-            @foreach($scenarios as $scenario)
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -190,26 +189,37 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                    $totalScenarios = count($scenarios);
+                    $scenarioCount = 0;
+                    @endphp
+
                     @foreach($scenarios as $scenario)
                     @foreach($scenario->case as $case)
-                    @foreach($case->step as $step)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $scenario->scenario_name }}</td>
-                        <td>{{ $case->case }}</td>
-                        <td>{{ $step->test_step_id }}</td>
-                        <td>{{ $step->test_step }}</td>
-                        <td>{{ $step->expected_result }}</td>
-                        <td>{{ $step->category }}</td>
-                        <td>{{ $step->severity }}</td>
-                        <td>{{ $step->status }}</td>
+                    @php
+                    $caseCount = $scenario->case->count();
+                    $rowCount = $case->step->count();
+                    $scenarioCount++; // Pindahkan peningkatan scenarioCount ke sini
+                    @endphp
+
+                    <tr class="border border-black">
+                        <td class="border border-black" rowspan="{{ $rowCount }}">{{ $scenarioCount }}</td>
+                        <td class="border border-black" rowspan="{{ $rowCount }}">{{ $scenario->scenario_name }}</td>
+                        <td class="border border-black" rowspan="{{ $rowCount }}">{{ $case->case }}</td>
+
+                        @foreach($case->step as $step)
+                        <td class="border border-black">{{ $step->test_step_id }}</td>
+                        <td class="border border-black">{{ $step->test_step }}</td>
+                        <td class="border border-black">{{ $step->expected_result }}</td>
+                        <td class="border border-black">{{ $step->category }}</td>
+                        <td class="border border-black">{{ $step->severity }}</td>
+                        <td class="border border-black">{{ $step->status }}</td>
                     </tr>
                     @endforeach
                     @endforeach
                     @endforeach
                 </tbody>
             </table>
-            @endforeach
         </div>
     </section>
 </div>

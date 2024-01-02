@@ -26,10 +26,9 @@
         <label for="test_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Test Level</label>
         <!-- <input type="text" wire:model="test_level" id="test-level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> -->
         <select wire:model.debounce.800ms="test_level" id="test_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value="">Pilih</option>
-            @foreach($test_lv as $data)
-            <option value="{{ $data->type }}">{{ $data->type }}</option>
-            @endforeach
+            <option value=""></option>
+            <option value="{{ $select }}">{{ $select }}</option>
+
         </select>
         @error('test_level')
         <span class="text-red-800">{{$message}}</span>
@@ -236,6 +235,7 @@
                         </td>
                     </div>
                     @foreach($this->cases as $tc => $case)
+
                     <div wire:key="{{ $tc }}">
                         <td class="px-6 py-4">
                             <input type="text" wire:model="cases.{{ $tc }}.case" class="w-full rounded border border-gray-300" value="">
@@ -245,6 +245,7 @@
                         @enderror
                     </div>
                     @foreach($this->steps as $ts => $step)
+
                     <div wire:key="{{ $ts }}">
                         <td class="px-6 py-4">
                             <input type="text" wire:model="steps.{{ $ts }}.test_step_id" class="w-full rounded border border-gray-300" value="">
@@ -295,7 +296,11 @@
                     </div>
 
                     @endforeach
+
+
                     @endforeach
+
+
                 </tr>
                 @endforeach
             </tbody>

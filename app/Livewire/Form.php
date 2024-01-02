@@ -15,6 +15,8 @@ use Livewire\Component;
 
 class Form extends Component
 {
+    public $currentParent = 0;
+
     public $i = 0;
     public $users;
     public $currentStep = 1;
@@ -39,9 +41,9 @@ class Form extends Component
     public $project_id;
     public $test_lv;
     public $status;
-    public $scenarios;
-    public $cases;
-    public $steps;
+    public $scenarios = [];
+    public $cases = [];
+    public $steps = [];
     public $test_step_id;
     public $test_step;
     public $case_id;
@@ -60,10 +62,11 @@ class Form extends Component
     public $test_status;
     public $row;
 
-
+    public $caseParentIndices;
 
     public function mount()
     {
+        $this->caseParentIndices = [];
         $this->users = [];
         $this->row = [];
         $this->scenarios = [];
@@ -93,11 +96,41 @@ class Form extends Component
         $this->render();
     }
 
+    // public function render()
+    // {
+
+    //     return view('livewire.form')->with([
+    //         'title' => 'SIT Form',
+    //         'description' => 'Please complete the documents to generate reports'
+    //     ]);
+    // }
+
     public function render()
     {
+        $route = request()->route()->getName();
+
+        $title = 'Default Title';
+        $description = 'Default Description';
+        $select = '';
+
+        // Check if the current route is 'sit/form'
+        if ($route == 'sit.form') {
+            $title = 'SIT Form';
+            $select = 'SIT';
+            $description = 'Please complete the documents to generate reports for SIT';
+        }
+
+        // Check if the current route is 'uat/form'
+        if ($route == 'uat.form') {
+            $title = 'UAT Form';
+            $select = 'UAT';
+            $description = 'Please complete the documents to generate reports for UAT';
+        }
+
         return view('livewire.form')->with([
-            'title' => 'SIT Form',
-            'description' => 'Please complete the documents to generate reports'
+            'select' => $select,
+            'title' => $title,
+            'description' => $description,
         ]);
     }
 
@@ -315,12 +348,15 @@ class Form extends Component
         $this->scenarios[] = [
             'scenario_name' => '',
         ];
+
+        $this->currentParent = count($this->scenarios) - 1;
     }
 
     public function addTestCase()
     {
         $this->cases[] = [
-            'case' => ''
+            'case' => '',
+            'steps' => [],
         ];
     }
 
@@ -389,7 +425,7 @@ class Form extends Component
                 'name' => 'required',
                 'jira_code' => 'required',
                 'test_type' => 'required',
-                'test_level' => 'required',
+                'test_level' => 'nullable',
                 'start_date' => 'required',
                 'end_date' => 'required'
             ]);
