@@ -25,10 +25,9 @@
     <div class="mb-5">
         <label for="test_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Test Level</label>
         <!-- <input type="text" wire:model="test_level" id="test-level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> -->
-        <select wire:model.debounce.800ms="test_level" id="test_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value=""></option>
+        <select wire:model="test_level" id="test_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value="">Pilih</option>
             <option value="{{ $select }}">{{ $select }}</option>
-
         </select>
         @error('test_level')
         <span class="text-red-800">{{$message}}</span>
@@ -173,14 +172,14 @@
             <i class="ph ph-plus"></i>
             <span>Tambah Skenario</span>
         </button>
-        <button wire:click="addTestCase" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
+        <!-- <button wire:click="addTestCase" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
             <i class="ph ph-plus"></i>
             <span>Tambah Test Case</span>
         </button>
         <button wire:click="addTestStep" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
             <i class="ph ph-plus"></i>
             <span>Tambah Test Step</span>
-        </button>
+        </button> -->
     </div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table id="tableTest" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -192,7 +191,7 @@
                     <th scope="col" class="px-16 py-3">
                         Scenario
                     </th>
-                    <th scope="col" class="px-16 py-3">
+                    <!-- <th scope="col" class="px-16 py-3">
                         Test Case
                     </th>
                     <th scope="col" class="px-12 py-3">
@@ -212,7 +211,7 @@
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Status (Passed/Failed)
-                    </th>
+                    </th> -->
                     <th scope="col" class="px-6 py-3">
                     </th>
                 </tr>
@@ -220,7 +219,9 @@
             <tbody>
                 @php
                 $i = 1;
+                $index = 0;
                 @endphp
+
                 @foreach($this->scenarios as $index => $scenario)
                 <tr>
                     <div wire:key="{{ $index }}" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -228,45 +229,60 @@
                             {{ $i++ }}
                         </th>
                         <td class="px-6 py-4">
-                            <input type="text" wire:model="scenarios.{{ $index }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" />
+                            <input type="text" wire:model="scenarios.{{ $index }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Scenario Name {{ $index++ }}" />
+
                             @error('scenario_name')
                             <span class="text-red-800">{{$message}}</span>
                             @enderror
+                            <button wire:click="addTestCase" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
+                                <i class="ph ph-plus"></i>
+                                <span>Tambah Test Case</span>
+                            </button>
                         </td>
                     </div>
-                    @foreach($this->cases as $tc => $case)
 
+                    @foreach($this->cases as $tc => $case)
+                <tr>
+                    <td></td>
                     <div wire:key="{{ $tc }}">
                         <td class="px-6 py-4">
-                            <input type="text" wire:model="cases.{{ $tc }}.case" class="w-full rounded border border-gray-300" value="">
+                            <input type="text" wire:model="cases.{{ $tc }}.case" class="w-full rounded border border-gray-300" value="" placeholder="Case">
+                            @error('case')
+                            <span class="text-red-800">{{$message}}</span>
+                            @enderror
+                            <button wire:click="addTestStep" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
+                                <i class="ph ph-plus"></i>
+                                <span>Tambah Test Step</span>
+                            </button>
                         </td>
-                        @error('case')
-                        <span class="text-red-800">{{$message}}</span>
-                        @enderror
+
+
                     </div>
                     @foreach($this->steps as $ts => $step)
-
+                <tr>
+                    <td></td>
                     <div wire:key="{{ $ts }}">
                         <td class="px-6 py-4">
-                            <input type="text" wire:model="steps.{{ $ts }}.test_step_id" class="w-full rounded border border-gray-300" value="">
+                            <input type="text" wire:model="steps.{{ $ts }}.test_step_id" class="w-full rounded border border-gray-300" value="" placeholder="Step">
                             @error('test_step_id')
                             <span class="text-red-800">{{$message}}</span>
                             @enderror
                         </td>
                         <td class="px-6 py-4">
-                            <textarea wire:model="steps.{{$ts}}.test_step" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100"></textarea>
+                            <textarea wire:model="steps.{{$ts}}.test_step" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Test Step"></textarea>
                             @error('test_step')
                             <span class="text-red-800">{{$message}}</span>
                             @enderror
                         </td>
                         <td class="px-6 py-4">
-                            <textarea wire:model="steps.{{ $ts }}.expected_result" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100"></textarea>
+                            <textarea wire:model="steps.{{ $ts }}.expected_result" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Expected Result"></textarea>
                             @error('expected_result')
                             <span class="text-red-800">{{$message}}</span>
                             @enderror
                         </td>
                         <td class="px-6 py-4">
-                            <select wire:model="steps.{{ $ts }}.category" id="" class="w-full bg-white border border-gray-200 rounded-lg">
+                            <label for="category">Category</label>
+                            <select wire:model="steps.{{ $ts }}.category" id="category" class="w-full bg-white border border-gray-200 rounded-lg">
                                 <option value="positive">Positive</option>
                                 <option value="negative">negative</option>
                             </select>
@@ -275,6 +291,7 @@
                             @enderror
                         </td>
                         <td class="px-6 py-4">
+                            <label for="category">Severity</label>
                             <select wire:model="steps.{{ $ts }}.severity" id="" class="w-full bg-white border border-gray-200 rounded-lg">
                                 <option value="high">High</option>
                                 <option value="medium">Medium</option>
@@ -285,6 +302,7 @@
                             @enderror
                         </td>
                         <td class="px-6 py-4">
+                            <label for="category">Status</label>
                             <select wire:model="steps.{{ $ts }}.status" id="" class="w-full bg-white border border-gray-200 rounded-lg">
                                 <option value="passed">Passed</option>
                                 <option value="failed">Failed</option>
@@ -294,12 +312,11 @@
                             @enderror
                         </td>
                     </div>
+                </tr>
+                @endforeach
 
-                    @endforeach
-
-
-                    @endforeach
-
+                </tr>
+                @endforeach
 
                 </tr>
                 @endforeach

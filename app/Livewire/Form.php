@@ -203,15 +203,13 @@ class Form extends Component
             }
         }
 
-        //test
-
-        // dd($this->scenarios);
+        //sceneario
         if (is_array($this->scenarios)) {
             foreach ($this->scenarios as $scenario) {
-                // $test_id = $scene['id'];
 
                 session()->put($this->scenario_name, $scenario['scenario_name']);
-
+                
+                //cases
                 if (is_array($this->cases)) {
                     foreach ($this->cases as $case) {
                         session()->put([
@@ -222,7 +220,7 @@ class Form extends Component
                         // session()->put('case_id');
                     }
 
-
+                    //step
                     if (is_array($this->steps)) {
                         foreach ($this->steps as $step) {
                             session()->push('steps', [
@@ -346,30 +344,38 @@ class Form extends Component
     public function addScenario()
     {
         $this->scenarios[] = [
-            'scenario_name' => '',
+            'scenario_name' => $this->scenario_name,
         ];
 
-        $this->currentParent = count($this->scenarios) - 1;
+        // $this->scenario_name = '';
     }
 
     public function addTestCase()
     {
         $this->cases[] = [
-            'case' => '',
-            'steps' => [],
+            'case' => $this->case
         ];
+
+        $this->case = '';
     }
 
     public function addTestStep()
     {
         $this->steps[] = [
-            'test_step_id' => '',
-            'test_step' => '',
-            'expected_result' => '',
-            'category' => '',
-            'severity ' => '',
-            'status ' => '',
+            'test_step_id' => $this->test_step_id,
+            'test_step' => $this->test_step,
+            'expected_result' => $this->expected_result,
+            'category' => $this->category,
+            'severity' => $this->severity,
+            'status' => $this->status
         ];
+
+        $this->test_step_id = '';
+        $this->test_step = '';
+        $this->expected_result = '';
+        $this->category = '';
+        $this->severity = '';
+        $this->status = '';
     }
 
     public function removeScenario($index)
@@ -425,7 +431,7 @@ class Form extends Component
                 'name' => 'required',
                 'jira_code' => 'required',
                 'test_type' => 'required',
-                'test_level' => 'nullable',
+                'test_level' => 'required',
                 'start_date' => 'required',
                 'end_date' => 'required'
             ]);
