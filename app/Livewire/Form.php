@@ -24,6 +24,7 @@ class Form extends Component
     public $name;
     public $jira_code;
     public $test_level;
+    public $select;
     public $test_type;
     public $start_date;
     public $end_date;
@@ -78,6 +79,7 @@ class Form extends Component
         $this->name;
         $this->jira_code;
         $this->test_level;
+        $this->select;
         $this->test_type = 'Business Functionality';
         $this->start_date;
         $this->end_date;
@@ -116,14 +118,14 @@ class Form extends Component
         // Check if the current route is 'sit/form'
         if ($route == 'sit.form') {
             $title = 'SIT Form';
-            $select = 'SIT';
+            $this->select = 'SIT';
             $description = 'Please complete the documents to generate reports for SIT';
         }
 
         // Check if the current route is 'uat/form'
         if ($route == 'uat.form') {
             $title = 'UAT Form';
-            $select = 'UAT';
+            $this->select = 'UAT';
             $description = 'Please complete the documents to generate reports for UAT';
         }
 
@@ -208,7 +210,7 @@ class Form extends Component
             foreach ($this->scenarios as $scenario) {
 
                 session()->put($this->scenario_name, $scenario['scenario_name']);
-                
+
                 //cases
                 if (is_array($this->cases)) {
                     foreach ($this->cases as $case) {
