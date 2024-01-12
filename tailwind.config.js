@@ -10,16 +10,16 @@ export default {
         extend: {},
         colors: {
             //custom
-            'transparent' : 'transparent',
-            'current' : 'currentColor',
-            'bsi-primary' : '#019B95',
-            'bsi-secondary' : '#F5AB2E'
+            transparent: "transparent",
+            current: "currentColor",
+            "bsi-primary": "#179d97",
+            "bsi-secondary": "#F6AD3C",
         },
     },
     plugins: [
         require("flowbite/plugin")({
             charts: true,
-        })
+        }),
     ],
-    darkMode: 'class',
+    darkMode: "class",
 };

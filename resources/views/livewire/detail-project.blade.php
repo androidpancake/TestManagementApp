@@ -156,7 +156,7 @@
         <livewire:head title="Scenario" description="Scenario, Cases, Steps" />
         <div class="relative overflow-x-auto shadow-md sm:rounded-t-lg">
 
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table class="w-full mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-2 py-3">
@@ -189,25 +189,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php
-                    $totalScenarios = count($scenarios);
-                    $scenarioCount = 0;
-                    @endphp
-
+                    @php $scenarioNumber = 0; @endphp
                     @foreach($scenarios as $scenario)
-                    @foreach($scenario->case as $case)
                     @php
-                    $caseCount = $scenario->case->count();
-                    $rowCount = $case->step->count();
-                    $scenarioCount++; // Pindahkan peningkatan scenarioCount ke sini
+                    $scenarioNumber++;
+                    $totalSteps = 0;
+                    foreach($scenario->case as $case) {
+                    $totalSteps += $case->step->count();
+                    }
+                    $isFirstRow = true;
                     @endphp
 
-                    <tr class="border border-black">
-                        <td class="border border-black" rowspan="{{ $rowCount }}">{{ $scenarioCount }}</td>
-                        <td class="border border-black" rowspan="{{ $rowCount }}">{{ $scenario->scenario_name }}</td>
-                        <td class="border border-black" rowspan="{{ $rowCount }}">{{ $case->case }}</td>
+                    @foreach($scenario->case as $caseIndex => $case)
+                    @php
+                    $rowCount = $case->step->count();
+                    @endphp
 
-                        @foreach($case->step as $step)
+                    @foreach($case->step as $stepIndex => $step)
+                    <tr class="border border-black">
+
+                        @if ($isFirstRow)
+                        <td class="border border-black" rowspan="{{ $totalSteps }}">{{ $scenarioNumber }}</td>
+                        <td class="border border-black" rowspan="{{ $totalSteps }}">{{ $scenario->scenario_name }}</td>
+                        @php $isFirstRow = false; @endphp
+                        @endif
+
+
+                        @if ($stepIndex === 0)
+                        <td class="border border-black" rowspan="{{ $rowCount }}">{{ $case->case }}</td>
+                        @endif
+
                         <td class="border border-black">{{ $step->test_step_id }}</td>
                         <td class="border border-black">{{ $step->test_step }}</td>
                         <td class="border border-black">{{ $step->expected_result }}</td>
@@ -221,5 +232,10 @@
                 </tbody>
             </table>
         </div>
+    </section>
+    <section>
+        <a href="{{ route('generate', $project->id) }}">
+            <button class="bg-bsi-primary p-2 text-sm text-white">Generate</button>
+        </a>
     </section>
 </div>

@@ -190,7 +190,7 @@
                     <th scope="col" class="px-16 py-3">
                         Scenario
                     </th>
-                    <!-- <th scope="col" class="px-16 py-3">
+                    <th scope="col" class="px-16 py-3">
                         Test Case
                     </th>
                     <th scope="col" class="px-12 py-3">
@@ -210,7 +210,7 @@
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Status (Passed/Failed)
-                    </th> -->
+                    </th>
                     <th scope="col" class="px-6 py-3">
                     </th>
                 </tr>
@@ -221,101 +221,93 @@
                 $index = 0;
                 @endphp
 
-                @foreach($this->scenarios as $index => $scenario)
-                <tr>
-                    <div wire:key="{{ $index }}" class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                @foreach($this->scenarios as $scenarioIndex => $scenario)
+                <tr wire:key="{{ $scenarioIndex }}">
+                    <div class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $i++ }}
                         </th>
                         <td class="px-6 py-4">
-                            <input type="text" wire:model="scenarios.{{ $index }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Scenario Name {{ $index++ }}" />
+                            <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Scenario Name {{ $index++ }}" />
 
                             @error('scenario_name')
                             <span class="text-red-800">{{$message}}</span>
                             @enderror
-                            <button wire:click="addTestCase" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
+                            <button wire:click="addTestCase({{ $scenarioIndex }})" class="bg-bsi-primary px-2.5 py-2 text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
                                 <i class="ph ph-plus"></i>
                                 <span>Tambah Test Case</span>
                             </button>
                         </td>
                     </div>
 
-                    @foreach($this->cases as $tc => $case)
-                <tr>
-                    <td></td>
-                    <div wire:key="{{ $tc }}">
+                    @foreach($scenario['cases'] as $caseIndex => $case)
+                    <tr wire:key="case-{{ $scenarioIndex }}-{{ $caseIndex }}">
                         <td class="px-6 py-4">
-                            <input type="text" wire:model="cases.{{ $tc }}.case" class="w-full rounded border border-gray-300" value="" placeholder="Case">
+                            <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.case" class="w-full rounded border border-gray-300" value="" placeholder="Case">
                             @error('case')
                             <span class="text-red-800">{{$message}}</span>
                             @enderror
-                            <button wire:click="addTestStep" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
+                            <button wire:click="addTestStep({{ $scenarioIndex }}, {{ $caseIndex }})" class="bg-bsi-primary px-2.5 py-2 text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
                                 <i class="ph ph-plus"></i>
                                 <span>Tambah Test Step</span>
                             </button>
                         </td>
+                        @foreach($case['steps'] as $stepIndex => $step)
+                        <tr wire:key="step-{{ $scenarioIndex }}-{{ $caseIndex }}-{{ $stepIndex }}">
+                            <td class="px-6 py-4">
+                                <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.test_step_id" class="w-full rounded border border-gray-300" placeholder="Test Step ID">
+                                @error('test_step_id')
+                                <span class="text-red-800">{{$message}}</span>
+                                @enderror
+                            </td>
+                            <td class="px-6 py-4">
+                                <textarea wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{$stepIndex}}.test_step" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Test Step"></textarea>
+                                @error('test_step')
+                                <span class="text-red-800">{{$message}}</span>
+                                @enderror
+                            </td>
+                            <td class="px-6 py-4">
+                                <textarea wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.expected_result" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Expected Result"></textarea>
+                                @error('expected_result')
+                                <span class="text-red-800">{{$message}}</span>
+                                @enderror
+                            </td>
+                            <td class="px-6 py-4">
+                                <label for="category">Category</label>
+                                <select wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.category" class="w-full bg-white border border-gray-200 rounded-lg">
+                                    <option value="positive">Positive</option>
+                                    <option value="negative">negative</option>
+                                </select>
+                                @error('category')
+                                <span class="text-red-800">{{$message}}</span>
+                                @enderror
+                            </td>
+                            <td class="px-6 py-4">
+                                <label for="category">Severity</label>
+                                <select wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.severity" class="w-full bg-white border border-gray-200 rounded-lg">
+                                    <option value="high">High</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                </select>
+                                @error('severity')
+                                <span class="text-red-800">{{$message}}</span>
+                                @enderror
+                            </td>
+                            <td class="px-6 py-4">
+                                <label for="category">Status</label>
+                                <select wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.status" class="w-full bg-white border border-gray-200 rounded-lg">
+                                    <option value="passed">Passed</option>
+                                    <option value="failed">Failed</option>
+                                </select>
+                                @error('status')
+                                <span class="text-red-800">{{$message}}</span>
+                                @enderror
+                            </td>
+                        </tr>
+                        @endforeach
 
-
-                    </div>
-                    @foreach($this->steps as $ts => $step)
-                <tr>
-                    <td></td>
-                    <div wire:key="{{ $ts }}">
-                        <td class="px-6 py-4">
-                            <input type="text" wire:model="steps.{{ $ts }}.test_step_id" class="w-full rounded border border-gray-300" value="" placeholder="Step">
-                            @error('test_step_id')
-                            <span class="text-red-800">{{$message}}</span>
-                            @enderror
-                        </td>
-                        <td class="px-6 py-4">
-                            <textarea wire:model="steps.{{$ts}}.test_step" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Test Step"></textarea>
-                            @error('test_step')
-                            <span class="text-red-800">{{$message}}</span>
-                            @enderror
-                        </td>
-                        <td class="px-6 py-4">
-                            <textarea wire:model="steps.{{ $ts }}.expected_result" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Expected Result"></textarea>
-                            @error('expected_result')
-                            <span class="text-red-800">{{$message}}</span>
-                            @enderror
-                        </td>
-                        <td class="px-6 py-4">
-                            <label for="category">Category</label>
-                            <select wire:model="steps.{{ $ts }}.category" id="category" class="w-full bg-white border border-gray-200 rounded-lg">
-                                <option value="positive">Positive</option>
-                                <option value="negative">negative</option>
-                            </select>
-                            @error('category')
-                            <span class="text-red-800">{{$message}}</span>
-                            @enderror
-                        </td>
-                        <td class="px-6 py-4">
-                            <label for="category">Severity</label>
-                            <select wire:model="steps.{{ $ts }}.severity" id="" class="w-full bg-white border border-gray-200 rounded-lg">
-                                <option value="high">High</option>
-                                <option value="medium">Medium</option>
-                                <option value="low">Low</option>
-                            </select>
-                            @error('severity')
-                            <span class="text-red-800">{{$message}}</span>
-                            @enderror
-                        </td>
-                        <td class="px-6 py-4">
-                            <label for="category">Status</label>
-                            <select wire:model="steps.{{ $ts }}.status" id="" class="w-full bg-white border border-gray-200 rounded-lg">
-                                <option value="passed">Passed</option>
-                                <option value="failed">Failed</option>
-                            </select>
-                            @error('status')
-                            <span class="text-red-800">{{$message}}</span>
-                            @enderror
-                        </td>
-                    </div>
-                </tr>
-                @endforeach
-
-                </tr>
-                @endforeach
+                    </tr>
+                    @endforeach
 
                 </tr>
                 @endforeach
@@ -344,7 +336,7 @@
                         TMP
                     </th>
                     <td class="px-6 py-4">
-                        <select wire:model="tmp" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                        <select wire:model="tmp" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
                             <option value="Not Available" selected>Not Available</option>
                             <option value="Available">Available</option>
                         </select>
@@ -358,7 +350,7 @@
                         Updated UAT
                     </th>
                     <td class="px-6 py-4">
-                        <select wire:model="updated_uat" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                        <select wire:model="updated_uat" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
                             <option value="Not Available" selected>Not Available</option>
                             <option value="Available">Available</option>
                         </select>
@@ -372,7 +364,7 @@
                         UAT Result
                     </th>
                     <td class="px-6 py-4">
-                        <select wire:model="uat_result" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                        <select wire:model="uat_result" id="" class="rounded-full bg-gray-100  border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
                             <option value="Not Available" selected>Not Available</option>
                             <option value="Available">Available</option>
                         </select>
@@ -386,7 +378,7 @@
                         UAT Attendance
                     </th>
                     <td class="px-6 py-4">
-                        <select wire:model="uat_attendance" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                        <select wire:model="uat_attendance" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
                             <option value="Not Available" selected>Not Available</option>
                             <option value="Available">Available</option>
                         </select>
@@ -400,7 +392,7 @@
                         Other
                     </th>
                     <td class="px-6 py-4">
-                        <select wire:model="other" id="" class="rounded-full bg-gray-100 text-gray-900 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                        <select wire:model="other" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
                             <option value="Not Available" selected>Not Available</option>
                             <option value="Available">Available</option>
                         </select>
@@ -433,7 +425,7 @@
             @endif
 
             @if($currentStep === $total_steps)
-            <button wire:click="save_data_project" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
+            <button wire:click="save_data_project" type="submit" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
             @endif
     </div>
     <!-- </form> -->

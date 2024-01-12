@@ -209,35 +209,37 @@ class Form extends Component
         if (is_array($this->scenarios)) {
             foreach ($this->scenarios as $scenario) {
 
-                session()->put($this->scenario_name, $scenario['scenario_name']);
+                session()->put(['scenario' => $scenario['scenario_name']]);
 
                 //cases
                 if (is_array($this->cases)) {
                     foreach ($this->cases as $case) {
                         session()->put([
-                            'cases.*.case' => $case['case'],
+                            'scenarios.*.cases.*.case' => $case['case'],
                         ]);
 
                         // $caseId = $case->id;
                         // session()->put('case_id');
+
+                        dd($this->case);
                     }
 
                     //step
                     if (is_array($this->steps)) {
                         foreach ($this->steps as $step) {
                             session()->push('steps', [
-                                'steps.*.test_step_id' => $step['test_step_id'],
-                                'steps.*.test_step' => $step['test_step'],
-                                'steps.*.expected_result' => $step['expected_result'],
-                                'steps.*.category' => $step['category'],
-                                'steps.*.severity' => $step['severity'],
-                                'steps.*.status' => $step['status'],
+                                'scenarios.*.cases.*.steps.*.test_step_id' => $step['test_step_id'],
+                                'scenarios.*.cases.*.steps.*.test_step' => $step['test_step'],
+                                'scenarios.*.cases.*.steps.*.expected_result' => $step['expected_result'],
+                                'scenarios.*.cases.*.steps.*.category' => $step['category'],
+                                'scenarios.*.cases.*.steps.*.severity' => $step['severity'],
+                                'scenarios.*.cases.*.steps.*.status' => $step['status'],
                             ]);
 
-                            // dd($this->steps);
+                            dd($this->steps);
                         }
                     }
-                }
+                } 
             }
         }
     }
@@ -293,17 +295,22 @@ class Form extends Component
                     'scenario_name' => $scene['scenario_name'],
                 ]);
 
-                session(['test_id' => $newScenario->id]);
+                // dd($newScenario);
 
-                if (is_array($this->cases)) {
-                    foreach ($this->cases as $case) {
+                // session(['test_id' => $newScenario->id]);
+                if (is_array($scene['cases'])) {
+                    foreach ($scene['cases'] as $case) {
+                        // dd($case);
+
                         $newCase = $newScenario->case()->create([
                             'case' => $case['case'],
                             'test_id' => session('test_id')
                         ]);
 
-                        if (is_array($this->steps)) {
-                            foreach ($this->steps as $step) {
+                        // dd($newCase);
+
+                        if (is_array($case['steps'])) {
+                            foreach ($case['steps'] as $step) {
                                 $newCase->step()->create([
                                     'test_step_id' => $step['test_step_id'],
                                     'test_step' => $step['test_step'],
@@ -325,45 +332,29 @@ class Form extends Component
         return redirect()->route('project');
     }
 
-    public function save_members()
-    {
-        if (is_array($this->users)) {
-            foreach ($this->users as $user) {
-                Members::create([
-                    'project_id' => session('project_id'),
-                    'user_name' => $user['user_name'],
-                    'unit' => $user['unit'],
-                    'telephone' => $user['telephone']
-                ]);
-            }
-        }
-
-        // dd($this->users);
-
-        return $this->incrementSteps();
-    }
-
     public function addScenario()
     {
         $this->scenarios[] = [
             'scenario_name' => $this->scenario_name,
+            'cases' => []
         ];
 
         // $this->scenario_name = '';
     }
 
-    public function addTestCase()
+    public function addTestCase($scenarioIndex)
     {
-        $this->cases[] = [
-            'case' => $this->case
+        $this->scenarios[$scenarioIndex]['cases'][] = [
+            'case' => $this->case,
+            'steps' => []
         ];
 
-        $this->case = '';
     }
 
-    public function addTestStep()
+    public function addTestStep($scenarioIndex, $caseIndex)
     {
-        $this->steps[] = [
+
+        $this->scenarios[$scenarioIndex]['cases'][$caseIndex]['steps'][] = [
             'test_step_id' => $this->test_step_id,
             'test_step' => $this->test_step,
             'expected_result' => $this->expected_result,
@@ -371,13 +362,13 @@ class Form extends Component
             'severity' => $this->severity,
             'status' => $this->status
         ];
-
-        $this->test_step_id = '';
-        $this->test_step = '';
-        $this->expected_result = '';
-        $this->category = '';
-        $this->severity = '';
-        $this->status = '';
+        
+        // $this->test_step_id = '';
+        // $this->test_step = '';
+        // $this->expected_result = '';
+        // $this->category = '';
+        // $this->severity = '';
+        // $this->status = '';
     }
 
     public function removeScenario($index)
@@ -459,14 +450,16 @@ class Form extends Component
         } elseif ($this->currentStep === 5) {
             $validated = $this->validate([
                 'scenarios.*.scenario_name' => 'required',
-                'cases.*.case' => 'required',
-                'steps.*.test_step_id' => 'nullable',
-                'steps.*.test_step' => 'nullable',
-                'steps.*.expected_result' => 'nullable',
-                'steps.*.category' => 'nullable',
-                'steps.*.severity' => 'nullable',
-                'steps.*.status' => 'nullable'
+                'scenarios.*.cases.*.case' => 'required',
+                'scenarios.*.cases.*.steps.*.test_step_id' => 'required',
+                'scenarios.*.cases.*.steps.*.test_step' => 'required',
+                'scenarios.*.cases.*.steps.*.expected_result' => 'required',
+                'scenarios.*.cases.*.steps.*.category' => 'required',
+                'scenarios.*.cases.*.steps.*.severity' => 'required',
+                'scenarios.*.cases.*.steps.*.status' => 'required'
             ]);
+
+            // dd($validated);
         } elseif ($this->currentStep === 6) {
             $validated = $this->validate([
                 'tmp' => 'required',
