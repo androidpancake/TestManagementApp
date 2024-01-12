@@ -46,6 +46,9 @@ class ExportController extends Controller
         // Membuat style tabel
         $tableStyle = ['borderSize' => 1, 'borderColor' => '000000'];
 
+        // Font style
+        $fontStyle = ['size' => 10];
+
         $table = $section->addTable(['borderSize' => 1, 'borderColor' => '00FFFFFF']);
         $row = $table->addRow();
 
@@ -271,7 +274,7 @@ class ExportController extends Controller
         $table7->addCell(1000)->addText("Low");
         $table7->addCell(7000)->addText("");
 
-        $section->addTextBreak(1);
+        $section->addPageBreak();
 
         $section->addText('Pihak-pihak yang bertandatangan di bawah ini menyatakan bahwa telah dilaksanakan' . $project->test_level . '
         pada tanggal' . $project->start_date . ' hingga ' . $project->end_date . ' untuk ' . $project->name . ' sesuai skenario yang tercantum dalam Test Script UAT dengan hasil 
@@ -284,15 +287,63 @@ class ExportController extends Controller
         $tableAcc = $section->addTable($tableStyle);
 
         $tableAcc->addRow();
-        $cell = $tableAcc->addCell(9000, ['gridSpan' => 48, 'valign' => 'center']);
-        $cell->addText("Teks di bagian atas", null, ['valign' => 'center']);
+        $cell = $tableAcc->addCell(9000, ['gridSpan' => 48]);
+        $cell->addText("Prepared By", $fontStyle, ['align' => 'center']);
 
         // Menambahkan beberapa baris kosong untuk ruang tanda tangan
         for ($i = 0; $i < 6; $i++) {
             $cell->addText("", [], ['spaceAfter' => 24]);
         }
 
-        $cell->addText("Teks di bagian bawah");
+        $cell->addText("Name : ", $fontStyle, ['align' => 'center']);
+        $cell->addText("Koordinator ". $project->test_level, $fontStyle, ['align' => 'center']);
+
+        $section->addTextBreak(1);
+
+        $tableAcc2 = $section->addTable($tableStyle);
+
+        //acc 2
+        $tableAcc2->addRow();
+
+        // kolom 1
+        $cellAcc1 = $tableAcc2->addCell(9000);
+
+        $cellAcc1->addText("Confirmed By,", $fontStyle, ['align' => 'center']);
+        for ($i = 0; $i < 6; $i++) {
+            $cellAcc1->addText("", [], ['spaceAfter' => 24]);
+        }
+        $cellAcc1->addText("Name:", $fontStyle, ['align' => 'center']);
+        $cellAcc1->addText("User Operations Development Group
+        Domestik Reconciliation Staff", $fontStyle, ['align' => 'center']);
+        
+        // kolom 1
+        $tableAcc2->addCell(9000)->addText("test");
+        $tableAcc2->addCell(9000)->addText("test");
+
+        $tableAcc2->addRow();
+        $tableAcc2->addCell(9000)->addText("test");
+        $tableAcc2->addCell(9000)->addText("test");
+        $tableAcc2->addCell(9000)->addText("test");
+
+        $tableAcc2->addRow();
+        $tableAcc2->addCell(9000)->addText("test");
+        $tableAcc2->addCell(9000)->addText("test");
+        $tableAcc2->addCell(9000)->addText("test");
+
+        $tableAcc2->addRow();
+        $tableAcc2->addCell(1000)->addText("test");
+        $tableAcc2->addCell(1000)->addText("test");
+        $tableAcc2->addCell(1000)->addText("test");
+
+        // $cellAcc2 = $tableAcc2->addCell(1000, ['gridSpan' => 48]);
+        // $cellAcc2->addText("Prepared By", $fontStyle, ['align' => 'center']);
+
+        // for ($i = 0; $i < 6; $i++) {
+        //     $cellAcc2->addText("", [], ['spaceAfter' => 24]);
+        // }
+
+        // $cellAcc2->addText("Name : ", $fontStyle, ['align' => 'center']);
+        // $cellAcc2->addText("Koordinator ". $project->test_level, $fontStyle, ['align' => 'center']);
 
         $section->addTextBreak(1);
 
