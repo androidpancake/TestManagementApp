@@ -12,6 +12,7 @@ use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Shared\Html;
 use PhpOffice\PhpWord\PhpWord\Table;
+use PhpOffice\PhpWord\SimpleType\Jc;
 use PhpOffice\PhpWord\Style\Table as StyleTable;
 
 class ExportController extends Controller
@@ -272,10 +273,26 @@ class ExportController extends Controller
 
         $section->addTextBreak(1);
 
-        $section->addText("Pihak-pihak yang bertandatangan di bawah ini menyatakan bahwa telah dilaksanakan User Acceptance Test (UAT)
-        pada tanggal 09-10-2023 hingga 11-10-2023 untuk Sistem Penerimaan Negara pada Collecting Agent –
-        Channel Teller Tunai & Channel Overbooking sesuai skenario yang tercantum dalam Test Script UAT dengan hasil 
-        tercantum pada UAT Report. Dengan ini kecukupan pelaksanaan dan hasil UAT adalah tanggung jawab User.");
+        $section->addText('Pihak-pihak yang bertandatangan di bawah ini menyatakan bahwa telah dilaksanakan' . $project->test_level . '
+        pada tanggal' . $project->start_date . ' hingga ' . $project->end_date . ' untuk ' . $project->name . ' sesuai skenario yang tercantum dalam Test Script UAT dengan hasil 
+        tercantum pada ' . $project->test_level . ' Report. Dengan ini kecukupan pelaksanaan dan hasil ' . $project->test_level . ' adalah tanggung jawab User.');
+
+        $section->addTextBreak(1);
+
+        $section->addText('Berita Acara UAT termasuk menyetujui isi UAT Report.');
+
+        $tableAcc = $section->addTable($tableStyle);
+
+        $tableAcc->addRow();
+        $cell = $tableAcc->addCell(9000, ['gridSpan' => 48, 'valign' => 'center']);
+        $cell->addText("Teks di bagian atas", null, ['valign' => 'center']);
+
+        // Menambahkan beberapa baris kosong untuk ruang tanda tangan
+        for ($i = 0; $i < 6; $i++) {
+            $cell->addText("", [], ['spaceAfter' => 24]);
+        }
+
+        $cell->addText("Teks di bagian bawah");
 
         $section->addTextBreak(1);
 
