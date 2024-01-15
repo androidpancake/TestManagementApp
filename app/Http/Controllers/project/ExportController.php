@@ -306,45 +306,100 @@ class ExportController extends Controller
         $tableAcc2->addRow();
 
         // kolom 1
-        $cellAcc1 = $tableAcc2->addCell(9000);
+        $cellAcc1 = $tableAcc2->addCell(5000);
 
         $cellAcc1->addText("Confirmed By,", $fontStyle, ['align' => 'center']);
-        for ($i = 0; $i < 6; $i++) {
-            $cellAcc1->addText("", [], ['spaceAfter' => 24]);
-        }
+        $cellAcc1->addTextBreak(6);
         $cellAcc1->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc1->addText("User Operations Development Group
-        Domestik Reconciliation Staff", $fontStyle, ['align' => 'center']);
+        $cellAcc1->addText("User TL", $fontStyle, ['align' => 'center']);
         
-        // kolom 1
-        $tableAcc2->addCell(9000)->addText("test");
-        $tableAcc2->addCell(9000)->addText("test");
+        // kolom 2
+        $cellAcc2 = $tableAcc2->addCell(5000);
+
+        $cellAcc2->addText("", $fontStyle, ['align' => 'center']);
+        $cellAcc2->addTextBreak(6);
+        $cellAcc2->addText("", $fontStyle, ['align' => 'center']);
+        $cellAcc2->addText("", $fontStyle, ['align' => 'center']);
+
+        // kolom 3
+        $cellAcc3 = $tableAcc2->addCell(5000);
+
+        $cellAcc3->addText("Confirmed By,", $fontStyle, ['align' => 'center']);
+        $cellAcc3->addTextBreak(6);
+        $cellAcc3->addText("Name:", $fontStyle, ['align' => 'center']);
+        $cellAcc3->addText("User", $fontStyle, ['align' => 'center']);
+
+        
+        $tableAcc2->addRow();
+
+        // kolom 4
+        $cellAcc4 = $tableAcc2->addCell(5000);
+
+        $cellAcc4->addText("Approve By,", $fontStyle, ['align' => 'center']);
+        $cellAcc4->addTextBreak(6);
+        $cellAcc4->addText("Name:", $fontStyle, ['align' => 'center']);
+        $cellAcc4->addText("User TL", $fontStyle, ['align' => 'center']);
+
+        // kolom 5
+        $cellAcc5 = $tableAcc2->addCell(5000);
+
+        $cellAcc5->addText("Approve By,", $fontStyle, ['align' => 'center']);
+        $cellAcc5->addTextBreak(6);
+        $cellAcc5->addText("Name:", $fontStyle, ['align' => 'center']);
+        $cellAcc5->addText("User Dept. Head", $fontStyle, ['align' => 'center']);
+
+        // kolom 6
+        $cellAcc6 = $tableAcc2->addCell(5000);
+
+        $cellAcc6->addText("Approve By,", $fontStyle, ['align' => 'center']);
+        $cellAcc6->addTextBreak(6);
+        $cellAcc6->addText("Name:", $fontStyle, ['align' => 'center']);
+        $cellAcc6->addText("User Group Head", $fontStyle, ['align' => 'center']);
 
         $tableAcc2->addRow();
-        $tableAcc2->addCell(9000)->addText("test");
-        $tableAcc2->addCell(9000)->addText("test");
-        $tableAcc2->addCell(9000)->addText("test");
+
+        // kolom 7
+        $cellAcc7 = $tableAcc2->addCell(5000);
+
+        $cellAcc7->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+        $cellAcc7->addTextBreak(6);
+        $cellAcc7->addText("Name:", $fontStyle, ['align' => 'center']);
+        $cellAcc7->addText("Project Manager", $fontStyle, ['align' => 'center']);
+
+        // kolom 8
+        $tableAcc2->addCell(5000);
+
+        // kolom 9
+        $cellAcc9 = $tableAcc2->addCell(5000);
+
+        $cellAcc9->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+        $cellAcc9->addTextBreak(6);
+        $cellAcc9->addText("Name:", $fontStyle, ['align' => 'center']);
+        $cellAcc9->addText("DH IT PMO", $fontStyle, ['align' => 'center']);
 
         $tableAcc2->addRow();
-        $tableAcc2->addCell(9000)->addText("test");
-        $tableAcc2->addCell(9000)->addText("test");
-        $tableAcc2->addCell(9000)->addText("test");
 
-        $tableAcc2->addRow();
-        $tableAcc2->addCell(1000)->addText("test");
-        $tableAcc2->addCell(1000)->addText("test");
-        $tableAcc2->addCell(1000)->addText("test");
+        $cellAcc10 = $tableAcc2->addCell(5000);
 
-        // $cellAcc2 = $tableAcc2->addCell(1000, ['gridSpan' => 48]);
-        // $cellAcc2->addText("Prepared By", $fontStyle, ['align' => 'center']);
+        $cellAcc10->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+        $cellAcc10->addTextBreak(6);
+        $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
+        $cellAcc10->addText("DH IT Testing - Quality Assurance", $fontStyle, ['align' => 'center']);
 
-        // for ($i = 0; $i < 6; $i++) {
-        //     $cellAcc2->addText("", [], ['spaceAfter' => 24]);
-        // }
+        $cellAcc10 = $tableAcc2->addCell(5000);
 
-        // $cellAcc2->addText("Name : ", $fontStyle, ['align' => 'center']);
-        // $cellAcc2->addText("Koordinator ". $project->test_level, $fontStyle, ['align' => 'center']);
+        $cellAcc10->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+        $cellAcc10->addTextBreak(6);
+        $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
+        $cellAcc10->addText("Deputy IT Application Support", $fontStyle, ['align' => 'center']);
 
+        $cellAcc10 = $tableAcc2->addCell(5000);
+
+        $cellAcc10->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+        $cellAcc10->addTextBreak(6);
+        $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
+        $cellAcc10->addText("Group Head IT Application Support", $fontStyle, ['align' => 'center']);
+        
         $section->addTextBreak(1);
 
         $table8 = $section->addTable($tableStyle, ['width' => 'auto']);
