@@ -35,6 +35,7 @@ class ExportController extends Controller
         $project = Project::with(['members', 'scenarios'])->findOrFail($id);
         $scenarios = Scenario::with(['case.step'])->where('project_id', $project->id)->get();
         $members = Members::where('project_id', $project->id)->get();
+        
         $img = file_get_contents('storage/image/logo/bsi.png');
 
         // Membuat instance PHPWord
@@ -48,6 +49,9 @@ class ExportController extends Controller
 
         // Font style
         $fontStyle = ['size' => 10];
+        $scenarioFont = ['size' => 14, 'bold' => true];
+        $caseFont = ['bold' => true];
+        $stepFont = ['bold' => true];
 
         $table = $section->addTable(['borderSize' => 1, 'borderColor' => '00FFFFFF']);
         $row = $table->addRow();
@@ -461,6 +465,26 @@ class ExportController extends Controller
             }
         }
 
+        $section->addPageBreak();
+
+        $scenarioNum = 0;
+        foreach($scenarios as $scenario){
+            $scenarioNum++;
+            $section->addText($scenarioNum . ". " . $scenario->scenario_name, $scenarioFont);
+
+            foreach($scenario->case as $case){
+                $section->addText("Test Case : ". $case->case, $caseFont);
+                $section->addText("Action Test : ");
+                $section->addText("Expected Result : ");
+                foreach($case->step as $step){
+                    $section->addText("Test Step ".$step->test_step_id, $stepFont);
+                    $section->addTextBreak(3);
+                    $section->addText("Result : ");
+                    $section->addTextBreak(2);
+                }
+            }
+        }
+        
 
         $writer = IOFactory::createWriter($phpWord, 'Word2007');
         $file_name = 'BA-' . date('Y-m-d') . '-' . $project->test_level . '.docx';
