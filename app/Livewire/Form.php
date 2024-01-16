@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Issue;
 use App\Models\Members;
 use App\Models\Project;
 use App\Models\Scenario;
@@ -20,7 +21,7 @@ class Form extends Component
     public $i = 0;
     public $users;
     public $currentStep = 1;
-    public $total_steps = 6;
+    public $total_steps = 7;
     public $name;
     public $jira_code;
     public $test_level;
@@ -32,7 +33,9 @@ class Form extends Component
     public $scope;
     public $env;
     public $sat_process;
-    public $issue;
+    public $issue = [];
+    public $issue_name;
+    public $issue_status;
     public $credentials;
     public $retesting;
     public $other;
@@ -87,7 +90,9 @@ class Form extends Component
         $this->scope;
         $this->env;
         $this->sat_process;
-        $this->issue;
+        $this->issue = [];
+        $this->issue_name;
+        $this->issue_status;
         $this->credentials;
         $this->retesting;
         $this->other;
@@ -97,15 +102,6 @@ class Form extends Component
         $this->status = 'Not Generated';
         $this->render();
     }
-
-    // public function render()
-    // {
-
-    //     return view('livewire.form')->with([
-    //         'title' => 'SIT Form',
-    //         'description' => 'Please complete the documents to generate reports'
-    //     ]);
-    // }
 
     public function render()
     {
@@ -163,6 +159,14 @@ class Form extends Component
         ];
     }
 
+    public function addIssue()
+    {
+        $this->issue[] = [
+            'issue' => '',
+            'status' => ''
+        ];
+    }
+
     public function removeUser($index)
     {
         unset($this->users[$index]);
@@ -181,7 +185,6 @@ class Form extends Component
         session()->put('desc', $this->desc);
         session()->put('scope', $this->scope);
         session()->put('env', $this->env);
-        session()->put('issue', $this->issue);
         session()->put('credentials', $this->credentials);
         session()->put('other', $this->other);
         session()->put('sat_process', $this->sat_process);
@@ -192,6 +195,17 @@ class Form extends Component
         session()->put('uat_result', $this->uat_result);
         session()->put('other', $this->other);
         session()->put('remarks', $this->remarks);
+
+        // issue
+        if (is_array($this->issue)) {
+            foreach ($this->issue as $issue) {
+                session()->put([
+                    'issue.*.project_id' => session('project_id'),
+                    'issue.*.issue' => $issue['issue'],
+                    'issue.*.status' => $issue['status']
+                ]);
+            }
+        }
 
         //members
         if (is_array($this->users)) {
@@ -205,7 +219,7 @@ class Form extends Component
             }
         }
 
-        //sceneario
+        //scenario
         if (is_array($this->scenarios)) {
             foreach ($this->scenarios as $scenario) {
 
@@ -239,7 +253,7 @@ class Form extends Component
                             dd($this->steps);
                         }
                     }
-                } 
+                }
             }
         }
     }
@@ -256,7 +270,6 @@ class Form extends Component
             'user_id' => auth()->id(),
             'desc' => $this->desc,
             'scope' => $this->scope,
-            'issue' => $this->issue,
             'credentials' => $this->credentials,
             'env' => $this->env,
             'sat_process' => $this->sat_process,
@@ -274,6 +287,15 @@ class Form extends Component
 
         session(['project_id' => $project->id]);
 
+        if (is_array($this->issue)) {
+            foreach ($this->issue as $issue) {
+                Issue::create([
+                    'project_id' => session('project_id'),
+                    'issue' => $issue['issue'],
+                    'status' => $issue['status']
+                ]);
+            }
+        }
         if (is_array($this->users)) {
             foreach ($this->users as $user) {
                 Members::create([
@@ -348,7 +370,6 @@ class Form extends Component
             'case' => $this->case,
             'steps' => []
         ];
-
     }
 
     public function addTestStep($scenarioIndex, $caseIndex)
@@ -362,7 +383,7 @@ class Form extends Component
             'severity' => $this->severity,
             'status' => $this->status
         ];
-        
+
         // $this->test_step_id = '';
         // $this->test_step = '';
         // $this->expected_result = '';
@@ -436,18 +457,22 @@ class Form extends Component
         } elseif ($this->currentStep === 3) {
             $validated = $this->validate([
                 'env' => 'required',
-                'issue' => 'required',
                 'credentials' => 'required',
                 'retesting' => 'required',
                 'other' => 'nullable'
             ]);
         } elseif ($this->currentStep === 4) {
             $validated = $this->validate([
+                'issue.*.issue' => 'required',
+                'issue.*.status' => 'required',
+            ]);
+        } elseif ($this->currentStep === 5) {
+            $validated = $this->validate([
                 'users.*.user_name' => 'required',
                 'users.*.unit' => 'required',
                 'users.*.telephone' => 'required|numeric',
             ]);
-        } elseif ($this->currentStep === 5) {
+        } elseif ($this->currentStep === 6) {
             $validated = $this->validate([
                 'scenarios.*.scenario_name' => 'required',
                 'scenarios.*.cases.*.case' => 'required',
@@ -460,7 +485,7 @@ class Form extends Component
             ]);
 
             // dd($validated);
-        } elseif ($this->currentStep === 6) {
+        } elseif ($this->currentStep === 7) {
             $validated = $this->validate([
                 'tmp' => 'required',
                 'updated_uat' => 'required',

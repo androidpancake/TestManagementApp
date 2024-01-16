@@ -16,7 +16,7 @@ Route::get('page/project', [ProjectController::class, 'index'])->name('project.i
 Route::middleware(['auth', 'role:user'])->group(
     function () {
         Route::get('project', Project::class)->name('project');
-        Route::get('project/detail/{id}', DetailProject::class);
+        Route::get('project/detail/{id}', DetailProject::class)->name('project.detail');
         Route::get('sit/form', Form::class)->name('sit.form');
         Route::get('uat/form', Form::class)->name('uat.form');
         Route::get('sit', SIT::class)->name('sit.index');

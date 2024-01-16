@@ -19,7 +19,7 @@ class DetailProject extends Component
 
     public function mount($id)
     {
-        $this->project = Project::with(['members', 'scenarios'])->findOrFail($id);
+        $this->project = Project::with(['members', 'scenarios', 'issue'])->findOrFail($id);
         $this->scenarios = Scenario::with(['case.step'])->where('project_id', $this->project->id)->get();
         $this->members = Members::where('project_id', $this->project->id)->get();
         $this->totalStep;

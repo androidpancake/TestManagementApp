@@ -21,7 +21,6 @@ class Project extends Model
         'end_date',
         'desc',
         'scope',
-        'issue',
         'credentials',
         'sat_process',
         'retesting',
@@ -51,5 +50,10 @@ class Project extends Model
     public function scenarios()
     {
         return $this->hasMany(Scenario::class, 'project_id');
+    }
+
+    public function issue()
+    {
+        return $this->hasMany(Issue::class, 'project_id');
     }
 }

@@ -35,7 +35,7 @@ class ExportController extends Controller
         $project = Project::with(['members', 'scenarios'])->findOrFail($id);
         $scenarios = Scenario::with(['case.step'])->where('project_id', $project->id)->get();
         $members = Members::where('project_id', $project->id)->get();
-        
+
         $img = file_get_contents('storage/image/logo/bsi.png');
 
         // Membuat instance PHPWord
@@ -244,7 +244,13 @@ class ExportController extends Controller
 
         $table6->addRow();
         $table6->addCell(1000)->addText("Defect/Issue Found");
-        $table6->addCell(8000)->addText($project->issue);
+
+        $issues = '';
+        foreach ($project->issue as $issue) {
+            $issues .= $issue->issue . ", ";
+        }
+
+        $table6->addCell(8000)->addText($issues);
 
         $table6->addRow();
         $table6->addCell(1000)->addText("Other");
@@ -300,7 +306,7 @@ class ExportController extends Controller
         }
 
         $cell->addText("Name : ", $fontStyle, ['align' => 'center']);
-        $cell->addText("Koordinator ". $project->test_level, $fontStyle, ['align' => 'center']);
+        $cell->addText("Koordinator " . $project->test_level, $fontStyle, ['align' => 'center']);
 
         $section->addTextBreak(1);
 
@@ -316,7 +322,7 @@ class ExportController extends Controller
         $cellAcc1->addTextBreak(6);
         $cellAcc1->addText("Name:", $fontStyle, ['align' => 'center']);
         $cellAcc1->addText("User TL", $fontStyle, ['align' => 'center']);
-        
+
         // kolom 2
         $cellAcc2 = $tableAcc2->addCell(5000);
 
@@ -333,7 +339,7 @@ class ExportController extends Controller
         $cellAcc3->addText("Name:", $fontStyle, ['align' => 'center']);
         $cellAcc3->addText("User", $fontStyle, ['align' => 'center']);
 
-        
+
         $tableAcc2->addRow();
 
         // kolom 4
@@ -403,7 +409,7 @@ class ExportController extends Controller
         $cellAcc10->addTextBreak(6);
         $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
         $cellAcc10->addText("Group Head IT Application Support", $fontStyle, ['align' => 'center']);
-        
+
         $section->addTextBreak(1);
 
         $table8 = $section->addTable($tableStyle, ['width' => 'auto']);
@@ -468,23 +474,23 @@ class ExportController extends Controller
         $section->addPageBreak();
 
         $scenarioNum = 0;
-        foreach($scenarios as $scenario){
+        foreach ($scenarios as $scenario) {
             $scenarioNum++;
             $section->addText($scenarioNum . ". " . $scenario->scenario_name, $scenarioFont);
 
-            foreach($scenario->case as $case){
-                $section->addText("Test Case : ". $case->case, $caseFont);
+            foreach ($scenario->case as $case) {
+                $section->addText("Test Case : " . $case->case, $caseFont);
                 $section->addText("Action Test : ");
                 $section->addText("Expected Result : ");
-                foreach($case->step as $step){
-                    $section->addText("Test Step ".$step->test_step_id, $stepFont);
+                foreach ($case->step as $step) {
+                    $section->addText("Test Step " . $step->test_step_id, $stepFont);
                     $section->addTextBreak(3);
                     $section->addText("Result : ");
                     $section->addTextBreak(2);
                 }
             }
         }
-        
+
 
         $writer = IOFactory::createWriter($phpWord, 'Word2007');
         $file_name = 'BA-' . date('Y-m-d') . '-' . $project->test_level . '.docx';
