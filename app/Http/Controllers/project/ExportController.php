@@ -32,9 +32,24 @@ class ExportController extends Controller
 
     public function export($id)
     {
-        $project = Project::with(['members', 'scenarios'])->findOrFail($id);
+        $project = Project::with(['members', 'scenarios.case.step', 'issue'])->findOrFail($id);
         $scenarios = Scenario::with(['case.step'])->where('project_id', $project->id)->get();
         $members = Members::where('project_id', $project->id)->get();
+
+        // count
+        $passed = 0;
+        $failed = 0;
+        $executed = 0;
+        $planned = 0;
+
+        foreach ($project->scenarios as $scenario) {
+            foreach ($scenario->case as $case) {
+                $planned += $scenario->case->count();
+                $executed += $scenario->case->count();
+                $passed += $case->step->where('status', 'passed')->count();
+                $failed += $case->step->where('status', 'failed')->count();
+            }
+        }
 
         $img = file_get_contents('storage/image/logo/bsi.png');
 
@@ -120,10 +135,14 @@ class ExportController extends Controller
         // Baris keempat
         $table2->addRow();
         $table2->addCell(1750)->addText("UAT");
-        // Membuat 9 sel kosong
-        for ($i = 0; $i < 9; $i++) {
-            $table2->addCell(350)->addText("");
-        }
+        $table2->addCell(350)->addText($planned);
+        $table2->addCell(350)->addText($executed);
+        $table2->addCell(350)->addText($passed);
+        $table2->addCell(350)->addText($failed);
+        $table2->addCell(350)->addText("");
+        $table2->addCell(350)->addText("");
+        $table2->addCell(350)->addText("");
+        $table2->addCell(350)->addText("");
 
         // Baris kelima
         $table2->addRow();
