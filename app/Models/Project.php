@@ -33,6 +33,11 @@ class Project extends Model
         'uat_result',
         'other',
         'remarks',
+        'tmp_remark',
+        'updated_remark',
+        'uat_remark',
+        'uat_attendance_remark',
+        'other_remark',
         'status',
         'user_id'
     ];

@@ -61,6 +61,11 @@ class Form extends Component
     public $uat_attendance;
     public $uat_result;
     public $remarks;
+    public $tmp_remark;
+    public $updated_remark;
+    public $uat_remark;
+    public $uat_attendance_remark;
+    public $other_remark;
     public $category;
     public $severity;
     public $test_status;
@@ -226,6 +231,7 @@ class Form extends Component
                     'users.*.project_id' => session('project_id'),
                     'users.*.user_name' => $user['user_name'],
                     'users.*.unit' => $user['unit'],
+                    'users.*.group' => $user['group'],
                     'users.*.telephone' => $user['telephone']
                 ]);
             }
@@ -292,7 +298,11 @@ class Form extends Component
             'updated_uat' => $this->updated_uat,
             'uat_attendance' => $this->uat_attendance,
             'uat_result' => $this->uat_result,
-            // 'remarks' => $this->remarks,
+            'tmp_remark' => $this->tmp_remark,
+            'updated_remark' => $this->updated_remark,
+            'uat_remark' => $this->uat_remark,
+            'uat_attendance_remark' => $this->uat_attendance_remark,
+            'other_remark' => $this->other_remark,
         ]);
 
         // dd($project);
@@ -314,6 +324,7 @@ class Form extends Component
                     'project_id' => session('project_id'),
                     'user_name' => $user['user_name'],
                     'unit' => $user['unit'],
+                    'group' => $user['group'],
                     'telephone' => $user['telephone']
                 ]);
             }
@@ -458,8 +469,8 @@ class Form extends Component
                 'jira_code' => 'required',
                 'test_type' => 'required',
                 'test_level' => 'required',
-                'start_date' => 'required',
-                'end_date' => 'required'
+                'start_date' => 'required|date|before_or_equal:end_date',
+                'end_date' => 'required|date|after_or_equal:start_date'
             ]);
         } elseif ($this->currentStep === 2) {
             $validated = $this->validate([
@@ -482,6 +493,7 @@ class Form extends Component
             $validated = $this->validate([
                 'users.*.user_name' => 'required',
                 'users.*.unit' => 'required',
+                'users.*.group' => 'required',
                 'users.*.telephone' => 'required|numeric',
             ]);
         } elseif ($this->currentStep === 6) {
@@ -505,6 +517,11 @@ class Form extends Component
                 'uat_attendance' => 'required',
                 'other' => 'required',
                 'remarks' => 'nullable',
+                'tmp_remark' => 'nullable',
+                'updated_remark' => 'nullable',
+                'uat_remark' => 'nullable',
+                'uat_attendance_remark' => 'nullable',
+                'other_remark' => 'nullable',
             ]);
         }
     }

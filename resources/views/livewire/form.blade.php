@@ -175,6 +175,13 @@
                 @enderror
             </div>
             <div class="mb-5 w-full">
+                <label for="group-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unit</label>
+                <input type="text" wire:model="users.{{ $index }}.group" id="unit-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
+                @error('group')
+                <span class="text-red-800">{{$message}}</span>
+                @enderror
+            </div>
+            <div class="mb-5 w-full">
                 <label for="telephone-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Telephone</label>
                 <input type="number" wire:model="users.{{ $index }}.telephone" id="telephone-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
                 @error('telephone')
@@ -297,6 +304,7 @@
                     <td class="px-6 py-4">
                         <label for="category">Category</label>
                         <select wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.category" class="w-full bg-white border border-gray-200 rounded-lg">
+                            <option value="">Pilih</option>
                             <option value="positive">Positive</option>
                             <option value="negative">negative</option>
                         </select>
@@ -307,6 +315,7 @@
                     <td class="px-6 py-4">
                         <label for="category">Severity</label>
                         <select wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.severity" class="w-full bg-white border border-gray-200 rounded-lg">
+                            <option value="">Pilih</option>
                             <option value="high">High</option>
                             <option value="medium">Medium</option>
                             <option value="low">Low</option>
@@ -318,6 +327,7 @@
                     <td class="px-6 py-4">
                         <label for="category">Status</label>
                         <select wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.status" class="w-full bg-white border border-gray-200 rounded-lg">
+                            <option value="">Pilih</option>
                             <option value="passed">Passed</option>
                             <option value="failed">Failed</option>
                         </select>
@@ -364,7 +374,7 @@
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="tmp_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -378,7 +388,7 @@
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="updated_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -392,7 +402,7 @@
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="uat_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -406,7 +416,7 @@
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="uat_attendance_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -420,7 +430,7 @@
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="remarks[]" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="other_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
             </tbody>

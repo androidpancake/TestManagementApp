@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Scenario;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Shared\Html;
@@ -77,7 +78,7 @@ class ExportController extends Controller
             'borderColor' => 'ffffff'
         ];
         // Font style
-        $fontStyle = ['size' => 10];
+        $fontStyle = ['size' => 10, 'bold' => true];
         $tableHeadFont = ['size' => 9, 'bold' => true];
         $scenarioFont = ['size' => 14, 'bold' => true];
         $caseFont = ['bold' => true];
@@ -103,19 +104,19 @@ class ExportController extends Controller
         // tabel header project
         // Baris 1
         $table1->addRow();
-        $table1->addCell(2000)->addText("Project Name");
+        $table1->addCell(2000)->addText("Project Name", ['bold' => true]);
         $table1->addCell(2000, ['gridSpan' => 2, 'vAlign' => 'center'])->addText($project->name);
-        $table1->addCell(2000)->addText("Kode JIRA");
+        $table1->addCell(2000)->addText("Kode JIRA", ['bold' => true]);
         $table1->addCell(2000, ['gridSpan' => 2, 'vAlign' => 'center'])->addText($project->jira_code);
 
         // Baris 2
         $table1->addRow();
-        $table1->addCell(2000)->addText("Test Level");
+        $table1->addCell(2000)->addText("Test Level", ['bold' => true]);
         $table1->addCell(2000)->addText($project->test_level);
-        $table1->addCell(2000)->addText("Start Date");
-        $table1->addCell(2000)->addText($project->start_date);
-        $table1->addCell(2000)->addText("End Date");
-        $table1->addCell(2000)->addText($project->end_date);
+        $table1->addCell(2000)->addText("Start Date", ['bold' => true]);
+        $table1->addCell(2000)->addText(\Carbon\Carbon::parse($project->start_date)->format('d F Y'));
+        $table1->addCell(2000)->addText("End Date", ['bold' => true]);
+        $table1->addCell(2000)->addText(\Carbon\Carbon::parse($project->start_date)->format('d F Y'));
 
 
         $section->addTextBreak(1);
@@ -123,14 +124,14 @@ class ExportController extends Controller
         // Table Summary Test
         $table2 = $section->addTable($tableStyle);
         $table2->addRow();
-        $table2->addCell(2000, ['bgColor' => 'a6a6a6'])->addText("Test Type");
+        $table2->addCell(2000, ['bgColor' => 'dedede'])->addText("Test Type");
         $table2->addCell(2000, ['gridSpan' => 9])->addText($project->test_type);
 
         // Baris kedua
         $table2->addRow();
-        $table2->addCell(1750, ['vMerge' => 'restart', 'bgColor' => 'a6a6a6'])->addText("Status");
-        $table2->addCell(2000, ['gridSpan' => 5, 'bgColor' => 'a6a6a6'])->addText("Test Cases");
-        $table2->addCell(3200, ['gridSpan' => 4, 'bgColor' => 'a6a6a6'])->addText("Defect Severity");
+        $table2->addCell(1750, ['vMerge' => 'restart', 'bgColor' => 'dedede'])->addText("Status");
+        $table2->addCell(2000, ['gridSpan' => 5, 'bgColor' => 'dedede'])->addText("Test Cases");
+        $table2->addCell(3200, ['gridSpan' => 4, 'bgColor' => 'dedede'])->addText("Defect Severity");
 
         // kolom test cases
         $table2->addRow();
@@ -162,7 +163,7 @@ class ExportController extends Controller
 
         // Baris kelima
         $table2->addRow();
-        $table2->addCell(1750)->addText("Outstanding Defect (at the end of the testing)");
+        $table2->addCell(1750, ['bgColor' => 'dedede'])->addText("Outstanding Defect (at the end of the testing)");
         $table2->addCell(700, ['gridSpan' => 2])->addText("Very High");
         $table2->addCell(700, ['gridSpan' => 3])->addText("High");
         $table2->addCell(700, ['gridSpan' => 2])->addText("Medium");
@@ -183,8 +184,8 @@ class ExportController extends Controller
         $table3 = $section->addTable($tableStyle);
         $table3->addRow();
 
-        $table3->addCell(2000, ['bgColor' => 'a6a6a6'])->addText("User Involvement");
-        $table3->addCell(2000, ['gridSpan' => 5, 'bgColor' => 'a6a6a6'])->addText('Active / Passive / Absence');
+        $table3->addCell(2000, ['bgColor' => 'dedede'])->addText("User Involvement");
+        $table3->addCell(2000, ['gridSpan' => 5, 'bgColor' => 'dedede'])->addText('Active / Passive / Absence');
 
         $table3->addRow();
         $table3->addCell(1750, ['vMerge' => 'restart'])->addText("List of " . $project->test_level . " tester");
@@ -209,16 +210,16 @@ class ExportController extends Controller
         $table4 = $section->addTable($tableStyle, ['width' => 'auto']);
 
         $table4->addRow();
-        $table4->addCell(1200)->addText("SAT Process");
+        $table4->addCell(1200, ['bgColor' => 'dedede'])->addText("SAT Process");
         $table4->addCell(3800, ['gridSpan' => 4, 'valign' => 'center'])->addText($project->sat_process);
-        $table4->addCell(1200)->addText("Retesting after Merging");
+        $table4->addCell(1200, ['bgColor' => 'dedede'])->addText("Retesting after Merging");
         $table4->addCell(3800, ['gridSpan' => 4, 'valign' => 'center'])->addText($project->retesting);
 
         $section->addTextBreak(1);
         $table5 = $section->addTable($tableStyle, ['width' => 'auto']);
 
         $table5->addRow();
-        $table5->addCell(1750, ['vMerge' => 'restart'])->addText("Document Completeness");
+        $table5->addCell(1750, ['vMerge' => 'restart', 'bgColor' => '770ea1'])->addText("Document Completeness", ['color' => 'ffffff']);
         $table5->addCell(2500, ['bgColor' => '8dd7f7'])->addText("Document Name");
         $table5->addCell(2500, ['bgColor' => '8dd7f7'])->addText("Document Availability");
         $table5->addCell(2500, ['bgColor' => '8dd7f7'])->addText("Remarks");
@@ -258,7 +259,7 @@ class ExportController extends Controller
         $table6 = $section->addTable($tableStyle);
 
         $table6->addRow();
-        $table6->addCell(1000)->addText("Description / 
+        $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Description / 
         Business Process 
         Flow / Changes 
         Made
@@ -266,19 +267,19 @@ class ExportController extends Controller
         $table6->addCell(1000)->addText("Introduction");
 
         $table6->addRow();
-        $table6->addCell(1000)->addText("Scope of Testing");
+        $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Scope of Testing");
         $table6->addCell(8000)->addText($project->scope);
 
         $table6->addRow();
-        $table6->addCell(1000)->addText("Test Environment");
+        $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Test Environment");
         $table6->addCell(8000)->addText($project->env);
 
         $table6->addRow();
-        $table6->addCell(1000)->addText("Credentials");
+        $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Credentials");
         $table6->addCell(8000)->addText($project->credentials);
 
         $table6->addRow();
-        $table6->addCell(1000)->addText("Defect/Issue Found");
+        $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Defect/Issue Found");
 
         $issues = '';
         foreach ($project->issue as $issue) {
@@ -288,7 +289,7 @@ class ExportController extends Controller
         $table6->addCell(8000)->addText($issues);
 
         $table6->addRow();
-        $table6->addCell(1000)->addText("Other");
+        $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Other");
         $table6->addCell(8000)->addText($project->other);
 
         $section->addTextBreak(1);
@@ -296,11 +297,11 @@ class ExportController extends Controller
         $table7 = $section->addTable($tableStyle);
 
         $table7->addRow();
-        $table7->addCell(2000)->addText("Classification of 
+        $table7->addCell(2000, ['bgColor' => 'dedede'])->addText("Classification of 
         Defect (based on 
         severity)
         ");
-        $table7->addCell(null, ['gridSpan' => 2])->addText("Impact of Defects");
+        $table7->addCell(null, ['gridSpan' => 2, 'bgColor' => 'dedede'])->addText("Impact of Defects");
 
         $table7->addRow();
         $table7->addCell(2000)->addText("Very High
@@ -321,7 +322,21 @@ class ExportController extends Controller
 
         $section->addPageBreak();
 
-        $section->addText('Pihak-pihak yang bertandatangan di bawah ini menyatakan bahwa telah dilaksanakan ' . $project->test_level . ' pada tanggal ' . $project->start_date . ' hingga ' . $project->end_date . ' untuk ' . $project->name . ' sesuai skenario yang tercantum dalam Test Script UAT dengan hasil tercantum pada ' . $project->test_level . ' Report. Dengan ini kecukupan pelaksanaan dan hasil ' . $project->test_level . ' adalah tanggung jawab User.');
+        $textRun = $section->addTextRun();
+
+        $textRun->addText('Pihak-pihak yang bertandatangan di bawah ini menyatakan bahwa telah dilaksanakan ');
+        $textRun->addText($project->test_level . ' ', array('bold' => true));
+        $textRun->addText('pada tanggal ');
+        $textRun->addText($project->start_date, array('bold' => true)); // Teks ditebalkan
+        $textRun->addText(' hingga ');
+        $textRun->addText($project->end_date, array('bold' => true));
+        $textRun->addText(' untuk ');
+        $textRun->addText($project->name . ' ', array('bold' => true));
+        $textRun->addText('sesuai skenario yang tercantum dalam Test Script UAT dengan hasil tercantum pada ');
+        $textRun->addText($project->test_level . ' ', array('bold' => true));
+        $textRun->addText('Report. Dengan ini kecukupan pelaksanaan dan hasil ');
+        $textRun->addText($project->test_level, array('bold' => true));
+        $textRun->addText(' adalah tanggung jawab User.');
 
         $section->addTextBreak(1);
 
@@ -526,7 +541,7 @@ class ExportController extends Controller
 
 
         $writer = IOFactory::createWriter($phpWord, 'Word2007');
-        $file_name = 'BA-' . date('Y-m-d') . '-' . $project->test_level . '.docx';
+        $file_name = 'BA-' . $project->test_level . '-' . $project->name . '.docx';
 
         $temp_file = tempnam(sys_get_temp_dir(), $file_name);
         $writer->save($temp_file);

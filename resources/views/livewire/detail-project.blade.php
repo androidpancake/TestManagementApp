@@ -156,6 +156,9 @@
                                     Unit
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    Group
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Telephone
                                 </th>
                             </tr>
@@ -165,6 +168,7 @@
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td class="px-6 py-4">{{ $data->user_name }}</td>
                                 <td class="px-6 py-4">{{ $data->unit }}</td>
+                                <td class="px-6 py-4">{{ $data->group }}</td>
                                 <td class="px-6 py-4">{{ $data->telephone }}</td>
                             </tr>
                             @endforeach
@@ -256,8 +260,10 @@
             </div>
         </section>
         <section>
-            <a href="{{ route('generate', $project->id) }}">
-                <button class="bg-bsi-primary p-2 text-sm text-white">Generate</button>
-            </a>
+            <div class="flex justify-end">
+                <a href="{{ route('generate', $project->id) }}">
+                    <button class="bg-bsi-primary p-2 text-sm text-white rounded-lg">Generate</button>
+                </a>
+            </div>
         </section>
     </div>
