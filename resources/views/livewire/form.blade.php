@@ -142,7 +142,7 @@
                 </select>
             </div>
             <div>
-                <button wire:click="" id="minUser" type="button" class="text-white bg-red-400 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800 dark:bg-red-800">
+                <button wire:click="removeIssue({{ $index }})" id="removeIssue" type="button" class="text-white bg-red-400 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800 dark:bg-red-800">
                     <i class="ph ph-minus"></i>
                     <span class="sr-only">Icon description</span>
                 </button>
@@ -259,8 +259,10 @@
 
                     @foreach($scenario['cases'] as $caseIndex => $case)
                 <tr wire:key="case-{{ $scenarioIndex }}-{{ $caseIndex }}">
+                    <td></td>
+                    <td></td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.case" class="w-full rounded border border-gray-300" value="" placeholder="Case">
+                        <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.case" class="w-full rounded border border-gray-300" value="" placeholder="Masukkan Case">
                         @error('case')
                         <span class="text-red-800">{{$message}}</span>
                         @enderror
@@ -271,8 +273,11 @@
                     </td>
                     @foreach($case['steps'] as $stepIndex => $step)
                 <tr wire:key="step-{{ $scenarioIndex }}-{{ $caseIndex }}-{{ $stepIndex }}">
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.test_step_id" class="w-full rounded border border-gray-300" placeholder="Test Step ID">
+                        <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.test_step_id" class="w-full rounded border border-gray-300" value="TS-{{ $stepIndex }}">
                         @error('test_step_id')
                         <span class="text-red-800">{{$message}}</span>
                         @enderror

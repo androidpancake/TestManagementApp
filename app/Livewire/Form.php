@@ -100,6 +100,12 @@ class Form extends Component
         $this->unit;
         $this->telephone;
         $this->status = 'Not Generated';
+        $this->test_step;
+        $this->test_step_id;
+        $this->expected_result;
+        $this->category;
+        $this->severity;
+        $this->status;
         $this->render();
     }
 
@@ -165,6 +171,12 @@ class Form extends Component
             'issue' => '',
             'status' => ''
         ];
+    }
+
+    public function removeIssue($index)
+    {
+        unset($this->issue[$index]);
+        $this->issue = array_values($this->issue);
     }
 
     public function removeUser($index)
@@ -235,7 +247,7 @@ class Form extends Component
                         // $caseId = $case->id;
                         // session()->put('case_id');
 
-                        dd($this->case);
+                        // dd($this->case);
                     }
 
                     //step
@@ -250,7 +262,7 @@ class Form extends Component
                                 'scenarios.*.cases.*.steps.*.status' => $step['status'],
                             ]);
 
-                            dd($this->steps);
+                            // dd($this->steps);
                         }
                     }
                 }
@@ -374,22 +386,22 @@ class Form extends Component
 
     public function addTestStep($scenarioIndex, $caseIndex)
     {
-
+        $totalSteps = 0;
+        foreach ($this->scenarios as $sIndex => $scenario) {
+            foreach ($scenario['cases'] as $cIndex => $case) {
+                if ($sIndex < $scenarioIndex || ($sIndex == $scenarioIndex && $cIndex <= $caseIndex)) {
+                    $totalSteps += count($case['steps']);
+                }
+            }
+        }
         $this->scenarios[$scenarioIndex]['cases'][$caseIndex]['steps'][] = [
-            'test_step_id' => $this->test_step_id,
+            'test_step_id' => 'TS-' . ($totalSteps + 1),
             'test_step' => $this->test_step,
             'expected_result' => $this->expected_result,
             'category' => $this->category,
             'severity' => $this->severity,
             'status' => $this->status
         ];
-
-        // $this->test_step_id = '';
-        // $this->test_step = '';
-        // $this->expected_result = '';
-        // $this->category = '';
-        // $this->severity = '';
-        // $this->status = '';
     }
 
     public function removeScenario($index)

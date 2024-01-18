@@ -42,6 +42,11 @@ class ExportController extends Controller
         $executed = 0;
         $planned = 0;
 
+        $vh_def = 0;
+        $h_def = 0;
+        $m_def = 0;
+        $l_def = 0;
+
         foreach ($project->scenarios as $scenario) {
             foreach ($scenario->case as $case) {
                 $planned += $scenario->case->count();
@@ -50,6 +55,12 @@ class ExportController extends Controller
                 $failed += $case->step->where('status', 'failed')->count();
             }
         }
+
+        // dd($project->issue);
+        $vh_def += $project->issue->where('status', 'very high')->count();
+        $h_def += $project->issue->where('status', 'high')->count();
+        $m_def += $project->issue->where('status', 'medium')->count();
+        $l_def += $project->issue->where('status', 'low')->count();
 
         $img = file_get_contents('storage/image/logo/bsi.png');
 
@@ -61,18 +72,22 @@ class ExportController extends Controller
 
         // Membuat style tabel
         $tableStyle = ['borderSize' => 1, 'borderColor' => '000000'];
-
+        $headerTableStyle = [
+            'borderSize' => 1,
+            'borderColor' => 'ffffff'
+        ];
         // Font style
         $fontStyle = ['size' => 10];
+        $tableHeadFont = ['size' => 9, 'bold' => true];
         $scenarioFont = ['size' => 14, 'bold' => true];
         $caseFont = ['bold' => true];
         $stepFont = ['bold' => true];
 
-        $table = $section->addTable(['borderSize' => 1, 'borderColor' => '00FFFFFF']);
+        $table = $section->addTable($headerTableStyle);
         $row = $table->addRow();
 
         $cell1 = $row->addCell(5000);
-        $cell1->addText("Test Report - " . $project->test_level);
+        $cell1->addText("Test Report - " . $project->test_level, ['bold' => true]);
         $cell1->addText("Version 1.0");
 
         // Menambahkan gambar ke kolom kedua
@@ -108,29 +123,29 @@ class ExportController extends Controller
         // Table Summary Test
         $table2 = $section->addTable($tableStyle);
         $table2->addRow();
-        $table2->addCell(2000)->addText("Test Type");
+        $table2->addCell(2000, ['bgColor' => 'a6a6a6'])->addText("Test Type");
         $table2->addCell(2000, ['gridSpan' => 9])->addText($project->test_type);
 
         // Baris kedua
         $table2->addRow();
-        $table2->addCell(1750, ['vMerge' => 'restart'])->addText("Status");
-        $table2->addCell(2000, ['gridSpan' => 5])->addText("Test Cases");
-        $table2->addCell(3200, ['gridSpan' => 4])->addText("Defect Severity");
+        $table2->addCell(1750, ['vMerge' => 'restart', 'bgColor' => 'a6a6a6'])->addText("Status");
+        $table2->addCell(2000, ['gridSpan' => 5, 'bgColor' => 'a6a6a6'])->addText("Test Cases");
+        $table2->addCell(3200, ['gridSpan' => 4, 'bgColor' => 'a6a6a6'])->addText("Defect Severity");
 
         // kolom test cases
         $table2->addRow();
         $table2->addCell(null, ['vMerge' => 'continue']);
-        $table2->addCell(800)->addText("Planned");
-        $table2->addCell(800)->addText("Executed");
-        $table2->addCell(800)->addText("Pass");
-        $table2->addCell(800)->addText("Failed");
-        $table2->addCell(800)->addText("N/A");
+        $table2->addCell(800, ['bgColor' => '8dd7f7'])->addText("Planned", $tableHeadFont);
+        $table2->addCell(800, ['bgColor' => '8dd7f7'])->addText("Executed", $tableHeadFont);
+        $table2->addCell(800, ['bgColor' => '8dd7f7'])->addText("Pass", $tableHeadFont);
+        $table2->addCell(800, ['bgColor' => '8dd7f7'])->addText("Failed", $tableHeadFont);
+        $table2->addCell(800, ['bgColor' => '8dd7f7'])->addText("N/A", $tableHeadFont);
 
         // kolom defect
-        $table2->addCell(800, ['valign' => 'center'])->addText("Very High");
-        $table2->addCell(500)->addText("High");
-        $table2->addCell(400)->addText("Medium");
-        $table2->addCell(400)->addText("Low");
+        $table2->addCell(800, ['valign' => 'center', 'bgColor' => '8dd7f7'])->addText("Very High", $tableHeadFont);
+        $table2->addCell(500, ['bgColor' => '8dd7f7'])->addText("High", $tableHeadFont);
+        $table2->addCell(400, ['bgColor' => '8dd7f7'])->addText("Medium", $tableHeadFont);
+        $table2->addCell(400, ['bgColor' => '8dd7f7'])->addText("Low", $tableHeadFont);
 
         // Baris keempat
         $table2->addRow();
@@ -139,10 +154,11 @@ class ExportController extends Controller
         $table2->addCell(350)->addText($executed);
         $table2->addCell(350)->addText($passed);
         $table2->addCell(350)->addText($failed);
-        $table2->addCell(350)->addText("");
-        $table2->addCell(350)->addText("");
-        $table2->addCell(350)->addText("");
-        $table2->addCell(350)->addText("");
+        $table2->addCell(350)->addText("N/A");
+        $table2->addCell(350)->addText($vh_def);
+        $table2->addCell(350)->addText($h_def);
+        $table2->addCell(350)->addText($m_def);
+        $table2->addCell(350)->addText($l_def);
 
         // Baris kelima
         $table2->addRow();
@@ -155,10 +171,10 @@ class ExportController extends Controller
         // Baris keenam
         $table2->addRow();
         $table2->addCell(1750)->addText("Deferred Defects");
-        $table2->addCell(350, ['gridSpan' => 2])->addText("vh");
-        $table2->addCell(350, ['gridSpan' => 3])->addText("h");
-        $table2->addCell(350, ['gridSpan' => 2])->addText("m");
-        $table2->addCell(350, ['gridSpan' => 2])->addText("l");
+        $table2->addCell(350, ['gridSpan' => 2])->addText("");
+        $table2->addCell(350, ['gridSpan' => 3])->addText("");
+        $table2->addCell(350, ['gridSpan' => 2])->addText("");
+        $table2->addCell(350, ['gridSpan' => 2])->addText("");
 
 
         $section->addTextBreak(1);
@@ -167,16 +183,16 @@ class ExportController extends Controller
         $table3 = $section->addTable($tableStyle);
         $table3->addRow();
 
-        $table3->addCell(2000)->addText("User Involvement");
-        $table3->addCell(2000, ['gridSpan' => 5])->addText('Active');
+        $table3->addCell(2000, ['bgColor' => 'a6a6a6'])->addText("User Involvement");
+        $table3->addCell(2000, ['gridSpan' => 5, 'bgColor' => 'a6a6a6'])->addText('Active / Passive / Absence');
 
         $table3->addRow();
         $table3->addCell(1750, ['vMerge' => 'restart'])->addText("List of " . $project->test_level . " tester");
-        $table3->addCell(1500)->addText("Tester Name");
-        $table3->addCell(1500)->addText("Group");
-        $table3->addCell(1500)->addText("Dept");
-        $table3->addCell(1500)->addText("Roles on Application under Test");
-        $table3->addCell(1500)->addText("Roles after Live Implementation");
+        $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Tester Name");
+        $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Group");
+        $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Dept");
+        $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Roles on Application under Test");
+        $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Roles after Live Implementation");
 
         $table3->addRow();
         $table3->addCell(null, ['vMerge' => 'continue']);
@@ -203,9 +219,9 @@ class ExportController extends Controller
 
         $table5->addRow();
         $table5->addCell(1750, ['vMerge' => 'restart'])->addText("Document Completeness");
-        $table5->addCell(2500)->addText("Document Name");
-        $table5->addCell(2500)->addText("Document Availability");
-        $table5->addCell(2500)->addText("Remarks");
+        $table5->addCell(2500, ['bgColor' => '8dd7f7'])->addText("Document Name");
+        $table5->addCell(2500, ['bgColor' => '8dd7f7'])->addText("Document Availability");
+        $table5->addCell(2500, ['bgColor' => '8dd7f7'])->addText("Remarks");
 
         $table5->addRow();
         $table5->addCell(null, ['vMerge' => 'continue']);
@@ -305,9 +321,7 @@ class ExportController extends Controller
 
         $section->addPageBreak();
 
-        $section->addText('Pihak-pihak yang bertandatangan di bawah ini menyatakan bahwa telah dilaksanakan' . $project->test_level . '
-        pada tanggal' . $project->start_date . ' hingga ' . $project->end_date . ' untuk ' . $project->name . ' sesuai skenario yang tercantum dalam Test Script UAT dengan hasil 
-        tercantum pada ' . $project->test_level . ' Report. Dengan ini kecukupan pelaksanaan dan hasil ' . $project->test_level . ' adalah tanggung jawab User.');
+        $section->addText('Pihak-pihak yang bertandatangan di bawah ini menyatakan bahwa telah dilaksanakan ' . $project->test_level . ' pada tanggal ' . $project->start_date . ' hingga ' . $project->end_date . ' untuk ' . $project->name . ' sesuai skenario yang tercantum dalam Test Script UAT dengan hasil tercantum pada ' . $project->test_level . ' Report. Dengan ini kecukupan pelaksanaan dan hasil ' . $project->test_level . ' adalah tanggung jawab User.');
 
         $section->addTextBreak(1);
 
@@ -413,7 +427,7 @@ class ExportController extends Controller
         $cellAcc10->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
         $cellAcc10->addTextBreak(6);
         $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc10->addText("DH IT Testing - Quality Assurance", $fontStyle, ['align' => 'center']);
+        $cellAcc10->addText("DH IT Testing and Quality Assurance", $fontStyle, ['align' => 'center']);
 
         $cellAcc10 = $tableAcc2->addCell(5000);
 
@@ -429,20 +443,20 @@ class ExportController extends Controller
         $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
         $cellAcc10->addText("Group Head IT Application Support", $fontStyle, ['align' => 'center']);
 
-        $section->addTextBreak(1);
+        $section->addPageBreak();
 
         $table8 = $section->addTable($tableStyle, ['width' => 'auto']);
 
         $table8->addRow();
-        $table8->addCell(1000)->addText("No.");
-        $table8->addCell(2500)->addText("Scenario");
-        $table8->addCell(2500)->addText("Test Case");
-        $table8->addCell(2500)->addText("Test Step ID");
-        $table8->addCell(2500)->addText("Test Step");
-        $table8->addCell(2500)->addText("Expected Result");
-        $table8->addCell(2500)->addText("Category");
-        $table8->addCell(2500)->addText("Severity");
-        $table8->addCell(2500)->addText("Status");
+        $table8->addCell(1000, ['bgColor' => '179d97'])->addText("No.");
+        $table8->addCell(2500, ['bgColor' => '179d97'])->addText("Scenario");
+        $table8->addCell(2500, ['bgColor' => '179d97'])->addText("Test Case");
+        $table8->addCell(2500, ['bgColor' => '179d97'])->addText("Test Step ID");
+        $table8->addCell(2500, ['bgColor' => '179d97'])->addText("Test Step");
+        $table8->addCell(2500, ['bgColor' => '179d97'])->addText("Expected Result");
+        $table8->addCell(2500, ['bgColor' => '179d97'])->addText("Category");
+        $table8->addCell(2500, ['bgColor' => '179d97'])->addText("Severity");
+        $table8->addCell(2500, ['bgColor' => '179d97'])->addText("Status");
 
         $scenarioNumber = 0;
         foreach ($scenarios as $scenario) {

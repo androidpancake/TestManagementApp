@@ -33,6 +33,7 @@ class DetailProject extends Component
         }
 
         // dd($this->scenarios);
+
     }
 
     public function generate($id)
@@ -47,7 +48,8 @@ class DetailProject extends Component
     {
         return view('livewire.detail-project')->with([
             'title' => $this->project->name,
-            'description' => $this->project->desc
+            'description' => $this->project->desc,
+            'project' => $this->project
         ]);
     }
 }
