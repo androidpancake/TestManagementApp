@@ -6,35 +6,38 @@
     <div class="flex justify-start">
         <div class="bg-bsi-primary p-2 rounded-full text-sm text-white">{{ $currentStep }} out of {{ $total_steps }}</div>
     </div>
+
     <!-- <form wire:submit="submit"> -->
     @if($currentStep===1)
     <div class="mb-5">
         <label for="name-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Project Name/AM Code</label>
-        <input type="text" wire:model.live="name" id="name-input" placeholder="Masukkan Nama Project" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <input type="text" wire:model="name" id="name-input" placeholder="Masukkan Nama Project" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         @error('name')
         <span class="text-red-800">{{$message}}</span>
         @enderror
     </div>
     <div class="mb-5">
         <label for="jira-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">JIRA Code</label>
-        <input type="text" wire:model.live="jira_code" id="jira-input" placeholder="Masukkan Kode JIRA" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <input type="text" wire:model="jira_code" id="jira-input" placeholder="Masukkan Kode JIRA" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         @error('jira_code')
         <span class="text-red-800">{{$message}}</span>
         @enderror
     </div>
     <div class="mb-5">
         <label for="test_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Test Level</label>
-        <select wire:model="test_level" id="test_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <select wire:model="test_level_id" id="test_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="">Pilih</option>
-            <option value="{{ $select }}">{{ $select }}</option>
+            @foreach($this->select as $type)
+            <option value="{{ $type->id }}">{{ $type->type }}</option>
+            @endforeach
         </select>
-        @error('test_level')
+        @error('test_level_id')
         <span class="text-red-800">{{$message}}</span>
         @enderror
     </div>
     <div class="mb-5">
         <label for="test_type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Test Type</label>
-        <input wire:model="test_type" id="test_type" type="text" value="{{ $test_type }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <input wire:model="test_type" id="test_type" type="text" value="{{ $test_type }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly>
         @error('test_type')
         <span class="text-red-800">{{$message}}</span>
         @enderror
@@ -48,7 +51,7 @@
                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                     </svg>
                 </div>
-                <input wire:model.live="start_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
+                <input wire:model="start_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
             </div>
             <span class="mx-4 text-gray-500">to</span>
             <div class="relative">
@@ -57,7 +60,7 @@
                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                     </svg>
                 </div>
-                <input wire:model.live="end_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+                <input wire:model="end_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
             </div>
         </div>
         @error('start_date')
@@ -105,15 +108,15 @@
         @enderror
     </div>
     <div class="mb-5">
-        <label for="sat-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SAT Process</label>
-        <input type="text" wire:model="sat_process" id="sat-input" placeholder="Other notes" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <label for="sat-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SAT Process (UAT)</label>
+        <input type="text" wire:model="sat_process" id="sat-input" placeholder="SAT Process" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         @error('sat_process')
         <span class="text-red-800">{{$message}}</span>
         @enderror
     </div>
     <div class="mb-5">
-        <label for="retest-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Retesting</label>
-        <input type="text" wire:model="retesting" id="restest-input" placeholder="Other notes" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <label for="retest-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Retesting (UAT)</label>
+        <input type="text" wire:model="retesting" id="restest-input" placeholder="Retesting" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         @error('retesting')
         <span class="text-red-800">{{$message}}</span>
         @enderror
@@ -151,6 +154,7 @@
         @endforeach
     </div>
     @elseif($currentStep===5)
+
     <div class="w-full flex justify-end">
         <button wire:click="addUser" id="addUser" type="button" class="text-white bg-bsi-primary hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800">
             <i class="ph ph-plus"></i>
@@ -175,7 +179,7 @@
                 @enderror
             </div>
             <div class="mb-5 w-full">
-                <label for="group-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unit</label>
+                <label for="group-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Group (UAT)</label>
                 <input type="text" wire:model="users.{{ $index }}.group" id="unit-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
                 @error('group')
                 <span class="text-red-800">{{$message}}</span>
@@ -197,9 +201,10 @@
         </div>
         @endforeach
     </div>
+
     @elseif($currentStep===6)
     <div class="flex justify-end space-x-2 w-full">
-        <button wire:click="addScenario" class="bg-bsi-primary px-2.5 py-2 rounded text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
+        <button wire:click="addScenario" class="bg-bsi-primary px-2.5 py-2 text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
             <i class="ph ph-plus"></i>
             <span>Tambah Skenario</span>
         </button>
@@ -251,7 +256,7 @@
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $i++ }}
                         </th>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 space-y-2">
                             <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Scenario Name {{ $index++ }}" />
 
                             @error('scenario_name')
@@ -261,6 +266,7 @@
                                 <i class="ph ph-plus"></i>
                                 <span>Tambah Test Case</span>
                             </button>
+                            <button wire:click="removeScenario({{ $scenarioIndex }})" class="bg-red-400 px-2.5 py-2 text-sm text-white rounded-lg">Hapus</button>
                         </td>
                     </div>
 
@@ -268,7 +274,7 @@
                 <tr wire:key="case-{{ $scenarioIndex }}-{{ $caseIndex }}">
                     <td></td>
                     <td></td>
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4 space-y-2">
                         <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.case" class="w-full rounded border border-gray-300" value="" placeholder="Masukkan Case">
                         @error('case')
                         <span class="text-red-800">{{$message}}</span>
@@ -277,6 +283,8 @@
                             <i class="ph ph-plus"></i>
                             <span>Tambah Test Step</span>
                         </button>
+                        <button wire:click="removeCase({{ $scenarioIndex}}, {{ $caseIndex }})" class="bg-red-400 px-2.5 py-2 text-sm text-white rounded-lg">Hapus</button>
+
                     </td>
                     @foreach($case['steps'] as $stepIndex => $step)
                 <tr wire:key="step-{{ $scenarioIndex }}-{{ $caseIndex }}-{{ $stepIndex }}">
@@ -284,7 +292,7 @@
                     <td></td>
                     <td></td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.test_step_id" class="w-full rounded border border-gray-300" value="TS-{{ $stepIndex }}">
+                        <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.test_step_id" class="w-full rounded border border-gray-300" value="TS-{{ $stepIndex }}" readonly>
                         @error('test_step_id')
                         <span class="text-red-800">{{$message}}</span>
                         @enderror
@@ -334,6 +342,9 @@
                         @error('status')
                         <span class="text-red-800">{{$message}}</span>
                         @enderror
+                    </td>
+                    <td>
+                        <button wire:click="removeStep({{ $scenarioIndex }}, {{ $caseIndex }}, {{ $stepIndex }})" class="bg-red-400 px-2.5 py-2 text-sm text-white rounded-lg">Hapus</button>
                     </td>
                 </tr>
                 @endforeach

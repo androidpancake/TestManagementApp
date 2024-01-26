@@ -18,13 +18,17 @@ class Form extends Component
 {
     public $currentParent = 0;
 
+    public $title;
+    public $description;
+    public $route;
+
     public $i = 0;
     public $users;
     public $currentStep = 1;
     public $total_steps = 7;
     public $name;
     public $jira_code;
-    public $test_level;
+    public $test_level_id;
     public $select;
     public $test_type;
     public $start_date;
@@ -75,6 +79,10 @@ class Form extends Component
 
     public function mount()
     {
+        $this->title;
+        $this->description;
+        $this->route;
+
         $this->caseParentIndices = [];
         $this->users = [];
         $this->row = [];
@@ -82,11 +90,11 @@ class Form extends Component
         $this->cases = [];
         $this->steps = [];
         $this->remarks = [];
-        $this->test_lv = TestLevel::all();
+        $this->test_lv = TestLevel::get();
         $this->project_id;
         $this->name;
         $this->jira_code;
-        $this->test_level;
+        $this->test_level_id;
         $this->select;
         $this->test_type = 'Business Functionality';
         $this->start_date;
@@ -116,30 +124,26 @@ class Form extends Component
 
     public function render()
     {
-        $route = request()->route()->getName();
-
-        $title = 'Default Title';
-        $description = 'Default Description';
-        $select = '';
+        $this->route = request()->route()->getName();
 
         // Check if the current route is 'sit/form'
-        if ($route == 'sit.form') {
-            $title = 'SIT Form';
-            $this->select = 'SIT';
-            $description = 'Please complete the documents to generate reports for SIT';
+        if ($this->route == 'sit.form') {
+            $this->title = 'SIT Form';
+            $this->select = $this->test_lv->where('type', 'SIT');
+            $this->description = 'Please complete the documents to generate reports for SIT';
         }
 
         // Check if the current route is 'uat/form'
-        if ($route == 'uat.form') {
-            $title = 'UAT Form';
-            $this->select = 'UAT';
-            $description = 'Please complete the documents to generate reports for UAT';
+        elseif ($this->route == 'uat.form') {
+            $this->title = 'UAT Form';
+            $this->select = $this->test_lv->where('type', 'UAT');
+            $this->description = 'Please complete the documents to generate reports for UAT';
         }
 
         return view('livewire.form')->with([
-            'select' => $select,
-            'title' => $title,
-            'description' => $description,
+            'select' => $this->select,
+            'title' => $this->title,
+            'description' => $this->description,
         ]);
     }
 
@@ -195,7 +199,7 @@ class Form extends Component
         //project
         session()->put('name', $this->name);
         session()->put('jira_code', $this->jira_code);
-        session()->put('test_level', $this->test_level);
+        session()->put('test_level_id', $this->test_level_id);
         session()->put('test_type', $this->name);
         session()->put('start_date', $this->start_date);
         session()->put('end_date', $this->end_date);
@@ -231,7 +235,7 @@ class Form extends Component
                     'users.*.project_id' => session('project_id'),
                     'users.*.user_name' => $user['user_name'],
                     'users.*.unit' => $user['unit'],
-                    'users.*.group' => $user['group'],
+                    'users.*.group' => $user['group'] ?? '',
                     'users.*.telephone' => $user['telephone']
                 ]);
             }
@@ -281,7 +285,7 @@ class Form extends Component
         $project = Project::create([
             'name' => $this->name,
             'jira_code' => $this->jira_code,
-            'test_level' => $this->test_level,
+            'test_level_id' => $this->test_level_id,
             'test_type' => $this->test_type,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
@@ -324,7 +328,7 @@ class Form extends Component
                     'project_id' => session('project_id'),
                     'user_name' => $user['user_name'],
                     'unit' => $user['unit'],
-                    'group' => $user['group'],
+                    'group' => $user['group'] ?? '',
                     'telephone' => $user['telephone']
                 ]);
             }
@@ -415,22 +419,32 @@ class Form extends Component
         ];
     }
 
-    public function removeScenario($index)
+    public function removeScenario($scenarioIndex)
     {
-        unset($this->scenarios[$index]);
+        unset($this->scenarios[$scenarioIndex]);
         $this->scenarios = array_values($this->scenarios);
     }
 
-    public function removeCase($tc)
+    public function removeCase($scenarioIndex, $caseIndex)
     {
-        unset($this->cases[$tc]);
-        $this->cases = array_values($this->cases);
+        if (isset($this->scenarios[$scenarioIndex]['cases'][$caseIndex])) {
+            unset($this->scenarios[$scenarioIndex]['cases'][$caseIndex]);
+            // Re-indexing jika perlu
+            $this->scenarios[$scenarioIndex]['cases'] = array_values($this->scenarios[$scenarioIndex]['cases']);
+        } else {
+            // Handle the error when the specified indexes are invalid
+        }
     }
 
-    public function removeStep($ts)
+    public function removeStep($scenarioIndex, $caseIndex, $stepIndex)
     {
-        unset($this->steps[$ts]);
-        $this->steps = array_values($this->steps);
+        if (isset($this->scenarios[$scenarioIndex]['cases'][$caseIndex]['steps'][$stepIndex])) {
+            unset($this->scenarios[$scenarioIndex]['cases'][$caseIndex]['steps'][$stepIndex]);
+            // Re-indexing jika perlu
+            $this->scenarios[$scenarioIndex]['cases'][$caseIndex]['steps'] = array_values($this->scenarios[$scenarioIndex]['cases'][$caseIndex]['steps']);
+        } else {
+            // Handle the error when the specified indexes are invalid
+        }
     }
 
     public function save_test()
@@ -468,7 +482,7 @@ class Form extends Component
                 'name' => 'required',
                 'jira_code' => 'required',
                 'test_type' => 'required',
-                'test_level' => 'required',
+                'test_level_id' => 'required',
                 'start_date' => 'required|date|before_or_equal:end_date',
                 'end_date' => 'required|date|after_or_equal:start_date'
             ]);
@@ -481,19 +495,18 @@ class Form extends Component
             $validated = $this->validate([
                 'env' => 'required',
                 'credentials' => 'required',
-                'retesting' => 'required',
                 'other' => 'nullable'
             ]);
         } elseif ($this->currentStep === 4) {
             $validated = $this->validate([
-                'issue.*.issue' => 'required',
-                'issue.*.status' => 'required',
+                'issue.*.issue' => 'nullable',
+                'issue.*.status' => 'nullable',
             ]);
         } elseif ($this->currentStep === 5) {
             $validated = $this->validate([
                 'users.*.user_name' => 'required',
                 'users.*.unit' => 'required',
-                'users.*.group' => 'required',
+                'users.*.group' => 'nullable',
                 'users.*.telephone' => 'required|numeric',
             ]);
         } elseif ($this->currentStep === 6) {

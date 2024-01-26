@@ -1,4 +1,4 @@
-<div class="pt-4 h-full space-y-2">
+<div class="pt-4 h-screen space-y-2">
     <!-- title -->
     <livewire:head title="Dashboard" description="Selamat Datang" user_name="{{ auth()->user()->name }}" />
     <!-- section1 -->
@@ -20,32 +20,26 @@
             <!-- header -->
             <div class="flex justify-end items-center">
                 <div>
-                    <button id="dropdownFilter" data-dropdown-toggle="dropdown" class="text-black hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-teal-300 font-base rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:text-white dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-blue-800" type="button">Filter
+                    <button id="filterTestType" data-dropdown-toggle="dropdown" class="text-black hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-teal-300 font-base rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:text-white dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-blue-800" type="button">Filter
                         <i class="ph ph-faders ms-2"></i>
                     </button>
 
                     <!-- Dropdown menu -->
-                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-28 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFilter">
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <select class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-28 dark:bg-gray-700">
+                        <option>
+                            <input type="text" value="SIT" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        </option>
+                        <option>
+                            <a href="">
+                                <input type="text" value="UAT" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                            </a>
+                        </option>
+                    </select>
                 </div>
             </div>
             <!-- project -->
             <div class="relative overflow-x-auto">
-                <livewire:project />
+                <livewire:project load="5" />
             </div>
         </div>
     </div>
@@ -145,128 +139,127 @@
     @endif
 </div>
 <script>
-    document.addEventListener('livewire:init', () => {
-        // ApexCharts options and config
-        window.addEventListener("load", function() {
-            const getChartOptions = () => {
-                return {
-                    series: [35.1, 23.5, 2.4, 5.4],
-                    colors: ["#1C64F2", "#16BDCA", "#FDBA8C", "#E74694"],
-                    chart: {
-                        height: 320,
-                        width: "100%",
-                        type: "donut",
-                    },
-                    stroke: {
-                        colors: ["transparent"],
-                        lineCap: "",
-                    },
-                    plotOptions: {
-                        pie: {
-                            donut: {
-                                labels: {
+    // ApexCharts options and config
+    var chartData = <?php echo json_encode($chartData) ?>;
+    window.addEventListener("load", function() {
+        const getChartOptions = () => {
+            return {
+                series: chartData.series,
+                colors: ["#1C64F2", "#16BDCA", "#FDBA8C", "#E74694"],
+                chart: {
+                    height: 320,
+                    width: "100%",
+                    type: "donut",
+                },
+                stroke: {
+                    colors: ["transparent"],
+                    lineCap: "",
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            labels: {
+                                show: true,
+                                name: {
                                     show: true,
-                                    name: {
-                                        show: true,
-                                        fontFamily: "Inter, sans-serif",
-                                        offsetY: 20,
-                                    },
-                                    total: {
-                                        showAlways: true,
-                                        show: false,
-                                        label: "Unique visitors",
-                                        fontFamily: "Inter, sans-serif",
-                                        formatter: function(w) {
-                                            const sum = w.globals.seriesTotals.reduce((a, b) => {
-                                                return a + b
-                                            }, 0)
-                                            return `${sum}k`
-                                        },
-                                    },
-                                    value: {
-                                        show: true,
-                                        fontFamily: "Inter, sans-serif",
-                                        offsetY: -20,
-                                        formatter: function(value) {
-                                            return value + "k"
-                                        },
+                                    fontFamily: "Inter, sans-serif",
+                                    offsetY: 20,
+                                },
+                                total: {
+                                    showAlways: true,
+                                    show: true,
+                                    label: "Total Test",
+                                    fontFamily: "Inter, sans-serif",
+                                    formatter: function(w) {
+                                        const sum = w.globals.seriesTotals.reduce((a, b) => {
+                                            return a + b
+                                        }, 0)
+                                        return `${sum}`
                                     },
                                 },
-                                size: "50%",
+                                value: {
+                                    show: true,
+                                    fontFamily: "Inter, sans-serif",
+                                    offsetY: -20,
+                                    formatter: function(value) {
+                                        return value + "k"
+                                    },
+                                },
                             },
+                            size: "80%",
                         },
                     },
-                    grid: {
-                        padding: {
-                            top: -2,
+                },
+                grid: {
+                    padding: {
+                        top: -2,
+                    },
+                },
+                labels: chartData.labels,
+                dataLabels: {
+                    enabled: false,
+                },
+                legend: {
+                    position: "bottom",
+                    fontFamily: "Inter, sans-serif",
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function(value) {
+                            return value + "k"
                         },
                     },
-                    labels: ["Direct", "Sponsor", "Affiliate", "Email marketing"], //important
-                    dataLabels: {
-                        enabled: true,
-                    },
-                    legend: {
-                        position: "bottom",
-                        fontFamily: "Inter, sans-serif",
-                    },
-                    yaxis: {
-                        labels: {
-                            formatter: function(value) {
-                                return value + "k"
-                            },
+                },
+                xaxis: {
+                    labels: {
+                        formatter: function(value) {
+                            return value + "k"
                         },
                     },
-                    xaxis: {
-                        labels: {
-                            formatter: function(value) {
-                                return value + "k"
-                            },
-                        },
-                        axisTicks: {
-                            show: false,
-                        },
-                        axisBorder: {
-                            show: false,
-                        },
+                    axisTicks: {
+                        show: false,
                     },
-                }
+                    axisBorder: {
+                        show: false,
+                    },
+                },
             }
+        }
 
-            if (document.getElementById("donut-chart") && typeof ApexCharts !== 'undefined') {
-                const chart = new ApexCharts(document.getElementById("donut-chart"), getChartOptions());
-                chart.render();
+        if (document.getElementById("donut-chart") && typeof ApexCharts !== 'undefined') {
+            const chart = new ApexCharts(document.getElementById("donut-chart"), getChartOptions());
+            chart.render();
 
-                // Get all the checkboxes by their class name
-                const checkboxes = document.querySelectorAll('#devices input[type="checkbox"]');
+            // Get all the checkboxes by their class name
+            const checkboxes = document.querySelectorAll('#devices input[type="checkbox"]');
 
-                // Function to handle the checkbox change event
-                function handleCheckboxChange(event, chart) {
-                    const checkbox = event.target;
-                    if (checkbox.checked) {
-                        switch (checkbox.value) {
-                            case 'desktop':
-                                chart.updateSeries([15.1, 22.5, 4.4, 8.4]);
-                                break;
-                            case 'tablet':
-                                chart.updateSeries([25.1, 26.5, 1.4, 3.4]);
-                                break;
-                            case 'mobile':
-                                chart.updateSeries([45.1, 27.5, 8.4, 2.4]);
-                                break;
-                            default:
-                                chart.updateSeries([55.1, 28.5, 1.4, 5.4]);
-                        }
-
-                    } else {
-                        chart.updateSeries([35.1, 23.5, 2.4, 5.4]);
+            // Function to handle the checkbox change event
+            function handleCheckboxChange(event, chart) {
+                const checkbox = event.target;
+                if (checkbox.checked) {
+                    switch (checkbox.value) {
+                        case 'desktop':
+                            chart.updateSeries([15.1, 22.5, 4.4, 8.4]);
+                            break;
+                        case 'tablet':
+                            chart.updateSeries([25.1, 26.5, 1.4, 3.4]);
+                            break;
+                        case 'mobile':
+                            chart.updateSeries([45.1, 27.5, 8.4, 2.4]);
+                            break;
+                        default:
+                            chart.updateSeries([55.1, 28.5, 1.4, 5.4]);
                     }
-                }
 
-                // Attach the event listener to each checkbox
-                checkboxes.forEach((checkbox) => {
-                    checkbox.addEventListener('change', (event) => handleCheckboxChange(event, chart));
-                });
+                } else {
+                    chart.updateSeries([35.1, 23.5, 2.4, 5.4]);
+                }
             }
-        });
+
+            // Attach the event listener to each checkbox
+            checkboxes.forEach((checkbox) => {
+                checkbox.addEventListener('change', (event) => handleCheckboxChange(event, chart));
+            });
+        }
     });
 </script>

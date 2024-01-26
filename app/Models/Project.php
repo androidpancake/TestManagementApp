@@ -15,7 +15,7 @@ class Project extends Model
         'id',
         'name',
         'jira_code',
-        'test_level',
+        'test_level_id',
         'test_type',
         'start_date',
         'end_date',
@@ -60,5 +60,10 @@ class Project extends Model
     public function issue()
     {
         return $this->hasMany(Issue::class, 'project_id');
+    }
+
+    public function test_level()
+    {
+        return $this->belongsTo(TestLevel::class, 'test_level_id');
     }
 }

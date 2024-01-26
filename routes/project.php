@@ -21,6 +21,8 @@ Route::middleware(['auth', 'role:user'])->group(
         Route::get('uat/form', Form::class)->name('uat.form');
         Route::get('sit', SIT::class)->name('sit.index');
         Route::get('uat', UAT::class)->name('uat.index');
+        Route::get('pi/form', Form::class)->name('pi.form');
+        Route::get('pi', UAT::class)->name('pi.index');
 
         Route::get('export/{id}', [ExportController::class, 'export'])->name('generate');
         Route::get('word/{id}', [ExportController::class, 'word']);

@@ -21,11 +21,9 @@
 <body>
    @include('layouts.header')
    @include('layouts.sidebar')
-   <div class="p-4 pt-16 sm:ml-64 bg-gray-200 dark:bg-gray-900">
+   <div class="p-4 pt-16 sm:ml-64 bg-gray-50 dark:bg-gray-900">
       @yield('content')
    </div>
-   @stack('test-chart')
-   @stack('add-form')
 
 </body>
 

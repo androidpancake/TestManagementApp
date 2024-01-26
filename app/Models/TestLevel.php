@@ -12,6 +12,12 @@ class TestLevel extends Model
     protected $table = 'test_levels';
 
     protected $fillable = [
-        'type'
+        'type',
+        'description'
     ];
+
+    public function project()
+    {
+        return $this->hasMany(Project::class, 'test_level_id');
+    }
 }

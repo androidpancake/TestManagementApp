@@ -72,11 +72,16 @@ class ExportController extends Controller
         $section = $phpWord->addSection();
 
         // Membuat style tabel
-        $tableStyle = ['borderSize' => 1, 'borderColor' => '000000'];
+        $tableStyle = ['borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40];
         $headerTableStyle = [
             'borderSize' => 1,
-            'borderColor' => 'ffffff'
+            'borderColor' => 'ffffff',
+            'cellMargin' => 2
         ];
+
+        $outerAccTableStyle = array('align' => 'center');
+        $accStyle = ['borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'align' => 'center'];
+
         // Font style
         $fontStyle = ['size' => 10, 'bold' => true];
         $tableHeadFont = ['size' => 9, 'bold' => true];
@@ -84,17 +89,23 @@ class ExportController extends Controller
         $caseFont = ['bold' => true];
         $stepFont = ['bold' => true];
 
-        $table = $section->addTable($headerTableStyle);
+        // Membuat header
+        $header = $section->addHeader();
+
+        // Menambahkan tabel dengan 2 kolom ke dalam header
+        $table = $header->addTable();
+
+        // Menambahkan satu baris
         $row = $table->addRow();
 
-        $cell1 = $row->addCell(5000);
-        $cell1->addText("Test Report - " . $project->test_level, ['bold' => true]);
-        $cell1->addText("Version 1.0");
+        // Menambahkan sel untuk teks
+        $textCell = $row->addCell(8000);
+        $textCell->addText("Test Report - " . $project->test_level->type, ['bold' => true]);
+        $textCell->addText("Version 1.0");
 
-        // Menambahkan gambar ke kolom kedua
-        $cell2 = $row->addCell(5000);
-        $cell2->addImage($img, ['width' => 120, 'height' => 36, 'align' => 'right']);
-
+        // Menambahkan sel untuk gambar
+        $imageCell = $row->addCell(2000);
+        $imageCell->addImage($img, ['width' => 120, 'height' => 36, 'align' => 'center']);
 
         $section->addTextBreak(1);
 
@@ -104,18 +115,18 @@ class ExportController extends Controller
         // tabel header project
         // Baris 1
         $table1->addRow();
-        $table1->addCell(2000)->addText("Project Name", ['bold' => true]);
+        $table1->addCell(2000, ['bgColor' => 'dedede'])->addText("Project Name", ['bold' => true]);
         $table1->addCell(2000, ['gridSpan' => 2, 'vAlign' => 'center'])->addText($project->name);
-        $table1->addCell(2000)->addText("Kode JIRA", ['bold' => true]);
+        $table1->addCell(2000, ['bgColor' => 'dedede'])->addText("Kode JIRA", ['bold' => true]);
         $table1->addCell(2000, ['gridSpan' => 2, 'vAlign' => 'center'])->addText($project->jira_code);
 
         // Baris 2
         $table1->addRow();
-        $table1->addCell(2000)->addText("Test Level", ['bold' => true]);
-        $table1->addCell(2000)->addText($project->test_level);
-        $table1->addCell(2000)->addText("Start Date", ['bold' => true]);
+        $table1->addCell(2000, ['bgColor' => 'dedede'])->addText("Test Level", ['bold' => true]);
+        $table1->addCell(2000)->addText($project->test_level->type);
+        $table1->addCell(2000, ['bgColor' => 'dedede'])->addText("Start Date", ['bold' => true]);
         $table1->addCell(2000)->addText(\Carbon\Carbon::parse($project->start_date)->format('d F Y'));
-        $table1->addCell(2000)->addText("End Date", ['bold' => true]);
+        $table1->addCell(2000, ['bgColor' => 'dedede'])->addText("End Date", ['bold' => true]);
         $table1->addCell(2000)->addText(\Carbon\Carbon::parse($project->start_date)->format('d F Y'));
 
 
@@ -150,7 +161,7 @@ class ExportController extends Controller
 
         // Baris keempat
         $table2->addRow();
-        $table2->addCell(1750)->addText("UAT");
+        $table2->addCell(1750)->addText($project->test_level->type);
         $table2->addCell(350)->addText($planned);
         $table2->addCell(350)->addText($executed);
         $table2->addCell(350)->addText($passed);
@@ -178,42 +189,44 @@ class ExportController extends Controller
         $table2->addCell(350, ['gridSpan' => 2])->addText("");
 
 
-        $section->addTextBreak(1);
 
-        // Table User
-        $table3 = $section->addTable($tableStyle);
-        $table3->addRow();
+        if ($project->test_level->type == 'UAT') {
+            $section->addTextBreak(1);
+            // Table User
+            $table3 = $section->addTable($tableStyle);
+            $table3->addRow();
 
-        $table3->addCell(2000, ['bgColor' => 'dedede'])->addText("User Involvement");
-        $table3->addCell(2000, ['gridSpan' => 5, 'bgColor' => 'dedede'])->addText('Active / Passive / Absence');
+            $table3->addCell(2000, ['bgColor' => 'dedede'])->addText("User Involvement");
+            $table3->addCell(2000, ['gridSpan' => 5, 'bgColor' => 'dedede'])->addText('Active / Passive / Absence');
 
-        $table3->addRow();
-        $table3->addCell(1750, ['vMerge' => 'restart'])->addText("List of " . $project->test_level . " tester");
-        $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Tester Name");
-        $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Group");
-        $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Dept");
-        $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Roles on Application under Test");
-        $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Roles after Live Implementation");
+            $table3->addRow();
+            $table3->addCell(1750, ['vMerge' => 'restart'])->addText("List of " . $project->test_level->type . " tester");
+            $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Tester Name");
+            $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Unit");
+            $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Dept");
+            $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Roles on Application under Test");
+            $table3->addCell(1500, ['bgColor' => '8dd7f7'])->addText("Roles after Live Implementation");
 
-        $table3->addRow();
-        $table3->addCell(null, ['vMerge' => 'continue']);
-        foreach ($members as $data) {
-            $table3->addCell(1500)->addText($data->user_name);
-            $table3->addCell(1500)->addText($data->unit);
-            $table3->addCell(1500)->addText($data->telephone);
-            $table3->addCell(1500)->addText("");
-            $table3->addCell(1500)->addText("");
+            $table3->addRow();
+            $table3->addCell(null, ['vMerge' => 'continue']);
+            foreach ($members as $data) {
+                $table3->addCell(1500)->addText($data->user_name);
+                $table3->addCell(1500)->addText($data->unit);
+                $table3->addCell(1500)->addText($data->group);
+                $table3->addCell(1500)->addText("");
+                $table3->addCell(1500)->addText("");
+            }
+
+            // tabel 4
+            $section->addTextBreak(1);
+            $table4 = $section->addTable($tableStyle, ['width' => 'auto']);
+
+            $table4->addRow();
+            $table4->addCell(1200, ['bgColor' => 'dedede'])->addText("SAT Process");
+            $table4->addCell(3800, ['gridSpan' => 4, 'valign' => 'center'])->addText($project->sat_process);
+            $table4->addCell(1200, ['bgColor' => 'dedede'])->addText("Retesting after Merging");
+            $table4->addCell(3800, ['gridSpan' => 4, 'valign' => 'center'])->addText($project->retesting);
         }
-
-        // tabel 4
-        $section->addTextBreak(1);
-        $table4 = $section->addTable($tableStyle, ['width' => 'auto']);
-
-        $table4->addRow();
-        $table4->addCell(1200, ['bgColor' => 'dedede'])->addText("SAT Process");
-        $table4->addCell(3800, ['gridSpan' => 4, 'valign' => 'center'])->addText($project->sat_process);
-        $table4->addCell(1200, ['bgColor' => 'dedede'])->addText("Retesting after Merging");
-        $table4->addCell(3800, ['gridSpan' => 4, 'valign' => 'center'])->addText($project->retesting);
 
         $section->addTextBreak(1);
         $table5 = $section->addTable($tableStyle, ['width' => 'auto']);
@@ -232,19 +245,19 @@ class ExportController extends Controller
 
         $table5->addRow();
         $table5->addCell(null, ['vMerge' => 'continue']);
-        $table5->addCell(1750)->addText("Updated" . $project->test_level . "Test Script");
+        $table5->addCell(1750)->addText("Updated" . $project->test_level->type . "Test Script");
         $table5->addCell(1750)->addText($project->tmp);
         $table5->addCell(1750)->addText($project->remarks);
 
         $table5->addRow();
         $table5->addCell(null, ['vMerge' => 'continue']);
-        $table5->addCell(1750)->addText("UAT Result");
+        $table5->addCell(1750)->addText($project->test_level->type . "Result");
         $table5->addCell(1750)->addText($project->tmp);
         $table5->addCell(1750)->addText($project->remarks);
 
         $table5->addRow();
         $table5->addCell(null, ['vMerge' => 'continue']);
-        $table5->addCell(1750)->addText("UAT Attendance List");
+        $table5->addCell(1750)->addText($project->test_level->type . "Attendance List");
         $table5->addCell(1750)->addText($project->uat_attendance);
         $table5->addCell(1750)->addText($project->remarks);
 
@@ -306,44 +319,65 @@ class ExportController extends Controller
         $table7->addRow();
         $table7->addCell(2000)->addText("Very High
         ");
-        $table7->addCell(7000)->addText("");
+        $tableCellVH = $table7->addCell(7000);
+        $tableCellVH->addListItem("Critical operations have been impaired");
+        $tableCellVH->addListItem("Non-availability of information which is mandated by statutory requirements (such as non-availability of key surveillance systems mandated by the government)");
+        $tableCellVH->addListItem("Sanctity of information / data has been compromised");
 
         $table7->addRow();
         $table7->addCell(1000)->addText("High");
-        $table7->addCell(7000)->addText("");
+
+        $tableCellH = $table7->addCell(1000);
+        $tableCellH->addListItem("The problem has significantly degraded the system’s ability to service its customers");
+        $tableCellH->addListItem("The problem has severely impacted the operations");
+        $tableCellH->addListItem("Delay in the resolution will significantly impact the Bank Syariah Indonesia’s ability to service its customers");
 
         $table7->addRow();
         $table7->addCell(1000)->addText("Medium");
-        $table7->addCell(7000)->addText("");
+
+        $tableCellM = $table7->addCell(1000);
+        $tableCellM->addListItem("Minimal impact on systems ability to service its customers");
+        $tableCellM->addListItem("Minimal impact on operations");
 
         $table7->addRow();
         $table7->addCell(1000)->addText("Low");
-        $table7->addCell(7000)->addText("");
+
+        $tableCellL = $table7->addCell(1000);
+        $tableCellL->addListItem("The nature of defects that have not been specified under Very high, high or medium will come under low");
 
         $section->addPageBreak();
 
-        $textRun = $section->addTextRun();
+        if ($project->test_level->type == 'UAT') {
 
-        $textRun->addText('Pihak-pihak yang bertandatangan di bawah ini menyatakan bahwa telah dilaksanakan ');
-        $textRun->addText($project->test_level . ' ', array('bold' => true));
-        $textRun->addText('pada tanggal ');
-        $textRun->addText($project->start_date, array('bold' => true)); // Teks ditebalkan
-        $textRun->addText(' hingga ');
-        $textRun->addText($project->end_date, array('bold' => true));
-        $textRun->addText(' untuk ');
-        $textRun->addText($project->name . ' ', array('bold' => true));
-        $textRun->addText('sesuai skenario yang tercantum dalam Test Script UAT dengan hasil tercantum pada ');
-        $textRun->addText($project->test_level . ' ', array('bold' => true));
-        $textRun->addText('Report. Dengan ini kecukupan pelaksanaan dan hasil ');
-        $textRun->addText($project->test_level, array('bold' => true));
-        $textRun->addText(' adalah tanggung jawab User.');
+            $textRun = $section->addTextRun();
 
-        $section->addTextBreak(1);
+            $textRun->addText('Pihak-pihak yang bertandatangan di bawah ini menyatakan bahwa telah dilaksanakan ');
+            $textRun->addText($project->test_level->type . ' ', array('bold' => true));
+            $textRun->addText('pada tanggal ');
+            $textRun->addText($project->start_date, array('bold' => true)); // Teks ditebalkan
+            $textRun->addText(' hingga ');
+            $textRun->addText($project->end_date, array('bold' => true));
+            $textRun->addText(' untuk ');
+            $textRun->addText($project->name . ' ', array('bold' => true));
+            $textRun->addText('sesuai skenario yang tercantum dalam Test Script ' . $project->test_level->type . ' dengan hasil tercantum pada ');
+            $textRun->addText($project->test_level->type . ' ', array('bold' => true));
+            $textRun->addText('Report. Dengan ini kecukupan pelaksanaan dan hasil ');
+            $textRun->addText($project->test_level->type, array('bold' => true));
+            $textRun->addText(' adalah tanggung jawab User.');
 
-        $section->addText('Berita Acara UAT termasuk menyetujui isi UAT Report.');
+            $section->addTextBreak(1);
+
+            $section->addText('Berita Acara ' . $project->test_level->type . ' termasuk menyetujui isi ' . $project->test_level->type . ' Report.');
+        }
 
         $tableAcc = $section->addTable($tableStyle);
 
+        if ($project->test_level->type == 'SIT') {
+            $tableAcc->addRow();
+            $cellProject = $tableAcc->addCell(9000, ['gridSpan' => 48]);
+            $cellProject->addText($project->name, $fontStyle, ['align' => 'center']);
+            $cellProject->addText($project->jira_code, $fontStyle, ['align' => 'center']);
+        }
         $tableAcc->addRow();
         $cell = $tableAcc->addCell(9000, ['gridSpan' => 48]);
         $cell->addText("Prepared By", $fontStyle, ['align' => 'center']);
@@ -354,7 +388,11 @@ class ExportController extends Controller
         }
 
         $cell->addText("Name : ", $fontStyle, ['align' => 'center']);
-        $cell->addText("Koordinator " . $project->test_level, $fontStyle, ['align' => 'center']);
+        if ($project->test_level->type == 'UAT') {
+            $cell->addText("Koordinator " . $project->test_level->type, $fontStyle, ['align' => 'center']);
+        } elseif ($project->test_level->type == 'SIT') {
+            $cell->addText("SIT Tester", $fontStyle, ['align' => 'center']);
+        }
 
         $section->addTextBreak(1);
 
@@ -369,7 +407,11 @@ class ExportController extends Controller
         $cellAcc1->addText("Confirmed By,", $fontStyle, ['align' => 'center']);
         $cellAcc1->addTextBreak(6);
         $cellAcc1->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc1->addText("User TL", $fontStyle, ['align' => 'center']);
+        if ($project->test_level->type == 'UAT') {
+            $cellAcc1->addText("User TL", $fontStyle, ['align' => 'center']);
+        } else if ($project->test_level->type == 'SIT') {
+            $cellAcc1->addText("Project Manager", $fontStyle, ['align' => 'center']);
+        }
 
         // kolom 2
         $cellAcc2 = $tableAcc2->addCell(5000);
@@ -385,7 +427,12 @@ class ExportController extends Controller
         $cellAcc3->addText("Confirmed By,", $fontStyle, ['align' => 'center']);
         $cellAcc3->addTextBreak(6);
         $cellAcc3->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc3->addText("User", $fontStyle, ['align' => 'center']);
+
+        if ($project->test_level->type == 'UAT') {
+            $cellAcc3->addText("User", $fontStyle, ['align' => 'center']);
+        } else if ($project->test_level->type == 'SIT') {
+            $cellAcc3->addText("SIT Lead", $fontStyle, ['align' => 'center']);
+        }
 
 
         $tableAcc2->addRow();
@@ -396,15 +443,22 @@ class ExportController extends Controller
         $cellAcc4->addText("Approve By,", $fontStyle, ['align' => 'center']);
         $cellAcc4->addTextBreak(6);
         $cellAcc4->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc4->addText("User TL", $fontStyle, ['align' => 'center']);
-
+        if ($project->test_level->type == 'UAT') {
+            $cellAcc4->addText("User TL", $fontStyle, ['align' => 'center']);
+        } else if ($project->test_level->type == 'SIT') {
+            $cellAcc4->addText("DH IT Project Management", $fontStyle, ['align' => 'center']);
+        }
         // kolom 5
         $cellAcc5 = $tableAcc2->addCell(5000);
 
         $cellAcc5->addText("Approve By,", $fontStyle, ['align' => 'center']);
         $cellAcc5->addTextBreak(6);
         $cellAcc5->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc5->addText("User Dept. Head", $fontStyle, ['align' => 'center']);
+        if ($project->test_level->type == 'UAT') {
+            $cellAcc5->addText("User Dept. Head", $fontStyle, ['align' => 'center']);
+        } else if ($project->test_level->type == 'SIT') {
+            $cellAcc5->addText("DH IT Testing-Quality Assurance", $fontStyle, ['align' => 'center']);
+        }
 
         // kolom 6
         $cellAcc6 = $tableAcc2->addCell(5000);
@@ -412,53 +466,116 @@ class ExportController extends Controller
         $cellAcc6->addText("Approve By,", $fontStyle, ['align' => 'center']);
         $cellAcc6->addTextBreak(6);
         $cellAcc6->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc6->addText("User Group Head", $fontStyle, ['align' => 'center']);
+        if ($project->test_level->type == 'UAT') {
+            $cellAcc6->addText("User Group Head", $fontStyle, ['align' => 'center']);
+        } else if ($project->test_level->type == 'SIT') {
+            $cellAcc6->addText("Deputy IT Application Support", $fontStyle, ['align' => 'center']);
+        }
 
-        $tableAcc2->addRow();
+        if ($project->test_level->type == 'UAT') {
 
-        // kolom 7
-        $cellAcc7 = $tableAcc2->addCell(5000);
+            $tableAcc2->addRow();
 
-        $cellAcc7->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
-        $cellAcc7->addTextBreak(6);
-        $cellAcc7->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc7->addText("Project Manager", $fontStyle, ['align' => 'center']);
+            // kolom 7
+            $cellAcc7 = $tableAcc2->addCell(5000);
 
-        // kolom 8
-        $tableAcc2->addCell(5000);
+            $cellAcc7->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+            $cellAcc7->addTextBreak(6);
+            $cellAcc7->addText("Name:", $fontStyle, ['align' => 'center']);
+            $cellAcc7->addText("Project Manager", $fontStyle, ['align' => 'center']);
 
-        // kolom 9
-        $cellAcc9 = $tableAcc2->addCell(5000);
+            // kolom 8
+            $tableAcc2->addCell(5000);
 
-        $cellAcc9->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
-        $cellAcc9->addTextBreak(6);
-        $cellAcc9->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc9->addText("DH IT PMO", $fontStyle, ['align' => 'center']);
+            // kolom 9
+            $cellAcc9 = $tableAcc2->addCell(5000);
 
-        $tableAcc2->addRow();
+            $cellAcc9->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+            $cellAcc9->addTextBreak(6);
+            $cellAcc9->addText("Name:", $fontStyle, ['align' => 'center']);
+            $cellAcc9->addText("DH IT PMO", $fontStyle, ['align' => 'center']);
 
-        $cellAcc10 = $tableAcc2->addCell(5000);
+            $tableAcc2->addRow();
 
-        $cellAcc10->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
-        $cellAcc10->addTextBreak(6);
-        $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc10->addText("DH IT Testing and Quality Assurance", $fontStyle, ['align' => 'center']);
+            $cellAcc10 = $tableAcc2->addCell(5000);
 
-        $cellAcc10 = $tableAcc2->addCell(5000);
+            $cellAcc10->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+            $cellAcc10->addTextBreak(6);
+            $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
+            $cellAcc10->addText("DH IT Testing and Quality Assurance", $fontStyle, ['align' => 'center']);
 
-        $cellAcc10->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
-        $cellAcc10->addTextBreak(6);
-        $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc10->addText("Deputy IT Application Support", $fontStyle, ['align' => 'center']);
+            $cellAcc10 = $tableAcc2->addCell(5000);
 
-        $cellAcc10 = $tableAcc2->addCell(5000);
+            $cellAcc10->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+            $cellAcc10->addTextBreak(6);
+            $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
+            $cellAcc10->addText("Deputy IT Application Support", $fontStyle, ['align' => 'center']);
 
-        $cellAcc10->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
-        $cellAcc10->addTextBreak(6);
-        $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
-        $cellAcc10->addText("Group Head IT Application Support", $fontStyle, ['align' => 'center']);
+            $cellAcc10 = $tableAcc2->addCell(5000);
 
-        $section->addPageBreak();
+            $cellAcc10->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+            $cellAcc10->addTextBreak(6);
+            $cellAcc10->addText("Name:", $fontStyle, ['align' => 'center']);
+            $cellAcc10->addText("Group Head IT Application Support", $fontStyle, ['align' => 'center']);
+
+            $tableAcc2->addRow();
+
+            $cellAcc11 = $tableAcc2->addCell(9000, ['gridSpan' => '3']);
+
+            $cellAcc11->addText("Catatan dari Policy and Procedure Group (PPG)");
+            $cellAcc11->addCheckBox('c1', htmlspecialchars(' PTO Baru'));
+            $cellAcc11->addCheckBox('c2', htmlspecialchars(' Pembaharuan PTO yang ada'));
+            $cellAcc11->addCheckBox('c3', htmlspecialchars(' Tidak perlu perubahan pada PTO'));
+            $cellAcc11->addText("Keterangan:");
+            $cellAcc11->addTextBreak(2);
+
+            $tableAcc2->addRow();
+            $cellAcc12 = $tableAcc2->addCell(9000, ['gridSpan' => '3']);
+            $cellAcc12->addText("Acknowledged By,", $fontStyle, ['align' => 'center']);
+            for ($i = 0; $i < 4; $i++) {
+                $cellAcc12->addText("", [], ['spaceAfter' => 24]);
+            }
+
+            $cellAcc12->addText("Name :", $fontStyle, ['align' => 'center']);
+            $cellAcc12->addText("Policy and Procedure Group (PPG) Team Leader/Manage", $fontStyle, ['align' => 'center']);
+        }
+
+        if ($project->test_level->type == 'SIT') {
+            $section->addPageBreak();
+            $section->addText("Hari/Tanggal :");
+            $section->addText("Tempat :");
+            $section->addText("Waktu :");
+
+            $section->addTextBreak(1);
+
+            $tableAccSIT = $section->addTable($tableStyle, ['width' => 'autos']);
+            $tableAccSIT->addRow();
+
+            $tableAccSIT->addCell(1000, ['bgColor' => 'dedede'])->addText("No.");
+            $tableAccSIT->addCell(1000, ['bgColor' => 'dedede'])->addText("Nama");
+            $tableAccSIT->addCell(1000, ['bgColor' => 'dedede'])->addText("Unit Kerja");
+            $tableAccSIT->addCell(1000, ['bgColor' => 'dedede'])->addText("Telepon");
+            $tableAccSIT->addCell(1000, ['bgColor' => 'dedede'])->addText("Tanda Tangan");
+
+            $accNum = 0;
+
+            $tableAccSIT->addRow();
+
+            foreach ($members as $member) {
+                $accNum++;
+                $tableAccSIT->addCell(1000)->addText($accNum);
+                $tableAccSIT->addCell(3000)->addText($member->user_name);
+                $tableAccSIT->addCell(3000)->addText($member->unit);
+                $tableAccSIT->addCell(3000)->addText($member->telephone);
+                $tableAccSIT->addCell(3000)->addText("");
+            }
+        }
+
+        if ($project->test_level->type == 'UAT') {
+            $section->addTextBreak(2);
+        } elseif ($project->test_level->type == 'SIT') {
+            $section->addPageBreak();
+        }
 
         $table8 = $section->addTable($tableStyle, ['width' => 'auto']);
 
@@ -519,6 +636,60 @@ class ExportController extends Controller
             }
         }
 
+        if ($project->test_level->type == 'SIT') {
+            $section->addPageBreak();
+
+            $tableReport = $section->addTable($tableStyle);
+
+            $tableReport->addRow();
+            $tableReport->addCell(3000, ['bgColor' => '179d97'])->addText("Server Name");
+            $tableReport->addCell(3000, ['bgColor' => '179d97'])->addText("Path Folder Name");
+            $tableReport->addCell(3000, ['bgColor' => '179d97'])->addText("File Name");
+            $tableReport->addCell(3000, ['bgColor' => '179d97'])->addText("Pages");
+
+            $tableReport->addRow();
+            $tableReport->addCell(3000)->addText("");
+            $tableReport->addCell(3000)->addText("");
+            $tableReport->addCell(3000)->addText("");
+            $tableReport->addCell(3000)->addText("");
+        }
+
+        if ($project->test_level->type == 'UAT') {
+
+            $section->addTextBreak(2);
+
+            $section->addText("Pihak-pihak yang bertandatangan di bawah ini menyatakan bahwa test script " . $project->name . ", telah sesuai dengan requirement termasuk impacted feature yang diinformasikan oleh pihak pengembang dan dapat digunakan untuk pelaksanaan " . $project->test_level->type . ". Demikian berita acara ini kami buat dengan sebenar-benarnya.");
+            $table9 = $section->addTable($accStyle);
+
+            $table9->addRow();
+
+            $cellAccScript1 = $table9->addCell(3000);
+            $cellAccScript1->addText("Prepared By,", $fontStyle, ['align' => 'center']);
+            $cellAccScript1->addTextBreak(4);
+            $cellAccScript1->addText("Name:", $fontStyle, ['align' => 'center']);
+            $cellAccScript1->addText("User", $fontStyle, ['align' => 'center']);
+
+            $cellAccScript2 = $table9->addCell(3000);
+            $cellAccScript2->addText("Prepared By,", $fontStyle, ['align' => 'center']);
+            $cellAccScript2->addTextBreak(4);
+            $cellAccScript2->addText("Name:", $fontStyle, ['align' => 'center']);
+            $cellAccScript2->addText("User", $fontStyle, ['align' => 'center']);
+
+            $table9->addRow();
+
+            $cellAccScript1 = $table9->addCell(3000);
+            $cellAccScript1->addText("Accepted By,", $fontStyle, ['align' => 'center']);
+            $cellAccScript1->addTextBreak(4);
+            $cellAccScript1->addText("Name:", $fontStyle, ['align' => 'center']);
+            $cellAccScript1->addText("User", $fontStyle, ['align' => 'center']);
+
+            $cellAccScript2 = $table9->addCell(3000);
+            $cellAccScript2->addText("Accepted By,", $fontStyle, ['align' => 'center']);
+            $cellAccScript2->addTextBreak(4);
+            $cellAccScript2->addText("Name:", $fontStyle, ['align' => 'center']);
+            $cellAccScript2->addText("User", $fontStyle, ['align' => 'center']);
+        }
+
         $section->addPageBreak();
 
         $scenarioNum = 0;
@@ -541,7 +712,7 @@ class ExportController extends Controller
 
 
         $writer = IOFactory::createWriter($phpWord, 'Word2007');
-        $file_name = 'BA-' . $project->test_level . '-' . $project->name . '.docx';
+        $file_name = 'BA-' . $project->test_level->type . '-' . $project->name . '.docx';
 
         $temp_file = tempnam(sys_get_temp_dir(), $file_name);
         $writer->save($temp_file);

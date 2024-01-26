@@ -11,11 +11,28 @@ class Project extends Component
     public $detail;
     public $title;
     public $description;
+    public $load;
+    public $chartData;
+    public $sitData;
+    public $uatData;
+    public $project;
 
-    public function mount()
+    public $search;
+
+    // protected $queryString = ['search' => ['except' => '']];
+
+    // public $limitperPage = 10;
+
+    // protected $listeners = [
+    //     'post-data' => 'postData'
+    // ];
+
+    public function mount($load = null)
     {
-        $this->projects = ModelsProject::where('user_id', auth()->id())->get();
-        // dd($this->projects);
+        $this->load = $load;
+
+
+        // dd($this->chartData);
     }
 
     public function placeholder()
@@ -30,10 +47,26 @@ class Project extends Component
         </div>
         HTML;
     }
+
     public function render()
     {
-        // dd($projects);
-        return view('livewire.project')->with([
+        $query = ModelsProject::where('user_id', auth()->id())->latest();
+
+        if ($this->search) {
+            $query->where('name', 'like', '%' . $this->search . '%');
+        }
+
+        $this->projects = $query->with(['test_level'])->latest()->get();
+
+        if ($this->load) {
+            $this->projects = $this->projects->take($this->load);
+        }
+
+        return view('livewire.project', [
+            'projects' => $this->projects,
+            'sit' => $this->sitData,
+            'uat' => $this->uatData,
+        ])->with([
             'title' => 'Project',
             'description' => 'Please complete the documents to generate reports'
         ]);
