@@ -5,6 +5,7 @@ use App\Http\Controllers\project\ProjectController;
 use App\Http\Controllers\sit\SitController;
 use App\Livewire\DetailProject;
 use App\Livewire\Form;
+use App\Livewire\PIT;
 use App\Livewire\Project;
 use App\Livewire\SIT;
 use App\Livewire\UAT;
@@ -21,8 +22,8 @@ Route::middleware(['auth', 'role:user'])->group(
         Route::get('uat/form', Form::class)->name('uat.form');
         Route::get('sit', SIT::class)->name('sit.index');
         Route::get('uat', UAT::class)->name('uat.index');
-        Route::get('pi/form', Form::class)->name('pi.form');
-        Route::get('pi', UAT::class)->name('pi.index');
+        Route::get('pit/form', Form::class)->name('pit.form');
+        Route::get('pit', PIT::class)->name('pit.index');
 
         Route::get('export/{id}', [ExportController::class, 'export'])->name('generate');
         Route::get('word/{id}', [ExportController::class, 'word']);

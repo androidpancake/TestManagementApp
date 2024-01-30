@@ -131,13 +131,14 @@ class Form extends Component
             $this->title = 'SIT Form';
             $this->select = $this->test_lv->where('type', 'SIT');
             $this->description = 'Please complete the documents to generate reports for SIT';
-        }
-
-        // Check if the current route is 'uat/form'
-        elseif ($this->route == 'uat.form') {
+        } elseif ($this->route == 'uat.form') {
             $this->title = 'UAT Form';
             $this->select = $this->test_lv->where('type', 'UAT');
             $this->description = 'Please complete the documents to generate reports for UAT';
+        } elseif ($this->route == 'pit.form') {
+            $this->title = 'PIT Form';
+            $this->select = $this->test_lv->where('type', 'PIR');
+            $this->description = 'Please complete the documents to generate reports for Production Issue';
         }
 
         return view('livewire.form')->with([

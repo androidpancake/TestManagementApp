@@ -18,17 +18,18 @@
     </div>
     <div class="mb-5">
         <label for="jira-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">JIRA Code</label>
-        <input type="text" wire:model="jira_code" id="jira-input" placeholder="Masukkan Kode JIRA" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <input type="text" wire:model="jira_code" id="jira-input" placeholder="Masukkan Kode JIRA/Kode Issue Production" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         @error('jira_code')
         <span class="text-red-800">{{$message}}</span>
         @enderror
     </div>
     <div class="mb-5">
         <label for="test_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Test Level</label>
+
         <select wire:model="test_level_id" id="test_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="">Pilih</option>
             @foreach($this->select as $type)
-            <option value="{{ $type->id }}">{{ $type->type }}</option>
+            <option value="{{ $type->id }}" selected>{{ $type->type }}</option>
             @endforeach
         </select>
         @error('test_level_id')
@@ -46,6 +47,7 @@
         <label for="date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal</label>
         <div class="flex w-full items-center">
             <div class="relative">
+
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
@@ -107,6 +109,7 @@
         <span class="text-red-800">{{$message}}</span>
         @enderror
     </div>
+    @if($this->route == 'uat.form')
     <div class="mb-5">
         <label for="sat-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SAT Process (UAT)</label>
         <input type="text" wire:model="sat_process" id="sat-input" placeholder="SAT Process" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -121,6 +124,7 @@
         <span class="text-red-800">{{$message}}</span>
         @enderror
     </div>
+    @endif
     @elseif($currentStep===4)
     <div class="w-full flex justify-end">
         <button wire:click="addIssue" id="addIssue" type="button" class="text-white bg-bsi-primary hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800">
@@ -178,6 +182,7 @@
                 <span class="text-red-800">{{$message}}</span>
                 @enderror
             </div>
+            @if($this->route == 'uat.form' || $this->route == 'pit.form')
             <div class="mb-5 w-full">
                 <label for="group-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Group (UAT)</label>
                 <input type="text" wire:model="users.{{ $index }}.group" id="unit-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
@@ -185,6 +190,7 @@
                 <span class="text-red-800">{{$message}}</span>
                 @enderror
             </div>
+            @endif
             <div class="mb-5 w-full">
                 <label for="telephone-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Telephone</label>
                 <input type="number" wire:model="users.{{ $index }}.telephone" id="telephone-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">

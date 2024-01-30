@@ -3,26 +3,36 @@
 namespace App\Livewire;
 
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Livewire\Component;
 
 class Dashboard extends Component
 {
     public $sitData;
     public $uatData;
+    public $pirData;
     public $chartData = [];
     public $labels;
 
 
     public function mount()
     {
-        $this->sitData = Project::where('user_id', auth()->id())->where('test_level', '=', 'SIT')->count();
-        $this->uatData = Project::where('user_id', auth()->id())->where('test_level', '=', 'UAT')->count();
-        // $this->labels = Project::where('user_id', auth()->id())->select('test_level')->get();
-        // dd($this->labels);
+        $this->sitData = Project::where('user_id', auth()->id())->whereHas('test_level', function ($query) {
+            $query->where('type', '=', 'SIT');
+        })->count();
+
+        $this->uatData = Project::where('user_id', auth()->id())->whereHas('test_level', function ($query) {
+            $query->where('type', '=', 'SIT');
+        })->count();
+
+        $this->pirData = Project::where('user_id', auth()->id())->whereHas('test_level', function ($query) {
+            $query->where('type', '=', 'PIR');
+        })->count();
 
         $this->chartData = [
-            'series' => [$this->sitData, $this->uatData],
-            'labels' => ['SIT', 'UAT']
+            'series' => [$this->sitData, $this->uatData, $this->pirData],
+            'labels' => ['SIT', 'UAT', 'PIR']
         ];
 
         // dd($this->chartData);

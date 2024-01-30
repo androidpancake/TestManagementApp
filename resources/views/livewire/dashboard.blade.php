@@ -3,8 +3,8 @@
     <livewire:head title="Dashboard" description="Selamat Datang" user_name="{{ auth()->user()->name }}" />
     <!-- section1 -->
     <div class="flex flex-col gap-2 lg:flex-row">
-        <!-- chart -->
-        <div class="w-full lg:max-w-sm bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6">
+        <!-- Chart section -->
+        <div class="sm:w-max lg:max-w-md bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6">
 
             <div class="flex justify-between mb-3">
                 <div class="flex justify-center items-center">
@@ -16,27 +16,8 @@
             <div class="py-6" id="donut-chart"></div>
         </div>
         <!-- table -->
-        <div class="lg:w-full bg-white rounded-lg dark:bg-gray-800 p-4">
-            <!-- header -->
-            <div class="flex justify-end items-center">
-                <div>
-                    <button id="filterTestType" data-dropdown-toggle="dropdown" class="text-black hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-teal-300 font-base rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:text-white dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-blue-800" type="button">Filter
-                        <i class="ph ph-faders ms-2"></i>
-                    </button>
+        <div class="sm:max-w-md lg:max-w-max bg-white rounded-lg dark:bg-gray-800 p-4">
 
-                    <!-- Dropdown menu -->
-                    <select class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-28 dark:bg-gray-700">
-                        <option>
-                            <input type="text" value="SIT" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        </option>
-                        <option>
-                            <a href="">
-                                <input type="text" value="UAT" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                            </a>
-                        </option>
-                    </select>
-                </div>
-            </div>
             <!-- project -->
             <div class="relative overflow-x-auto">
                 <livewire:project load="5" />

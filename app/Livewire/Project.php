@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Project as ModelsProject;
+use App\Models\TestLevel;
 use Livewire\Component;
 
 class Project extends Component
@@ -18,6 +19,7 @@ class Project extends Component
     public $project;
 
     public $search;
+    public $filter;
 
     // protected $queryString = ['search' => ['except' => '']];
 
@@ -50,10 +52,15 @@ class Project extends Component
 
     public function render()
     {
+        $test_level = TestLevel::all();
         $query = ModelsProject::where('user_id', auth()->id())->latest();
 
         if ($this->search) {
             $query->where('name', 'like', '%' . $this->search . '%');
+        }
+
+        if ($this->filter) {
+            $query->where('test_level_id', '=', $test_level->id);
         }
 
         $this->projects = $query->with(['test_level'])->latest()->get();
