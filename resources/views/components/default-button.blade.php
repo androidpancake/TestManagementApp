@@ -1,0 +1,1 @@
+<button class="bg-bsi-primary p-2 text-sm text-white rounded-lg hover:bg-cyan-300 dark:bg-bsi-primary">{{ $title }}</button>

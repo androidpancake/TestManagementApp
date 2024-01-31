@@ -348,7 +348,7 @@ class ExportController extends Controller
 
         $issues = '';
         foreach ($project->issue as $issue) {
-            $issues .= $issue->issue . ", ";
+            $issues .= $issue->issue . "(close " . $issue->closed_date . "), ";
         }
 
         $table6->addCell(8000)->addText($issues);

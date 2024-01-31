@@ -4,7 +4,7 @@
     <!-- section1 -->
     <div class="flex flex-col gap-2 lg:flex-row">
         <!-- Chart section -->
-        <div class="sm:w-max lg:max-w-md bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6">
+        <div class="sm:w-full lg:max-w-md bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6">
 
             <div class="flex justify-between mb-3">
                 <div class="flex justify-center items-center">
@@ -15,14 +15,16 @@
             <!-- Chart -->
             <div class="py-6" id="donut-chart"></div>
         </div>
-        <!-- table -->
-        <div class="sm:max-w-md lg:max-w-max bg-white rounded-lg dark:bg-gray-800 p-4">
+        @if(auth()->user()->roles->first()->name === 'USER')
+        <!-- Project section -->
+        <div class="sm:w-full lg:max-w-max bg-white rounded-lg dark:bg-gray-800 p-4">
 
             <!-- project -->
             <div class="relative overflow-x-auto">
                 <livewire:project load="5" />
             </div>
         </div>
+        @endif
     </div>
 
     @if(auth()->user()->roles->first()->name === 'ADMIN')
@@ -75,46 +77,7 @@
                 </div>
             </div>
             <!-- table -->
-            <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase dark:text-gray-100">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                No.
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                User
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Status
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Addition Date
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                1
-                            </th>
-                            <td class="px-6 py-4">
-                                <div class="bg-gray-100 text-center text-gray-900 rounded-lg p-2">Silver</div>
-                            </td>
-                            <td class="px-6 py-4">
-                                Laptop
-                            </td>
-                            <td class="px-6 py-4">
-                                $2999
-                            </td>
-                            <td>
-                                <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Details</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <livewire:user-list />
         </div>
     </div>
     @endif

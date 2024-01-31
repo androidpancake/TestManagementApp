@@ -141,7 +141,7 @@ class Form extends Component
             $this->description = 'Please complete the documents to generate reports for Production Issue';
         }
 
-        return view('livewire.form')->with([
+        return view('livewire.form.form')->with([
             'select' => $this->select,
             'title' => $this->title,
             'description' => $this->description,

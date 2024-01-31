@@ -46,7 +46,7 @@ class DetailProject extends Component
 
     public function render()
     {
-        return view('livewire.detail-project')->with([
+        return view('livewire.project.detail-project')->with([
             'title' => $this->project->name,
             'description' => $this->project->desc,
             'project' => $this->project

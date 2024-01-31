@@ -69,7 +69,7 @@ class Project extends Component
             $this->projects = $this->projects->take($this->load);
         }
 
-        return view('livewire.project', [
+        return view('livewire.data.data', [
             'projects' => $this->projects,
             'sit' => $this->sitData,
             'uat' => $this->uatData,

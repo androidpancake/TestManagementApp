@@ -14,7 +14,7 @@ class Filter extends Component
     }
     public function render()
     {
-        return view('livewire.filter', [
+        return view('livewire.filter.filter', [
             'datas' => $this->datas
         ]);
     }

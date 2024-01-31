@@ -14,7 +14,7 @@ class Head extends Component
 
     public function render()
     {
-        return view('livewire.head', [
+        return view('livewire.section.head', [
             'user_name' => Auth::user()->name
         ]);
     }

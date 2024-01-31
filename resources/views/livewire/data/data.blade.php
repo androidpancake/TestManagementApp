@@ -1,0 +1,2 @@
+<livewire:search />
+<livewire:project />
