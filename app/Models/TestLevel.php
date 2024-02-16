@@ -18,6 +18,11 @@ class TestLevel extends Model
 
     public function project()
     {
-        return $this->hasMany(Project::class, 'test_level_id');
+        return $this->hasMany(Project::class);
+    }
+
+    public function draft()
+    {
+        return $this->hasMany(Draft::class);
     }
 }

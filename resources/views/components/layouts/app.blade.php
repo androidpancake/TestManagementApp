@@ -5,13 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Management</title>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    @vite('resources/js/darkmode.js')
-    @vite(['resources/css/datatables.min.css','resources/js/datatables.min.js'])
-    @vite(['dist/datepicker.min.js'])
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js"></script>
+    @vite(['resources/js/darkmode.js'])
+    @vite(['resources/css/datatables.min.','resources/js/datatables.min.js'])
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="flowbite/dist/datepicker.js"></script>
 
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script> -->
@@ -20,8 +16,8 @@
 
 <body>
     @include('layouts.header')
-    @include('layouts.sidebar')
-    <div class="p-4 pt-16 sm:ml-64 bg-gray-200 dark:bg-gray-900">
+    <livewire:sidebar.sidebar />
+    <div class="p-4 pt-16 sm:ml-64 min-h-screen bg-gray-200 dark:bg-gray-900">
         {{ $slot }}
     </div>
     @stack('test-chart')

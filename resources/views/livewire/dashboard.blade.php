@@ -4,11 +4,11 @@
     <!-- section1 -->
     <div class="flex flex-col gap-2 lg:flex-row">
         <!-- Chart section -->
-        <div class="sm:w-full lg:max-w-md bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6">
+        <div class="w-full lg:w-full bg-white rounded-lg dark:bg-gray-800 p-4 md:p-6">
 
             <div class="flex justify-between mb-3">
                 <div class="flex justify-center items-center">
-                    <h5 class="text-md font-medium leading-none text-gray-900 dark:text-white pe-1">SIT dan UAT Summary</h5>
+                    <h5 class="text-md font-medium leading-none text-gray-900 dark:text-white pe-1">Test Type Summary</h5>
                 </div>
             </div>
 
@@ -17,7 +17,7 @@
         </div>
         @if(auth()->user()->roles->first()->name === 'USER')
         <!-- Project section -->
-        <div class="sm:w-full lg:max-w-max bg-white rounded-lg dark:bg-gray-800 p-4">
+        <div class="w-full lg:w-3/5 bg-white rounded-lg dark:bg-gray-800 p-4">
 
             <!-- project -->
             <div class="relative overflow-x-auto">

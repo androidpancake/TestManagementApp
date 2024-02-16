@@ -14,27 +14,25 @@ class Project extends Component
     public $description;
     public $load;
     public $chartData;
-    public $sitData;
-    public $uatData;
+    public $type;
     public $project;
 
     public $search;
     public $filter;
 
-    // protected $queryString = ['search' => ['except' => '']];
+    public $received;
 
-    // public $limitperPage = 10;
+    protected $listeners = ['menuItem'];
 
-    // protected $listeners = [
-    //     'post-data' => 'postData'
-    // ];
-
-    public function mount($load = null)
+    public function mount($load = null, $type = null)
     {
         $this->load = $load;
+        $this->type = $type;
+    }
 
-
-        // dd($this->chartData);
+    public function menuItem($data)
+    {
+        $this->type = $data;
     }
 
     public function placeholder()
@@ -52,15 +50,21 @@ class Project extends Component
 
     public function render()
     {
-        $test_level = TestLevel::all();
-        $query = ModelsProject::where('user_id', auth()->id())->latest();
+        $test_level = TestLevel::get();
+        $query = ModelsProject::with(['test_level'])->where('user_id', auth()->id());
 
-        if ($this->search) {
+        if (!empty($this->search)) {
             $query->where('name', 'like', '%' . $this->search . '%');
         }
 
         if ($this->filter) {
             $query->where('test_level_id', '=', $test_level->id);
+        }
+
+        if ($this->type == 'SIT') {
+            $query->whereHas('test_level', function ($type) {
+                $type->where('type', '=', 'SIT');
+            });
         }
 
         $this->projects = $query->with(['test_level'])->latest()->get();
@@ -69,10 +73,8 @@ class Project extends Component
             $this->projects = $this->projects->take($this->load);
         }
 
-        return view('livewire.data.data', [
+        return view('livewire.project', [
             'projects' => $this->projects,
-            'sit' => $this->sitData,
-            'uat' => $this->uatData,
         ])->with([
             'title' => 'Project',
             'description' => 'Please complete the documents to generate reports'

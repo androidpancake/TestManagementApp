@@ -6,21 +6,22 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class defaultButton extends Component
+class customButton extends Component
 {
     /**
      * Create a new component instance.
      */
-
     public $value;
     public $type;
     public $params;
+    public $class;
 
-    public function __construct($value, $type, $params)
+    public function __construct()
     {
-        $this->value = $value;
-        $this->type = $type;
-        $this->params = $params;
+        $this->value;
+        $this->type;
+        $this->params;
+        $this->class;
     }
 
     /**
@@ -28,6 +29,6 @@ class defaultButton extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.default-button');
+        return view('components.custom-button');
     }
 }

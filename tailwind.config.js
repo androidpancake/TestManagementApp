@@ -4,7 +4,9 @@ export default {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
+        "./resources/**/*.css",
         "./node_modules/flowbite/**/*.js",
+        "./node_modules/apexcharts/**/*.js",
     ],
     theme: {
         extend: {},

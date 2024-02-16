@@ -18,18 +18,6 @@ use PhpOffice\PhpWord\Style\Table as StyleTable;
 
 class ExportController extends Controller
 {
-    public function word($id)
-    {
-        $project = Project::with(['members', 'scenarios'])->findOrFail($id);
-        $scenarios = Scenario::with(['case.step'])->where('project_id', $project->id)->get();
-        $members = Members::where('project_id', $project->id)->get();
-
-        return view('docs.export', [
-            'project' => $project,
-            'scenarios' => $scenarios,
-            'members' => $members
-        ]);
-    }
 
     public function export($id)
     {
@@ -37,7 +25,9 @@ class ExportController extends Controller
         $scenarios = Scenario::with(['case.step'])->where('project_id', $project->id)->get();
         $members = Members::where('project_id', $project->id)->get();
 
-        $project->status == 'Generated';
+        $project->update([
+            'is_generated' => 'Generated'
+        ]);
 
         // count
         $passed = 0;
@@ -75,8 +65,6 @@ class ExportController extends Controller
 
         // auto page
         $phpWord->getSettings()->setUpdateFields(true);
-
-
 
         // Membuat style tabel
         $tableStyle = ['borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40];

@@ -13,9 +13,10 @@ class SIT extends Component
     public function mount()
     {
         $this->projects = Project::whereHas('test_level', function ($query) {
-            $query->where('test_level_id', '=', 2);
+            $query->where('type', '=', 'SIT');
         })->get();
 
+        // dd($projects);
         $this->desc = $this->projects->pluck('test_level.description')->unique()->implode(' ');
 
         // dd($this->desc);

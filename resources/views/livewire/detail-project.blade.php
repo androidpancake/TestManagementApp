@@ -120,6 +120,20 @@
                 @enderror
             </div>
             <div class="mb-5">
+                <label for="sat-process" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SAT Process</label>
+                <input type="text" wire:model="credentials" id="sat-process" value="{{ $project->sat_process }}" placeholder="Credentials" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                @error('credentials')
+                <span class="text-red-800">{{$message}}</span>
+                @enderror
+            </div>
+            <div class="mb-5">
+                <label for="retesting" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Retesting</label>
+                <input type="text" wire:model="credentials" id="retesting" value="{{ $project->retesting }}" placeholder="Retesting" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                @error('credentials')
+                <span class="text-red-800">{{$message}}</span>
+                @enderror
+            </div>
+            <div class="mb-5">
                 <label for="credentials-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Credentials</label>
                 <input type="text" wire:model="credentials" id="credentials-input" value="{{ $project->credentials }}" placeholder="Credentials" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 @error('credentials')
@@ -133,13 +147,7 @@
                 <span class="text-red-800">{{$message}}</span>
                 @enderror
             </div>
-            <div class="mb-5">
-                <label for="retest-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Retesting</label>
-                <input type="text" wire:model="retesting" id="restest-input" value="{{ $project->retesting }}" placeholder="Retesting" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @error('retesting')
-                <span class="text-red-800">{{$message}}</span>
-                @enderror
-            </div>
+            
         </section>
 
         <section>

@@ -1,13 +1,18 @@
-<div class="pt-4 flex flex-col w-full h-screen space-y-2">
+<div class="pt-4 flex flex-col w-full space-y-2">
     <div class="w-full justify-start">
         <div id="title" class="font-semibold text-lg text-gray-900 uppercase dark:text-gray-100">{{ $title }}</div>
         <div id="subtitle" class="font-base text-sm text-gray-700 dark:text-gray-200">{{ $description }}</div>
     </div>
-    <div class="flex justify-start">
+    <div class="flex justify-between">
         <div class="bg-bsi-primary p-2 rounded-full text-sm text-white">{{ $currentStep }} out of {{ $total_steps }}</div>
+        <button wire:click="draft" type="button" class="bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 px-2.5 py-2 text-white rounded">
+            <span>
+                Simpan
+            </span>
+        </button>
     </div>
 
-    <!-- <form wire:submit="submit"> -->
+    <!-- <form wire:submit.prevent="incrementSteps"> -->
     @if($currentStep===1)
     <div class="mb-5">
         <label for="name-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Project Name/AM Code</label>
@@ -28,9 +33,7 @@
 
         <select wire:model="test_level_id" id="test_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="">Pilih</option>
-            @foreach($this->select as $type)
-            <option value="{{ $type->id }}" selected>{{ $type->type }}</option>
-            @endforeach
+            <option value="{{ $select->id }}" selected>{{ $select->type }}</option>
         </select>
         @error('test_level_id')
         <span class="text-red-800">{{$message}}</span>
@@ -72,6 +75,7 @@
         <span class="text-red-800">{{$message}}</span>
         @enderror
     </div>
+
     @elseif($currentStep===2)
     <div class="mb-5">
         <label for="desc" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description / Business Process Flow / Changes Made</label>
@@ -87,6 +91,7 @@
         <span class="text-red-800">{{$message}}</span>
         @enderror
     </div>
+
     @elseif($currentStep===3)
     <div class="mb-5">
         <label for="env-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Test Environment</label>
@@ -109,7 +114,8 @@
         <span class="text-red-800">{{$message}}</span>
         @enderror
     </div>
-    @if($this->route == 'uat.form')
+
+    @if($select->type == 'UAT')
     <div class="mb-5">
         <label for="sat-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SAT Process (UAT)</label>
         <input type="text" wire:model="sat_process" id="sat-input" placeholder="SAT Process" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -125,6 +131,7 @@
         @enderror
     </div>
     @endif
+
     @elseif($currentStep===4)
     <div class="w-full flex justify-end">
         <button wire:click="addIssue" id="addIssue" type="button" class="text-white bg-bsi-primary hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800">
@@ -135,11 +142,15 @@
     <div class="flex flex-col gap-2">
         @foreach($this->issue as $index => $issue)
         <div wire:key="{{ $index }}" id="forms" class="flex flex-row gap-2 items-center w-full bg-white p-2 rounded-lg dark:border-2 dark:border-gray-600 dark:bg-gray-800">
-            <div class="mb-5 w-full">
+            <div class="mb-5 w-2/4">
                 <label for="issue-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Issue</label>
-                <input type="text" wire:model="issue.{{ $index }}.issue" id="issue-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
+                <input type="text" wire:model="issue.{{ $index }}.issue" id="issue-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500" placeholder="Masukkan Issue">
             </div>
-            <div class="mb-5 w-fit">
+            <div class="mb-5 w-2/4">
+                <label for="closed-date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Closed Date</label>
+                <input type="date" wire:model="issue.{{ $index }}.closed_date" id="closed-date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500" placeholder="Masukkan Issue">
+            </div>
+            <div class="mb-5 w-2/4">
                 <label for="status-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
                 <select wire:model="issue.{{ $index }}.status" id="status-input" class="w-full bg-white border border-gray-200 rounded-lg">
                     <option>Very High</option>
@@ -157,8 +168,8 @@
         </div>
         @endforeach
     </div>
-    @elseif($currentStep===5)
 
+    @elseif($currentStep===5)
     <div class="w-full flex justify-end">
         <button wire:click="addUser" id="addUser" type="button" class="text-white bg-bsi-primary hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800">
             <i class="ph ph-plus"></i>
@@ -182,7 +193,7 @@
                 <span class="text-red-800">{{$message}}</span>
                 @enderror
             </div>
-            @if($this->route == 'uat.form' || $this->route == 'pit.form')
+            @if($select->type == 'UAT' || $select->type == 'PIR')
             <div class="mb-5 w-full">
                 <label for="group-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Group (UAT)</label>
                 <input type="text" wire:model="users.{{ $index }}.group" id="unit-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-blue-500">
@@ -225,7 +236,7 @@
                     <th scope="col" class="px-16 py-3">
                         Scenario
                     </th>
-                    <th scope="col" class="px-16 py-3">
+                    <th scope="col" class="px-24 py-3" colspan="2">
                         Test Case
                     </th>
                     <th scope="col" class="px-12 py-3">
@@ -262,7 +273,7 @@
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $i++ }}
                         </th>
-                        <td class="px-6 py-4 space-y-2">
+                        <td class="px-16 py-4 space-y-2">
                             <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Scenario Name {{ $index++ }}" />
 
                             @error('scenario_name')
@@ -280,8 +291,8 @@
                 <tr wire:key="case-{{ $scenarioIndex }}-{{ $caseIndex }}">
                     <td></td>
                     <td></td>
-                    <td class="px-6 py-4 space-y-2">
-                        <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.case" class="w-full rounded border border-gray-300" value="" placeholder="Masukkan Case">
+                    <td colspan="2" class="py-4 space-y-2">
+                        <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.case" class="w-full rounded border border-gray-300" placeholder="Masukkan Case">
                         @error('case')
                         <span class="text-red-800">{{$message}}</span>
                         @enderror
@@ -296,7 +307,7 @@
                 <tr wire:key="step-{{ $scenarioIndex }}-{{ $caseIndex }}-{{ $stepIndex }}">
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td colspan="2"></td>
                     <td class="px-6 py-4">
                         <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.test_step_id" class="w-full rounded border border-gray-300" value="TS-{{ $stepIndex }}" readonly>
                         @error('test_step_id')
@@ -363,6 +374,7 @@
             </tbody>
         </table>
     </div>
+
     @elseif($currentStep===7)
     <div class="relative overflow-x-auto mb-5 rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -452,7 +464,6 @@
                 </tr>
             </tbody>
         </table>
-        <input type="hidden" wire:model="status" value="Generated">
     </div>
     @endif
 
@@ -474,6 +485,8 @@
             @endif
 
             @if($currentStep === $total_steps)
+            <input type="hidden" wire:model="is_generated" value="Generated">
+            <input type="hidden" wire:model="published" value="published">
             <button wire:click="save_data_project" type="submit" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
             @endif
     </div>

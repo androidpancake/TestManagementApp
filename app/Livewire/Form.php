@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Http\Controllers\project\ProjectController;
+use App\Models\Draft;
 use App\Models\Issue;
 use App\Models\Members;
 use App\Models\Project;
@@ -48,7 +50,7 @@ class Form extends Component
     public $telephone;
     public $project_id;
     public $test_lv;
-    public $status;
+    public $is_generated;
     public $scenarios = [];
     public $cases = [];
     public $steps = [];
@@ -112,13 +114,13 @@ class Form extends Component
         $this->user_name;
         $this->unit;
         $this->telephone;
-        $this->status = 'Not Generated';
+        $this->is_generated = 'Not Generated';
         $this->test_step;
         $this->test_step_id;
         $this->expected_result;
         $this->category;
         $this->severity;
-        $this->status;
+        $this->test_status;
         $this->render();
     }
 
@@ -129,19 +131,20 @@ class Form extends Component
         // Check if the current route is 'sit/form'
         if ($this->route == 'sit.form') {
             $this->title = 'SIT Form';
-            $this->select = $this->test_lv->where('type', 'SIT');
+            $this->select = $this->test_lv->where('type', 'SIT')->first();
+            // dd($this->select);
             $this->description = 'Please complete the documents to generate reports for SIT';
         } elseif ($this->route == 'uat.form') {
             $this->title = 'UAT Form';
-            $this->select = $this->test_lv->where('type', 'UAT');
+            $this->select = $this->test_lv->where('type', 'UAT')->first();
             $this->description = 'Please complete the documents to generate reports for UAT';
         } elseif ($this->route == 'pit.form') {
             $this->title = 'PIT Form';
-            $this->select = $this->test_lv->where('type', 'PIR');
+            $this->select = $this->test_lv->where('type', 'PIR')->first();
             $this->description = 'Please complete the documents to generate reports for Production Issue';
         }
 
-        return view('livewire.form.form')->with([
+        return view('livewire.form')->with([
             'select' => $this->select,
             'title' => $this->title,
             'description' => $this->description,
@@ -195,6 +198,250 @@ class Form extends Component
         $this->users = array_values($this->users);
     }
 
+    public function validateForm()
+    {
+        if ($this->currentStep === 1) {
+            $validated = $this->validate([
+                'name' => 'required',
+                'jira_code' => 'required',
+                'test_type' => 'required',
+                'test_level_id' => 'required',
+                'start_date' => 'required|date|before_or_equal:end_date',
+                'end_date' => 'required|date|after_or_equal:start_date'
+            ]);
+        } elseif ($this->currentStep === 2) {
+            $validated = $this->validate([
+                'desc' => 'required',
+                'scope' => 'required',
+            ]);
+        } elseif ($this->currentStep === 3) {
+            $validated = $this->validate([
+                'env' => 'required',
+                'credentials' => 'required',
+                'other' => 'nullable'
+            ]);
+        } elseif ($this->currentStep === 4) {
+            $validated = $this->validate([
+                'issue.*.issue' => 'nullable',
+                'issue.*.closed_date' => 'nullable',
+                'issue.*.status' => 'nullable',
+            ]);
+        } elseif ($this->currentStep === 5) {
+            $validated = $this->validate([
+                'users.*.user_name' => 'required',
+                'users.*.unit' => 'required',
+                'users.*.group' => 'nullable',
+                'users.*.telephone' => 'required|min:9|max:12',
+            ]);
+        } elseif ($this->currentStep === 6) {
+            $validated = $this->validate([
+                'scenarios.*.scenario_name' => 'required',
+                'scenarios.*.cases.*.case' => 'required',
+                'scenarios.*.cases.*.steps.*.test_step_id' => 'required',
+                'scenarios.*.cases.*.steps.*.test_step' => 'required',
+                'scenarios.*.cases.*.steps.*.expected_result' => 'required',
+                'scenarios.*.cases.*.steps.*.category' => 'required',
+                'scenarios.*.cases.*.steps.*.severity' => 'required',
+                'scenarios.*.cases.*.steps.*.status' => 'required'
+            ]);
+
+            // dd($validated);
+        } elseif ($this->currentStep === 7) {
+            $validated = $this->validate([
+                'tmp' => 'required',
+                'updated_uat' => 'required',
+                'uat_result' => 'required',
+                'uat_attendance' => 'required',
+                'other' => 'required',
+                'remarks' => 'nullable',
+                'tmp_remark' => 'nullable',
+                'updated_remark' => 'nullable',
+                'uat_remark' => 'nullable',
+                'uat_attendance_remark' => 'nullable',
+                'other_remark' => 'nullable',
+            ]);
+        }
+    }
+
+    public function draft()
+    {
+        $project = Project::create([
+            'user_id' => auth()->id(),
+            'is_generated' => 'Not Generated'
+        ]);
+
+        $data = $project->findOrFail($project->id);
+
+        $data->update([
+            'name' => $this->name,
+            'jira_code' => $this->jira_code,
+            'test_level_id' => $this->test_level_id,
+            'test_type' => $this->test_type,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'user_id' => auth()->id(),
+            'desc' => $this->desc,
+            'scope' => $this->scope,
+            'credentials' => $this->credentials,
+            'env' => $this->env,
+            'sat_process' => $this->sat_process,
+            'retesting' => $this->retesting,
+            'other' => $this->other,
+            'is_generated' => $this->is_generated,
+            'tmp' => $this->tmp,
+            'updated_uat' => $this->updated_uat,
+            'uat_attendance' => $this->uat_attendance,
+            'uat_result' => $this->uat_result,
+            'tmp_remark' => $this->tmp_remark,
+            'updated_remark' => $this->updated_remark,
+            'uat_remark' => $this->uat_remark,
+            'uat_attendance_remark' => $this->uat_attendance_remark,
+            'other_remark' => $this->other_remark,
+            'published' => 'draft'
+        ]);
+
+        if (is_array($this->issue)) {
+
+            foreach ($this->issue as $issue) {
+                Issue::create([
+                    'project_id' => $project->id,
+                    'issue' => $issue['issue'],
+                    'status' => $issue['status']
+                ]);
+            }
+        }
+
+        if (is_array($this->users)) {
+            foreach ($this->users as $user) {
+                Members::create([
+                    'project_id' => session('project_id'),
+                    'user_name' => $user['user_name'],
+                    'unit' => $user['unit'],
+                    'group' => $user['group'] ?? '',
+                    'telephone' => $user['telephone']
+                ]);
+            }
+        }
+
+        if (is_array($this->scenarios)) {
+            foreach ($this->scenarios as $scene) {
+
+                $newScenario = Scenario::create([
+                    'project_id' => session('project_id'),
+                    'scenario_name' => $scene['scenario_name'],
+                ]);
+
+                // dd($newScenario);
+
+                // session(['test_id' => $newScenario->id]);
+                if (is_array($scene['cases'])) {
+                    foreach ($scene['cases'] as $case) {
+                        // dd($case);
+
+                        $newCase = $newScenario->case()->create([
+                            'case' => $case['case'],
+                            'test_id' => session('test_id')
+                        ]);
+
+                        // dd($newCase);
+
+                        if (is_array($case['steps'])) {
+                            foreach ($case['steps'] as $step) {
+                                $newCase->step()->create([
+                                    'test_step_id' => $step['test_step_id'],
+                                    'test_step' => $step['test_step'],
+                                    'expected_result' => $step['expected_result'],
+                                    'category' => $step['category'],
+                                    'severity' => $step['severity'],
+                                    'status' => $step['status'],
+                                    'case_id' => session('case_id')
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // dd($this->steps);
+        }
+    }
+
+    public function add_to_draft()
+    {
+        $draft = new Draft;
+        // $project_id + 1;
+        $newProjectId = Project::create([
+            'user_id' => auth()->id(),
+            'published' => 'draft'
+        ]);
+
+        $draft->project_id = $newProjectId->id;
+        $draft->values = [
+            'project' => [
+                'name' => $this->name,
+                'jira_code' => $this->jira_code,
+                'test_level_id' => $this->test_level_id,
+                'test_type' => $this->test_type,
+                'start_date' => $this->start_date,
+                'end_date' => $this->end_date,
+                'desc' => $this->desc,
+                'scope' => $this->scope,
+                'sat_process' => $this->sat_process,
+                'retesting' => $this->retesting,
+                'env' => $this->env,
+                'credentials' => $this->credentials,
+                'tmp' => $this->tmp,
+                'expected_result' => $this->expected_result,
+                'updated_uat' => $this->updated_uat,
+                'uat_attendance' => $this->uat_attendance,
+                'uat_result' => $this->uat_result,
+                'other' => $this->other,
+                'remarks' => $this->remarks,
+                'tmp_remark' => $this->tmp_remark,
+                'updated_remark' => $this->updated_remark,
+                'uat_remark' => $this->uat_remark,
+                'uat_attendance_remark' => $this->uat_attendance_remark,
+                'other_remark' => $this->other_remark,
+                'is_generated' => $this->is_generated,
+                'published' => 'draft',
+                'user_id' => auth()->id()
+            ],
+            'issue' => collect($this->issue)->map(function ($issue) use ($newProjectId) {
+                return [
+                    'project_id' => $newProjectId,
+                    'issue' => $issue['issue'],
+                    'closed_date' => $issue['closed_date'],
+                    'status' => $issue['status']
+                ];
+            })->toArray(),
+            'users' => collect($this->users)->map(function ($user) use ($newProjectId) {
+                return [
+                    'project_id' => $newProjectId,
+                    'user_name' => $user['user_name'],
+                    'unit' => $user['unit'],
+                    'telephone' => $user['telephone'],
+                    'group' => $user['telephone']
+                ];
+            })->toArray(),
+            'scenario' => collect($this->scenarios)->map(function ($scenario) use ($newProjectId) {
+
+                return [
+                    'scenario_name' => $scenario['scenario_name'],
+                    'project_id' => $newProjectId,
+                    'cases' => collect($this->cases)->filter(function ($case) use ($scenario) {
+                        return [
+                            $case['test_id'] == $scenario['id'],
+                            'case' => $case['case']
+                        ];
+                    })->pluck('case')->toArray(),
+                ];
+            })->toArray(),
+
+        ];
+
+        $draft->save();
+    }
+
     public function save_temporary_data()
     {
         //project
@@ -224,6 +471,7 @@ class Form extends Component
                 session()->put([
                     'issue.*.project_id' => session('project_id'),
                     'issue.*.issue' => $issue['issue'],
+                    'issue.*.closed_date' => $issue['closed_date'],
                     'issue.*.status' => $issue['status']
                 ]);
             }
@@ -298,7 +546,7 @@ class Form extends Component
             'sat_process' => $this->sat_process,
             'retesting' => $this->retesting,
             'other' => $this->other,
-            'status' => $this->status,
+            'is_generated' => $this->is_generated,
             'tmp' => $this->tmp,
             'updated_uat' => $this->updated_uat,
             'uat_attendance' => $this->uat_attendance,
@@ -377,9 +625,9 @@ class Form extends Component
             }
 
             // dd($this->steps);
-        }
 
-        return redirect()->route('project');
+            $this->generate($project->id);
+        }
     }
 
     public function addScenario()
@@ -416,7 +664,7 @@ class Form extends Component
             'expected_result' => $this->expected_result,
             'category' => $this->category,
             'severity' => $this->severity,
-            'status' => $this->status
+            'status' => $this->test_status
         ];
     }
 
@@ -448,95 +696,9 @@ class Form extends Component
         }
     }
 
-    public function save_test()
+    public function generate($id)
     {
-        if (is_array($this->scenarios)) {
-            foreach ($this->scenarios as $scene) {
-
-                $newScenario = Scenario::create([
-                    'project_id' => session('project_id'),
-                    'scenario_name' => $scene['scenario_name'],
-                ]);
-
-                if (is_array($this->cases)) {
-                    foreach ($this->cases as $case) {
-                        $newScenario->case()->create([
-                            'case' => $case['case']
-                        ]);
-                    }
-                }
-            }
-        }
-
-        return $this->incrementSteps();
-    }
-
-    public function generate()
-    {
-        //generate word
-    }
-
-    public function validateForm()
-    {
-        if ($this->currentStep === 1) {
-            $validated = $this->validate([
-                'name' => 'required',
-                'jira_code' => 'required',
-                'test_type' => 'required',
-                'test_level_id' => 'required',
-                'start_date' => 'required|date|before_or_equal:end_date',
-                'end_date' => 'required|date|after_or_equal:start_date'
-            ]);
-        } elseif ($this->currentStep === 2) {
-            $validated = $this->validate([
-                'desc' => 'required',
-                'scope' => 'required',
-            ]);
-        } elseif ($this->currentStep === 3) {
-            $validated = $this->validate([
-                'env' => 'required',
-                'credentials' => 'required',
-                'other' => 'nullable'
-            ]);
-        } elseif ($this->currentStep === 4) {
-            $validated = $this->validate([
-                'issue.*.issue' => 'nullable',
-                'issue.*.status' => 'nullable',
-            ]);
-        } elseif ($this->currentStep === 5) {
-            $validated = $this->validate([
-                'users.*.user_name' => 'required',
-                'users.*.unit' => 'required',
-                'users.*.group' => 'nullable',
-                'users.*.telephone' => 'required|numeric',
-            ]);
-        } elseif ($this->currentStep === 6) {
-            $validated = $this->validate([
-                'scenarios.*.scenario_name' => 'required',
-                'scenarios.*.cases.*.case' => 'required',
-                'scenarios.*.cases.*.steps.*.test_step_id' => 'required',
-                'scenarios.*.cases.*.steps.*.test_step' => 'required',
-                'scenarios.*.cases.*.steps.*.expected_result' => 'required',
-                'scenarios.*.cases.*.steps.*.category' => 'required',
-                'scenarios.*.cases.*.steps.*.severity' => 'required',
-                'scenarios.*.cases.*.steps.*.status' => 'required'
-            ]);
-
-            // dd($validated);
-        } elseif ($this->currentStep === 7) {
-            $validated = $this->validate([
-                'tmp' => 'required',
-                'updated_uat' => 'required',
-                'uat_result' => 'required',
-                'uat_attendance' => 'required',
-                'other' => 'required',
-                'remarks' => 'nullable',
-                'tmp_remark' => 'nullable',
-                'updated_remark' => 'nullable',
-                'uat_remark' => 'nullable',
-                'uat_attendance_remark' => 'nullable',
-                'other_remark' => 'nullable',
-            ]);
-        }
+        $project = Project::findOrFail($id);
+        return redirect()->route('generate', $project->id);
     }
 }

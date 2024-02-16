@@ -4,15 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Project extends Model
 {
     use HasFactory;
 
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
     protected $table = 'project';
 
     protected $fillable = [
-        'id',
         'name',
         'jira_code',
         'test_level_id',
@@ -38,9 +42,19 @@ class Project extends Model
         'uat_remark',
         'uat_attendance_remark',
         'other_remark',
-        'status',
+        'is_generated',
+        'published',
         'user_id'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->id = Str::uuid();
+        });
+    }
 
     public function users()
     {
@@ -65,5 +79,10 @@ class Project extends Model
     public function test_level()
     {
         return $this->belongsTo(TestLevel::class, 'test_level_id');
+    }
+
+    public function draft()
+    {
+        return $this->hasMany(Draft::class);
     }
 }

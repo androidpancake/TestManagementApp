@@ -30,6 +30,8 @@ class Dashboard extends Component
             $query->where('type', '=', 'PIR');
         })->count();
 
+        // dd($this->sitData);
+
         $this->chartData = [
             'series' => [$this->sitData, $this->uatData, $this->pirData],
             'labels' => ['SIT', 'UAT', 'PIR']
@@ -40,7 +42,7 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.dashboard', [
+        return view('livewire.dashboard', [
             'chartData' => $this->chartData,
         ]);
     }

@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\auth\AuthUserController;
+use App\Http\Controllers\DraftController;
 use App\Livewire\Dashboard;
+use App\Livewire\DraftProject;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,21 +17,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', Dashboard::class)->middleware('auth');
 
 
 Route::middleware(['auth'])->group(function () {
-
+    Route::get('/', Dashboard::class);
     Route::get('/dashboard', Dashboard::class);
 });
 
-Route::get('/projects', function () {
-    return view('project.index');
-});
 
 Route::get('/users', function () {
     return view('user.index');
 });
+
+// Route::get('draft', [DraftController::class,'index'])->name('draft');
+
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/project.php';
