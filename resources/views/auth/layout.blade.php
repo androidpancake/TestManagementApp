@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Management</title>
     @vite(['resources/js/darkmode.js'])
-    @vite(['resources/css/datatables.min.css','resources/js/datatables.min.js'])
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 

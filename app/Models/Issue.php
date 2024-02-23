@@ -14,7 +14,8 @@ class Issue extends Model
     protected $fillable = [
         'issue',
         'status',
-        'project_id'
+        'project_id',
+        'closed_date'
     ];
 
     public function project()

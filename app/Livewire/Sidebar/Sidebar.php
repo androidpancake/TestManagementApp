@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Sidebar;
 
+use App\Models\Project;
 use Livewire\Component;
 
 class Sidebar extends Component
@@ -10,6 +11,39 @@ class Sidebar extends Component
     {
         $this->emit('menuItem', $data);
     }
+
+    public function sit()
+    {
+        $data = Project::create([
+            'user_id' => auth()->id(),
+            'test_level_id' => 2
+        ]);
+
+        return redirect()->route('form', $data->id);
+    }
+
+    public function uat()
+    {
+        $data = Project::create([
+            'user_id' => auth()->id(),
+            'test_level_id' => 1
+
+        ]);
+
+        return redirect()->route('form', $data->id);
+    }
+
+    public function pir()
+    {
+        $data = Project::create([
+            'user_id' => auth()->id(),
+            'test_level_id' => 3
+
+        ]);
+
+        return redirect()->route('form', $data->id);
+    }
+
     public function render()
     {
         return view('livewire.sidebar.sidebar');

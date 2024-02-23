@@ -61,9 +61,15 @@
                         <td class="px-6 py-4">
                             {{ $data->jira_code }}
                         </td>
+                        @if($data->test_level_id = null)
                         <td class="px-6 py-4">
                             {{ $data->test_level->type }}
                         </td>
+                        @else
+                        <td>
+                            no test level
+                        </td>
+                        @endif
                         <td class="px-6 py-4">
                             {{ $data->start_date }}
                         </td>
@@ -80,7 +86,7 @@
                             <a href="{{ route('generate', $data->id) }}" class="font-medium text-bsi-primary dark:text-blue-500 hover:underline">Generate</a>
                         </td>
                         <td class="px-6 py-4">
-                            <a href="{{ url('project/detail', $data->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Continue</a>
+                            <a href="{{ url('form', $data->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Continue</a>
                         </td>
                     </tr>
                     @empty

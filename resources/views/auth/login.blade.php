@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="w-1/2">
-    <form action="{{ route('auth') }}" method="POST" class="bg-white p-2 rounded-lg justify-center dark:bg-gray-800">
+    <form action="{{ route('ldap.auth') }}" method="POST" class="bg-white p-2 rounded-lg justify-center dark:bg-gray-800">
         @csrf
         <div class="mb-5">
             <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>

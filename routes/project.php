@@ -9,6 +9,7 @@ use App\Livewire\DetailProject;
 use App\Livewire\Draft;
 use App\Livewire\DraftProject;
 use App\Livewire\Form;
+use App\Livewire\Form\Form as FormForm;
 use App\Livewire\PIT;
 use App\Livewire\Project;
 use App\Livewire\ProjectDraft;
@@ -25,14 +26,16 @@ Route::middleware(['auth', 'role:user'])->group(
         Route::get('project/detail/{id}', DetailProject::class)->name('project.detail');
         Route::get('sit/form', Form::class)->name('sit.form');
         Route::get('uat/form', Form::class)->name('uat.form');
+        Route::get('pit/form', Form::class)->name('pit.form');
         Route::get('sit', SIT::class)->name('sit.index');
         Route::get('uat', UAT::class)->name('uat.index');
-        Route::get('pit/form', Form::class)->name('pit.form');
         Route::get('pit', PIT::class)->name('pit.index');
         Route::get('project/draft', Draft::class)->name('draft');
         Route::get('project/draft/{id}', DetailDraft::class)->name('draft.detail');
 
         Route::get('export/{id}', [ExportController::class, 'export'])->name('generate');
+
+        Route::get('form/{id}', FormForm::class)->name('form');
     }
 );
 //livewire

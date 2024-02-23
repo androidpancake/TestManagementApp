@@ -19,7 +19,7 @@ use PhpOffice\PhpWord\Style\Table as StyleTable;
 class ExportController extends Controller
 {
 
-    public function export($id)
+    public static function export($id)
     {
         $project = Project::with(['members', 'scenarios.case.step', 'issue'])->findOrFail($id);
         $scenarios = Scenario::with(['case.step'])->where('project_id', $project->id)->get();

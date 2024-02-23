@@ -21,7 +21,8 @@
                 <label for="test_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Test Level</label>
                 <!-- <input type="text" wire:model="test_level" id="test-level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> -->
                 <select wire:model.debounce.800ms="test_level_id" id="test_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value="{{ $project->test_level_id }}">{{ $project->test_level->type }}</option>
+                    <option selected value="{{ $project->test_level_id }}">{{ $project->test_level->type }}</option>
+
                 </select>
                 @error('test_level')
                 <span class="text-red-800">{{$message}}</span>
@@ -147,7 +148,7 @@
                 <span class="text-red-800">{{$message}}</span>
                 @enderror
             </div>
-            
+
         </section>
 
         <section>

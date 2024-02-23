@@ -23,7 +23,6 @@ class UAT extends Component
         return view('livewire.uat.uat', [
             'title' => 'UAT',
             'projects' => $this->projects,
-            'description' => $this->desc
-        ]);
+        ])->with(['description' => $this->desc]);
     }
 }

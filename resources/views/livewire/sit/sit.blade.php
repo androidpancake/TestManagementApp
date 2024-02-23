@@ -2,5 +2,5 @@
 
     <livewire:head title="{{ $title }}" description="{{ $description }}" />
 
-    <livewire:project />
+    <livewire:project type="SIT" />
 </div>

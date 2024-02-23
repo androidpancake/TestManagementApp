@@ -30,11 +30,6 @@ class Project extends Component
         $this->type = $type;
     }
 
-    public function menuItem($data)
-    {
-        $this->type = $data;
-    }
-
     public function placeholder()
     {
         return <<<'HTML'
@@ -64,6 +59,14 @@ class Project extends Component
         if ($this->type == 'SIT') {
             $query->whereHas('test_level', function ($type) {
                 $type->where('type', '=', 'SIT');
+            });
+        } elseif ($this->type == 'UAT') {
+            $query->whereHas('test_level', function ($type) {
+                $type->where('type', '=', 'UAT');
+            });
+        } elseif ($this->type == 'PIR') {
+            $query->whereHas('test_level', function ($type) {
+                $type->where('type', '=', 'PIR');
             });
         }
 

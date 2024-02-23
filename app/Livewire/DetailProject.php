@@ -6,6 +6,7 @@ use App\Models\Members;
 use App\Models\Project;
 use App\Models\Scenario;
 use App\Models\TestCase;
+use App\Models\TestLevel;
 use Livewire\Component;
 
 class DetailProject extends Component
@@ -16,6 +17,7 @@ class DetailProject extends Component
     public $case;
     public $step;
     public $totalStep;
+    public $test_level;
 
     public function mount($id)
     {
@@ -29,14 +31,10 @@ class DetailProject extends Component
             foreach ($scenario->case as $testcase) {
                 $totalStep += $testcase->step->count();
             }
-            // dd($totalStep);
         }
-
-        // dd($this->scenarios);
-
     }
 
-    
+
 
     public function generate($id)
     {

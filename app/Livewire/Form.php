@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Http\Controllers\project\ExportController;
 use App\Http\Controllers\project\ProjectController;
 use App\Models\Draft;
 use App\Models\Issue;
@@ -77,7 +78,6 @@ class Form extends Component
     public $test_status;
     public $row;
 
-    public $caseParentIndices;
 
     public function mount()
     {
@@ -85,7 +85,6 @@ class Form extends Component
         $this->description;
         $this->route;
 
-        $this->caseParentIndices = [];
         $this->users = [];
         $this->row = [];
         $this->scenarios = [];
@@ -147,7 +146,7 @@ class Form extends Component
         return view('livewire.form')->with([
             'select' => $this->select,
             'title' => $this->title,
-            'description' => $this->description,
+            'description' => $this->description
         ]);
     }
 
@@ -626,7 +625,7 @@ class Form extends Component
 
             // dd($this->steps);
 
-            $this->generate($project->id);
+            return $this->generate($project->id);
         }
     }
 
@@ -637,7 +636,6 @@ class Form extends Component
             'cases' => []
         ];
 
-        // $this->scenario_name = '';
     }
 
     public function addTestCase($scenarioIndex)
@@ -699,6 +697,7 @@ class Form extends Component
     public function generate($id)
     {
         $project = Project::findOrFail($id);
+        // return ExportController::export($id);
         return redirect()->route('generate', $project->id);
     }
 }
