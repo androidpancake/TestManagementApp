@@ -1,1 +1,0 @@
-<button wire:click="{{ $params }}" type="{{ $type }}" class="text-white bg-bsi-primary hover:bg-bsi-secondary focus:ring-4 focus:outline-none focus:ring-bsi-primary font-medium rounded-lg text-sm px-4 py-2 dark:bg-bsi-primary dark:hover:bg-bsi-primary dark:focus:ring-bsi-primary">{{ $value }}</button>

@@ -15,6 +15,7 @@ class Project extends Component
     public $load;
     public $chartData;
     public $type;
+    public $page;
     public $project;
 
     public $search;
@@ -24,10 +25,11 @@ class Project extends Component
 
     protected $listeners = ['menuItem'];
 
-    public function mount($load = null, $type = null)
+    public function mount($load = null, $type = null, $page = null)
     {
         $this->load = $load;
         $this->type = $type;
+        $this->page = $page;
     }
 
     public function placeholder()
@@ -55,6 +57,11 @@ class Project extends Component
         if ($this->filter) {
             $query->where('test_level_id', '=', $test_level->id);
         }
+
+        $query->paginate(10);
+        // if ($this->page) {
+        //     $query->paginate(10);
+        // }
 
         if ($this->type == 'SIT') {
             $query->whereHas('test_level', function ($type) {

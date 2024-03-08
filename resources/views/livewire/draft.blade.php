@@ -49,7 +49,7 @@
                     </th>
                     </th>
                     <th class="px-6 py-4">
-                        <a href="{{ url('project/detail', $data->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Continue</a>
+                        <a href="{{ route('form', $data->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Continue</a>
                     </th>
                 </tr>
                 @empty

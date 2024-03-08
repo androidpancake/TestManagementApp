@@ -16,7 +16,7 @@ class TestCase extends Model
         'test_id'
     ];
 
-    public function scenario()
+    public function scenarios()
     {
         return $this->belongsTo(Scenario::class, 'test_id');
     }

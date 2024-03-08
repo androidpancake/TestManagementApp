@@ -10,7 +10,10 @@
                 Simpan
             </span>
         </button> -->
-        <button wire:click="scenarioView" data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+        <!-- <button wire:click="scenarioView" data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+            Scenario-Case-Step List
+        </button> -->
+        <button wire:click="scenarioComponent" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
             Scenario-Case-Step List
         </button>
     </div>
@@ -282,14 +285,11 @@
 
     @elseif($currentStep===6)
     <div class="flex justify-end space-x-2 w-full">
-
         <button wire:click="addScenario" class="bg-bsi-primary px-2.5 py-2 text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
             <i class="ph ph-plus"></i>
             <span>Tambah Skenario</span>
         </button>
     </div>
-
-
 
     <div class="relative overflow-x-auto shadow-md">
         <table id="tableTest" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -339,7 +339,7 @@
                             {{ $i++ }}
                         </th>
                         <td class="px-16 py-4 space-y-2">
-                            <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Scenario Name {{ $index++ }}" />
+                            <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Scenario Name" />
 
                             @error('scenario_name')
                             <span class="text-red-800">{{$message}}</span>
@@ -552,7 +552,10 @@
             @if($currentStep === $total_steps)
             <input type="hidden" wire:model="is_generated" value="Generated">
             <input type="hidden" wire:model="published" value="published">
-            <button wire:click="generate" type="submit" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
+            <div>
+                <button wire:click="store" type="submit" class="bg-transparent border border-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
+                <button wire:click="generate" type="submit" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
+            </div>
             @endif
     </div>
 </div>

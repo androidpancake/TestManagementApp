@@ -3,6 +3,7 @@
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\project\ExportController;
 use App\Http\Controllers\project\ProjectController;
+use App\Http\Controllers\ScenarioController;
 use App\Http\Controllers\sit\SitController;
 use App\Livewire\DetailDraft;
 use App\Livewire\DetailProject;
@@ -12,9 +13,12 @@ use App\Livewire\Form;
 use App\Livewire\Form\Form as FormForm;
 use App\Livewire\PIT;
 use App\Livewire\Project;
+use App\Livewire\Project\ScenarioComponent;
 use App\Livewire\ProjectDraft;
 use App\Livewire\SIT;
 use App\Livewire\UAT;
+use App\Models\Project as ModelsProject;
+use App\Models\Scenario;
 use Illuminate\Support\Facades\Route;
 
 Route::get('page/project', [ProjectController::class, 'index'])->name('project.index');
@@ -36,6 +40,13 @@ Route::middleware(['auth', 'role:user'])->group(
         Route::get('export/{id}', [ExportController::class, 'export'])->name('generate');
 
         Route::get('form/{id}', FormForm::class)->name('form');
+        Route::resource('scenario', ScenarioController::class);
+        Route::get('scenario-test-step/{id}', ScenarioComponent::class)->name('scenario-list');
+
+        // test
+        Route::get('scenario-list', function () {
+            return ModelsProject::with('scenarios.case.step')->get();
+        });
     }
 );
 //livewire
