@@ -9,6 +9,7 @@ use App\Models\TestCase;
 use App\Models\TestStep;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ScenarioController extends Controller
 {
@@ -58,78 +59,69 @@ class ScenarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update2(Request $request, $id)
     {
-        // Validate the incoming request data
-        $validatedData = $request->validate([
-            'scenario_name.*' => 'required',
-            'case.*' => 'required',
-            'test_step_id.*' => 'required',
-            'test_step.*' => 'required',
-            'expected_result.*' => 'required',
-            'category.*' => 'required',
-            'severity.*' => 'required',
-        ]);
-
-        // Retrieve the project
-        $project = Project::findOrFail($id);
-
-        // Update scenarios and related cases and steps
-        foreach ($validatedData['scenario_name'] as $sIndex => $scenarioName) {
-            $scenario = $project->scenarios()->where('scenario_name', $scenarioName)->firstOrFail();
-            $scenario->update(['scenario_name' => $scenarioName]);
-
-            // Iterate through cases and steps
-            foreach ($validatedData['case'][$sIndex] as $cIndex => $caseData) {
-                // Find or create case
-                $case = $scenario->cases()->firstOrCreate(['case' => $caseData]);
-
-                // Iterate through steps
-                foreach ($caseData['test_step_id'] as $stIndex => $testStepId) {
-                    // Find or create step
-                    $step = $case->steps()->firstOrCreate(['test_step_id' => $testStepId]);
-
-                    // Update step data
-                    $step->update([
-                        'test_step' => $caseData['test_step'][$stIndex],
-                        'expected_result' => $caseData['expected_result'][$stIndex],
-                        'category' => $caseData['category'][$stIndex],
-                        'severity' => $caseData['severity'][$stIndex],
-                    ]);
-                }
+        $project = Project::find($id);
+        $scenarios = Scenario::with('case.step')->where('project_id', $project->id);
+        $data = $request->all();
+        // dd($request->scenario_name);
+        if ($request->scenario_name) {
+            foreach ($data['scenario_name'] as $sIndex => $scenario) {
+                $sc_id = $data['id'];
+                // dd($sc_id);
+                $sc_data = [
+                    'scenario_name' => $data['scenario_name'][$sIndex]
+                ];
+                // dd($sc_data);
+                $scenarios->where('id', $sc_id)->update($sc_data);
             }
+            // dd($sc_data);
         }
 
-        // Redirect back with success message
-        return redirect()->back()->with('success', 'Scenarios updated successfully');
-        // $data = $request->all();
-        // dd($data);
-        // // dd($request->scenario);
-        // $project = Project::find($id);
+        return redirect()->route('scenario.show', $project->id);
+    }
 
-        // $scenarios_data = [];
-        // foreach ($request->scenario_name as $sIndex => $scenario) {
-        //     $project->scenarios()->update([
-        //         $scenarios_data[] = [
-        //             'scenario_name' => $sIndex['scenario_name']
-        //         ]
-        //     ]);
-        // }
+    public function update(ScenarioRequest $request, $projectId)
+    {
+        $project = Project::find($projectId);
+        $scenarios = $request->input('scenario_name');
+        $cases = $request->input('case');
+        $testSteps = $request->input('test_step');
+        $expectedResults = $request->input('expected_result');
+        $categories = $request->input('category');
+        $severities = $request->input('severity');
 
-        // dd($request['scenario_name']);
-        // $project->scenarios->case()->update([
-        //     'case' => $data['case']
-        // ]);
+        DB::beginTransaction();
+        try {
+            foreach ($project->scenarios as $sIndex => $scenario) {
+                if (isset($scenarios[$sIndex])) {
+                    $scenario->scenario_name = $scenarios[$sIndex];
+                    $scenario->save();
+                }
 
-        // $project->scenarios->case->step->save([
-        //     $request['test_step_id'],
-        //     $request['test_step'],
-        //     $request['expected_result'],
-        //     $request['category'],
-        //     $request['severity']
-        // ]);
+                foreach ($scenario->case as $cIndex => $case) {
+                    if (isset($cases[$cIndex])) {
+                        $case->case = $cases[$cIndex];
+                        $case->save();
+                    }
 
-        // return redirect()->route('scenario.show', $id);
+                    foreach ($case->step as $stIndex => $step) {
+                        if (isset($testSteps[$stIndex])) {
+                            $step->test_step = $testSteps[$stIndex];
+                            $step->expected_result = $expectedResults[$stIndex];
+                            $step->category = $categories[$stIndex];
+                            $step->severity = $severities[$stIndex];
+                            $step->save();
+                        }
+                    }
+                }
+            }
+            DB::commit();
+            return redirect()->route('your.route.name')->with('success', 'Project updated successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error updating project: ' . $e->getMessage());
+        }
     }
 
     /**
