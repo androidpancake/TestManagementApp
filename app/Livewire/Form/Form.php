@@ -247,7 +247,7 @@ class Form extends Component
     public function update_data()
     {
         $this->validateForm();
-
+        // dd($data);
         $this->project->update([
             'name' => $this->name,
             'jira_code' => $this->jira_code,
@@ -298,6 +298,7 @@ class Form extends Component
         }
 
         if (is_array($this->scenarios)) {
+            // dd($this->scenarios);
             foreach ($this->scenarios as $scene) {
                 $newScenario = Scenario::updateOrCreate([
                     'project_id' => $this->project->id,
@@ -339,79 +340,9 @@ class Form extends Component
         }
     }
 
-    public function update_modal_v1()
+    public function toStep($step)
     {
-        $this->validateScenario();
-
-        foreach ($this->scenarios as $scenario) {
-            $updatedScenario = Scenario::find($scenario['id']);
-            $updatedScenario->update([
-                'scenario_name' => $scenario['scenario_name'],
-            ]);
-
-            foreach ($scenario['cases'] as $case) {
-                $updatedCase = TestCase::find($case['id']);
-                $updatedCase->update([
-                    'case' => $case['case'],
-                ]);
-
-                dd($updatedCase);
-
-                foreach ($case['steps'] as $step) {
-                    $updatedStep = TestStep::find($step['id']);
-                    $updatedStep->update([
-                        'test_step' => $step['test_step'],
-                        'expected_result' => $step['expected_result'],
-                        'category' => $step['category'],
-                        'severity' => $step['severity'],
-                        'status' => $step['status'],
-                    ]);
-                }
-            }
-        }
-    }
-
-
-    public function update_modal()
-    {
-        $this->validateScenario();
-
-        if (is_array($this->scenarios)) {
-            foreach ($this->scenarios as $scenario) {
-                $newScenario = Scenario::find($this->scenario->id)->update([
-                    'scenario_name' => $scenario['scenario_name'],
-                ]);
-
-                // dd($this->scenarios);
-
-                // session(['test_id' => $newScenario->id]);
-                if (is_array($this->cases)) {
-                    foreach ($scenario['cases'] as $case) {
-                        // dd($case);
-
-                        $newCase = $newScenario->case()->update([
-                            'case' => $case['case'],
-                        ]);
-
-                        // dd($newCase);
-
-                        if (is_array($this->steps)) {
-                            foreach ($case['steps'] as $step) {
-                                $newCase->step()->update([
-                                    'test_step' => $step['test_step'],
-                                    'expected_result' => $step['expected_result'],
-                                    'category' => $step['category'],
-                                    'severity' => $step['severity'],
-                                    'status' => $step['status'],
-                                ]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // dd($this->steps);
+        $this->currentStep = $step;
     }
 
     public function incrementSteps()
@@ -496,9 +427,17 @@ class Form extends Component
         }
     }
 
-    public function addTestStep($scenarioIndex, $caseIndex)
+    public function addTestStep($scenarioIndex, $caseIndex, Project $project, Scenario $scenario, TestCase $case)
     {
-        $totalSteps = 0;
+        $project = Project::where('id', $this->project->id)->first();
+        $scenario = $scenario->with('case')->where('project_id', $project->id)->first();
+        if ($scenario) {
+            $step = $scenario->steps()->count();
+            $totalSteps = $step;
+        } else {
+            $totalSteps = 0;
+        }
+
         foreach ($this->scenarios as $sIndex => $scenario) {
             foreach ($scenario['cases'] as $cIndex => $case) {
                 if ($sIndex < $scenarioIndex || ($sIndex == $scenarioIndex && $cIndex <= $caseIndex)) {
@@ -525,6 +464,11 @@ class Form extends Component
         } else {
             // Handle the error when the specified indexes are invalid
         }
+    }
+
+    public function reset_test()
+    {
+        unset($this->scenarios);
     }
 
     public function generate()
@@ -585,8 +529,6 @@ class Form extends Component
                 'scenarios.*.cases.*.steps.*.severity' => 'required',
                 'scenarios.*.cases.*.steps.*.status' => 'required'
             ]);
-
-            // dd($validated);
         } elseif ($this->currentStep === 7) {
             $validated = $this->validate([
                 'tmp' => 'required',
@@ -603,20 +545,6 @@ class Form extends Component
         }
     }
 
-    public function validateScenario()
-    {
-        $validated = $this->validate([
-            'scenarios.*.scenario_name' => 'required',
-            'scenarios.*.cases.*.case' => 'required',
-            'scenarios.*.cases.*.steps.*.test_step_id' => 'required',
-            'scenarios.*.cases.*.steps.*.test_step' => 'required',
-            'scenarios.*.cases.*.steps.*.expected_result' => 'required',
-            'scenarios.*.cases.*.steps.*.category' => 'required',
-            'scenarios.*.cases.*.steps.*.severity' => 'required',
-            'scenarios.*.cases.*.steps.*.status' => 'required'
-        ]);
-    }
-
     public function scenarioView()
     {
         $this->scenarioView = true;
@@ -624,6 +552,6 @@ class Form extends Component
 
     public function scenarioComponent()
     {
-        return redirect()->route('scenario-list', $this->project->id);
+        return redirect()->route('scenario.show', $this->project->id);
     }
 }

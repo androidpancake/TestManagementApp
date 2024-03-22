@@ -5,19 +5,8 @@
     </div>
     <div class="flex justify-between">
         <div class="bg-gray-500 p-2 rounded-full text-sm text-white">{{ $currentStep }} out of {{ $total_steps }}</div>
-        <!-- <button wire:click="update" type="button" class="bg-gray-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 px-2.5 py-2 text-white rounded">
-            <span>
-                Simpan
-            </span>
-        </button> -->
-        <!-- <button wire:click="scenarioView" data-modal-target="default-modal" data-modal-toggle="default-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-            Scenario-Case-Step List
-        </button> -->
-        <button wire:click="scenarioComponent" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-            Scenario-Case-Step List
-        </button>
+
     </div>
-    @include('livewire.scenario-modal')
     @if($currentStep===1)
     <div class="mb-5">
         <label for="name-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Project Name/AM Code</label>
@@ -284,11 +273,21 @@
     </div>
 
     @elseif($currentStep===6)
-    <div class="flex justify-end space-x-2 w-full">
-        <button wire:click="addScenario" class="bg-bsi-primary px-2.5 py-2 text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
-            <i class="ph ph-plus"></i>
-            <span>Tambah Skenario</span>
-        </button>
+    <div class="flex justify-between space-x-2 w-full">
+        <div class="flex flex-row gap-2 order-last">
+            <button wire:click="addScenario" class="bg-bsi-primary px-2.5 py-2 text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
+                <i class="ph ph-plus"></i>
+                <span>Tambah Skenario</span>
+            </button>
+            <button wire:click="scenarioComponent" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                Scenario-Case-Step List
+            </button>
+        </div>
+        <div>
+            <button wire:click="reset_test" class="block text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" type="button">
+                Reset
+            </button>
+        </div>
     </div>
 
     <div class="relative overflow-x-auto shadow-md">
@@ -319,11 +318,10 @@
                     <th scope="col" class="px-6 py-3">
                         Severity (High/Medium/Low)
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" colspan="2">
                         Status (Passed/Failed)
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                    </th>
+                    <!-- <th class="px-2 py-3"></th> -->
                 </tr>
             </thead>
             <tbody>
@@ -335,9 +333,9 @@
                 @foreach($this->scenarios as $scenarioIndex => $scenario)
                 <tr wire:key="{{ $scenarioIndex }}">
                     <div class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $i++ }}
-                        </th>
+                        </td>
                         <td class="px-16 py-4 space-y-2">
                             <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.scenario_name" id="" cols="30" rows="10" class="rounded border border-gray-200 bg-gray-100" placeholder="Scenario Name" />
 
@@ -366,7 +364,6 @@
                             <span>Tambah Test Step</span>
                         </button>
                         <button wire:click="removeCase({{ $scenarioIndex}}, {{ $caseIndex }})" class="bg-red-400 hover:bg-red-600 px-2.5 py-2 text-sm text-white rounded-lg">Hapus</button>
-
                     </td>
                     @foreach($case['steps'] as $stepIndex => $step)
                 <tr wire:key="step-{{ $scenarioIndex }}-{{ $caseIndex }}-{{ $stepIndex }}">
@@ -374,7 +371,7 @@
                     <td></td>
                     <td colspan="2"></td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.test_step_id" class="w-full rounded border border-gray-300" value="TS-{{ $stepIndex }}" readonly>
+                        <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.test_step_id" class="w-full rounded border border-gray-300" value="TS-{{ $stepIndex }}">
                         @error('test_step_id')
                         <span class="text-red-800">{{$message}}</span>
                         @enderror
@@ -425,7 +422,7 @@
                         <span class="text-red-800">{{$message}}</span>
                         @enderror
                     </td>
-                    <td>
+                    <td class="px-6 py-4">
                         <button wire:click="removeStep({{ $scenarioIndex }}, {{ $caseIndex }}, {{ $stepIndex }})" class="bg-red-400 hover:bg-red-600 px-2.5 py-2 text-sm text-white rounded-lg">Hapus</button>
                     </td>
                 </tr>
@@ -435,6 +432,75 @@
                 @endforeach
 
                 </tr>
+                @endforeach
+
+                @php $scenarioNumber = 0; @endphp
+                @foreach($project->scenarios as $scenarioIndex => $scenario)
+                @php
+                $scenarioNumber++;
+                $totalSteps = 0;
+                foreach($scenario->case as $case) {
+                $totalSteps += $case->step->count();
+                }
+                $isFirstRow = true;
+                @endphp
+
+                @foreach($scenario->case as $caseIndex => $case)
+                @php
+                $rowCount = $case->step->count();
+                @endphp
+
+                @foreach($case->step as $stepIndex => $step)
+                <tr class="border border-black">
+
+                    @if ($isFirstRow)
+                    <td class="border border-black" rowspan="{{ $totalSteps }}">{{ $scenarioNumber }}</td>
+                    <td class="border border-black" rowspan="{{ $totalSteps }}">
+                        <input type="text" class="w-full" wire:model="scenario_name[]" value="{{ $scenario->scenario_name }}">
+                    </td>
+                    @php $isFirstRow = false; @endphp
+                    @endif
+
+
+                    @if ($stepIndex === 0)
+                    <td class="border border-black" rowspan="{{ $rowCount }}" colspan="2">
+                        <input type="text" class="w-full" name="case[]" value="{{ $case->case }}">
+                    </td>
+                    @endif
+
+                    <td class="border border-black">{{ $step->test_step_id }}</td>
+                    <td class="border border-black">
+                        <input type="text" class="w-full" name="test_step[]" value="{{ $step->test_step }}">
+                    </td>
+                    <td class="border border-black">
+                        <input type="text" class="w-full" name="expected_result[]" value="{{ $step['expected_result'] }}">
+
+                    </td>
+                    <td class="border border-black">
+                        <select name="category[]" class="w-full bg-white border border-gray-200 rounded-lg">
+                            <option value="">{{ $step->category }}</option>
+                            <option value="positive">Positive</option>
+                            <option value="negative">negative</option>
+                        </select>
+                    </td>
+                    <td class="border border-black">
+                        <select name="severity[]" class="w-full bg-white border border-gray-200 rounded-lg">
+                            <option value="{{ $step->severity }}">{{ $step->severity }}</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </td>
+                    <td class="border border-black" colspan="2">
+                        <select name="status[]" class="w-full bg-white border border-gray-200 rounded-lg">
+                            <option value="{{ $step->status }}">{{ $step->status }}</option>
+                            <option value="passed">Passed</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </td>
+                </tr>
+                @endforeach
+                @endforeach
                 @endforeach
             </tbody>
         </table>
@@ -462,13 +528,13 @@
                         TMP
                     </th>
                     <td class="px-6 py-4">
-                        <select wire:model.blur="tmp" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                        <select wire:model="tmp" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
                             <option value="Not Available" selected>Not Available</option>
                             <option value="Available">Available</option>
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model.blur="tmp_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="tmp_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -476,13 +542,13 @@
                         Updated UAT
                     </th>
                     <td class="px-6 py-4">
-                        <select wire:model.blur="updated_uat" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                        <select wire:model="updated_uat" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
                             <option value="Not Available" selected>Not Available</option>
                             <option value="Available">Available</option>
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model.blur="updated_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="updated_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -490,13 +556,13 @@
                         UAT Result
                     </th>
                     <td class="px-6 py-4">
-                        <select wire:model.blur="uat_result" id="" class="rounded-full bg-gray-100  border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                        <select wire:model="uat_result" id="" class="rounded-full bg-gray-100  border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
                             <option value="Not Available" selected>Not Available</option>
                             <option value="Available">Available</option>
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model.blur="uat_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="uat_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -504,13 +570,13 @@
                         UAT Attendance
                     </th>
                     <td class="px-6 py-4">
-                        <select wire:model.blur="uat_attendance" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                        <select wire:model="uat_attendance" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
                             <option value="Not Available" selected>Not Available</option>
                             <option value="Available">Available</option>
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model.blur="uat_attendance_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="uat_attendance_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
                 <tr class="bg-white dark:bg-gray-800">
@@ -518,13 +584,13 @@
                         Other
                     </th>
                     <td class="px-6 py-4">
-                        <select wire:model.blur="other" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
+                        <select wire:model="other" id="" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
                             <option value="Not Available" selected>Not Available</option>
                             <option value="Available">Available</option>
                         </select>
                     </td>
                     <td class="px-6 py-4">
-                        <input type="text" wire:model.blur="other_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
+                        <input type="text" wire:model="other_remark" class="bg-gray-100 w-full rounded border border-gray-300 dark:bg-gray-700 focus:outline-none focus:ring-teal-300 dark:border-gray-700 dark:focus:outline-none dark:focus:ring-teal-300">
                     </td>
                 </tr>
             </tbody>
@@ -536,7 +602,15 @@
         @if($currentStep > 1)
         <button wire:click="decrementSteps" class="order-first bg-gray-800 px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Previous</button>
         @endif
-
+        <div>
+            <button wire:click="toStep(1)" type="button">1</button>
+            <button wire:click="toStep(2)" type="button">2</button>
+            <button wire:click="toStep(3)" type="button">3</button>
+            <button wire:click="toStep(4)" type="button">4</button>
+            <button wire:click="toStep(5)" type="button">5</button>
+            <button wire:click="toStep(6)" type="button">6</button>
+            <button wire:click="toStep(7)" type="button">7</button>
+        </div>
         @if($currentStep < $total_steps) @if($currentStep===4) <button wire:click="incrementSteps" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Create Project & Next</button>
             @elseif($currentStep===5)
             <button wire:click="incrementSteps" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Add Members & Next</button>
@@ -544,7 +618,7 @@
             <button wire:click="incrementSteps" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Save Test & Next</button>
 
             @else
-            <button wire:click="incrementSteps" class="order-last bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Next</button>
+            <button wire:click.prevent="incrementSteps" class="order-last bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Next</button>
             @endif
 
             @endif
@@ -553,7 +627,7 @@
             <input type="hidden" wire:model="is_generated" value="Generated">
             <input type="hidden" wire:model="published" value="published">
             <div>
-                <button wire:click="store" type="submit" class="bg-transparent border border-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
+                <button wire:click="store" type="button" class="bg-transparent border border-bsi-primary px-6 py-2.5 rounded text-bsi-primary hover:bg-teal-700 hover:text-white hover:border-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
                 <button wire:click="generate" type="submit" class="bg-bsi-primary px-6 py-2.5 rounded text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-400">Generate</button>
             </div>
             @endif

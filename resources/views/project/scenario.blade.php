@@ -1,12 +1,14 @@
 @extends('base.app')
 @section('content')
+@if($project->scenarios)
+
 <form action="{{ route('scenario.update', $project->id ) }}" method="POST" class="max-w-lg mx-auto min-h-screen" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="flex flex-col">
         <div class="bg-white p-2 rounded-lg mb-2">
             @foreach($project->scenarios as $sIndex => $scenario)
-            <input type="hidden" name="id" value="{{ $scenario->id }}">
+            <!-- <input type="hidden" value="{{ $scenario->id }}" name="id"> -->
             <div class="mb-3">
                 <label for="scenario" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Scenarios {{ $sIndex }}</label>
                 <input type="text" name="scenario_name[]" value="{{ $scenario->scenario_name }}" id="scenario" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -18,7 +20,7 @@
             @foreach($scenario->case as $cIndex => $case)
             <div class="font-bold text-sm">Case</div>
             <div class="mb-3">
-                <label for="case" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Case {{ $cIndex }}</label>
+                <label for="case" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Scenarios {{ $sIndex }} Case {{ $cIndex }}</label>
                 <input type="text" name="case[]" value="{{ $case->case }}" id="case" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             @error('case')
@@ -76,4 +78,11 @@
         </div>
     </div>
 </form>
+@else
+<div class="flex flex-col">
+    <div class="bg-white p-2 rounded-lg mb-2">
+        <p>Tidak ada data</p>
+    </div>
+</div>
+@endif
 @endsection

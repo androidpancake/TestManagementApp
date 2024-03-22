@@ -14,8 +14,10 @@ class UserList extends Component
     public function mount()
     {
         $this->users = User::whereHas('roles', function ($query) {
-            $query->where('role_id', '=', 2);
+            $query->where('name', 'USER');
         })->get();
+
+        // dd($this->users);
     }
 
     public function placeholder()
@@ -35,7 +37,7 @@ class UserList extends Component
 
     public function render()
     {
-        return view('livewire.users.user-list', [
+        return view('livewire.users.index', [
             'users' => $this->users
         ]);
     }
