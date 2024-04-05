@@ -33,14 +33,28 @@
                         {{ $user->username }}
                     </td>
                     <td class="px-6 py-4">
-                        Project
+                        @forelse($user->project as $data)
+                        <ul>
+                            <li>{{ $data->name }}</li>
+                        </ul>
+                        @empty
+                        no project
+                        @endforelse
                     </td>
                     <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                        <button wire:click="edit({{ $user->id }})" data-modal-target="default-modal" data-modal-toggle="default-modal" type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr>
+                    <td class="px-6 py-3" colspan="5">
+                        {{ $users->links() }}
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
+@include('livewire.users.edit')

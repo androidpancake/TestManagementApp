@@ -48,7 +48,7 @@ class Form extends Component
 
     public $credentials;
     public $retesting;
-    public $other;
+    public $other_notes;
     public $user_name;
     public $unit;
     public $telephone;
@@ -64,8 +64,11 @@ class Form extends Component
     public $users;
 
     public $scenarios;
+    public $recentScenario;
     public $cases;
+    public $recentCases;
     public $steps;
+    public $recentSteps;
     public $updated_uat;
     public $scenario_name;
     public $case;
@@ -76,6 +79,7 @@ class Form extends Component
     public $updated_remark;
     public $uat_remark;
     public $uat_attendance_remark;
+    public $other;
     public $other_remark;
     public $category;
     public $severity;
@@ -129,12 +133,15 @@ class Form extends Component
         $this->telephone;
 
         $this->scenarios = [];
+        $this->recentScenario = [];
         $this->scenario_name;
 
         $this->cases = [];
+        $this->recentCases;
         $this->case;
 
         $this->steps = [];
+        $this->recentSteps;
         $this->test_step;
         $this->test_step_id;
         $this->expected_result;
@@ -244,6 +251,27 @@ class Form extends Component
         $this->update_data();
     }
 
+
+    public function update_scenario(Request $request, $id)
+    {
+        $scenario = Scenario::where('id', $request->id)->find($id);
+        $data = $this->validateScenario();
+        // dd($data);
+        if (is_array($this->recentScenario)) {
+            // dd($this->recentScenario);
+            foreach ($this->recentScenario as $rScenario) {
+                // scenario
+                dd($rScenario);
+
+                if ($scenario) {
+                    $scenario->update([
+                        'scenario_name' => $rScenario['scenario_name']
+                    ]);
+                }
+            }
+        }
+    }
+
     public function update_data()
     {
         $this->validateForm();
@@ -261,12 +289,13 @@ class Form extends Component
             'credentials' => $this->credentials,
             'sat_process' => $this->sat_process,
             'retesting' => $this->retesting,
-            'other' => $this->other,
+            'other_notes' => $this->other,
             'is_generated' => $this->is_generated,
             'tmp' => $this->tmp,
             'updated_uat' => $this->updated_uat,
             'uat_attendance' => $this->uat_attendance,
             'uat_result' => $this->uat_result,
+            'other' => $this->other,
             'tmp_remark' => $this->tmp_remark,
             'updated_remark' => $this->updated_remark,
             'uat_remark' => $this->uat_remark,
@@ -294,6 +323,26 @@ class Form extends Component
                     'group' => $user['group'] ?? '',
                     'telephone' => $user['telephone']
                 ]);
+            }
+        }
+
+        if (is_array($this->recentScenario)) {
+            // dd($this->recentScenario);
+            foreach ($this->recentScenario as $rScenario) {
+                // scenario
+                dd($rScenario['scenario_name']);
+                $eScenario = Scenario::where('project_id', $this->project->id)
+                    ->where('scenario_name', $rScenario['scenario_name'])
+                    ->first();
+
+
+                dd($eScenario);
+
+                if ($eScenario) {
+                    $eScenario->update([
+                        'scenario_name' => $rScenario['scenario_name']
+                    ]);
+                }
             }
         }
 
@@ -342,6 +391,8 @@ class Form extends Component
 
     public function toStep($step)
     {
+        $this->update_data();
+
         $this->currentStep = $step;
     }
 
@@ -358,9 +409,13 @@ class Form extends Component
 
     public function decrementSteps()
     {
+        $this->validateForm();
+
         if ($this->currentStep > 1) {
             $this->currentStep--;
         }
+
+        $this->temporary();
     }
 
     public function addMember()
@@ -397,7 +452,7 @@ class Form extends Component
     public function addScenario()
     {
         $this->scenarios[] = [
-            'scenario_name' => $this->scenario_name,
+            'scenario_name',
             'cases' => []
         ];
     }
@@ -466,7 +521,7 @@ class Form extends Component
         }
     }
 
-    public function reset_test()
+    public function reset_test($scenarios)
     {
         unset($this->scenarios);
     }
@@ -483,8 +538,25 @@ class Form extends Component
         return redirect()->route('project');
     }
 
+    public function validateScenario()
+    {
+        $this->validate([
+            'recentScenario.*.scenario_name' => 'required',
+            // 'case.*' => 'required',
+            // 'test_step.*' => 'required',
+            // 'expected_result.*' => 'required',
+            // 'category.*' => 'required',
+            // 'severity.*' => 'required',
+            // 'status.*' => 'required'
+        ]);
+    }
+
     public function validateForm()
     {
+        $messages = [
+            'recentScenario.*.scenario_name.required' => 'Scenario Baru Wajib Diisi'
+        ];
+
         if ($this->currentStep === 1) {
             $validated = $this->validate([
                 'name' => 'required',
@@ -503,7 +575,7 @@ class Form extends Component
             $validated = $this->validate([
                 'env' => 'required',
                 'credentials' => 'required',
-                'other' => 'nullable'
+                'other_notes' => 'nullable'
             ]);
         } elseif ($this->currentStep === 4) {
             $validated = $this->validate([
@@ -529,6 +601,8 @@ class Form extends Component
                 'scenarios.*.cases.*.steps.*.severity' => 'required',
                 'scenarios.*.cases.*.steps.*.status' => 'required'
             ]);
+
+            // dd($validated);
         } elseif ($this->currentStep === 7) {
             $validated = $this->validate([
                 'tmp' => 'required',

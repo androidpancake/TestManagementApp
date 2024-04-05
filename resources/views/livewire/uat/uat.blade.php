@@ -1,5 +1,5 @@
 <div class="h-fit">
     <livewire:head title="{{ $title }}" description="{{ $description }}" />
 
-    <livewire:project type="UAT" />
+    <livewire:project.project type="UAT" />
 </div>

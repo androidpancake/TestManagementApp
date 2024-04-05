@@ -18,15 +18,15 @@ class Dashboard extends Component
 
     public function mount()
     {
-        $this->sitData = Project::where('user_id', auth()->id())->whereHas('test_level', function ($query) {
+        $this->sitData = Project::whereHas('test_level', function ($query) {
             $query->where('type', '=', 'SIT');
         })->count();
 
-        $this->uatData = Project::where('user_id', auth()->id())->whereHas('test_level', function ($query) {
+        $this->uatData = Project::whereHas('test_level', function ($query) {
             $query->where('type', '=', 'SIT');
         })->count();
 
-        $this->pirData = Project::where('user_id', auth()->id())->whereHas('test_level', function ($query) {
+        $this->pirData = Project::whereHas('test_level', function ($query) {
             $query->where('type', '=', 'PIR');
         })->count();
 

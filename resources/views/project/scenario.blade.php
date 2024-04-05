@@ -2,11 +2,12 @@
 @section('content')
 @if($project->scenarios)
 
-<form action="{{ route('scenario.update', $project->id ) }}" method="POST" class="max-w-lg mx-auto min-h-screen" enctype="multipart/form-data">
+<form action="{{ route('scenario.update', $project->id ) }}" method="POST" class="max-w-lg mx-auto my-5 items-center min-h-screen" enctype="multipart/form-data">
     @csrf
     @method('PUT')
-    <div class="flex flex-col">
-        <div class="bg-white p-2 rounded-lg mb-2">
+    <div class="flex flex-col gap-2">
+        <div class="bg-white p-2 rounded-lg mb-2 dark:bg-gray-800">
+            @php $sIndex=1; @endphp
             @foreach($project->scenarios as $sIndex => $scenario)
             <!-- <input type="hidden" value="{{ $scenario->id }}" name="id"> -->
             <div class="mb-3">
@@ -18,7 +19,7 @@
             @enderror
 
             @foreach($scenario->case as $cIndex => $case)
-            <div class="font-bold text-sm">Case</div>
+            <div class="font-bold text-sm text-white">Case</div>
             <div class="mb-3">
                 <label for="case" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Scenarios {{ $sIndex }} Case {{ $cIndex }}</label>
                 <input type="text" name="case[]" value="{{ $case->case }}" id="case" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -27,7 +28,7 @@
             <span class="text-red-800">{{$message}}</span>
             @enderror
             @foreach($case->step as $stIndex => $step)
-            <div class="font-bold text-sm">Step</div>
+            <div class="font-bold text-sm text-white">Step</div>
 
             <div class="mb-3">
                 <label for="test_step_id" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Test Step ID {{ $step->test_step_id }}</label>
@@ -70,11 +71,11 @@
             @endforeach
         </div>
         <!-- footer -->
-        <div class="flex items-center border-t border-gray-200 rounded-b dark:border-gray-600 gap-2">
+        <div class="flex items-center border-t border-gray-300 rounded-b dark:border-gray-800 gap-2 py-4">
             <a href="{{ route('form', $project->id) }}">
                 <button type="button" class="text-white bg-gray-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Close</button>
             </a>
-            <button type="submit" class="text-white bg-bsi-primary hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update</button>
+            <button type="submit" class="text-white bg-bsi-primary hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800">Update</button>
         </div>
     </div>
 </form>

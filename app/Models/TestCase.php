@@ -25,4 +25,9 @@ class TestCase extends Model
     {
         return $this->hasMany(TestStep::class, 'case_id', 'id');
     }
+
+    public function latestStep()
+    {
+        return $this->hasOne(TestStep::class, 'case_id')->latest();
+    }
 }

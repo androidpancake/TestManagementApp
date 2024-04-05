@@ -21,13 +21,13 @@
 
             <!-- project -->
             <div class="relative overflow-x-auto">
-                <livewire:project load="5" />
+                <livewire:project.project />
             </div>
         </div>
         @endif
     </div>
 
-    @if(auth()->user()->roles->first()->name === 'ADMIN')
+    @if(auth()->user()->roles === 'ADMIN')
     <!-- section2 -->
     <div class="flex flex-col gap-2 lg:flex-row">
         <!-- summary -->
@@ -77,7 +77,7 @@
                 </div>
             </div>
             <!-- table -->
-            <livewire:user-list />
+            <livewire:user-list lazy />
         </div>
     </div>
     @endif

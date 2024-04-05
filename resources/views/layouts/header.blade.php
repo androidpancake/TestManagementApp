@@ -10,7 +10,7 @@
           </svg>
         </button>
         @endauth
-        <a href="https://ir.bankbsi.co.id/" class="flex ms-2 md:me-24">
+        <a href="{{ route('dashboard') }}" class="flex ms-2 md:me-24">
           <img src="{{ asset('storage/image/logo/bsi.png') }}" class="h-8 me-3" alt="Bank Syariah Indonesia" />
         </a>
       </div>

@@ -18,7 +18,7 @@ class TestLevel extends Model
 
     public function project()
     {
-        return $this->hasMany(Project::class);
+        return $this->hasMany(Project::class, 'id');
     }
 
     public function draft()

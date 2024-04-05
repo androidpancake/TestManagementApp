@@ -2,14 +2,14 @@
 @section('content')
 
 <div class="w-1/2">
-    <form action="{{ route('ldap.auth') }}" method="POST" class="bg-white p-2 rounded-lg justify-center dark:bg-gray-800">
+    <form action="{{ route('auth') }}" method="POST" class="bg-white p-2 rounded-lg justify-center dark:bg-gray-800">
         @csrf
         <div class="mb-5">
             <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
             <input type="text" id="username" name="username" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500" placeholder="Username Anda" required>
             @error('username')
             <span class="" role="alert">
-                <div class="text-sm text-red-500">{{ $errors->username }}</div>
+                <div class="text-sm text-red-500">{{ $message }}</div>
             </span>
             @enderror
         </div>
@@ -18,7 +18,7 @@
             <input type="password" id="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500" placeholder="Password Anda" required>
             @error('password')
             <span class="" role="alert">
-                <div class="text-sm text-red-500">{{ $errors->password }}</div>
+                <div class="text-sm text-red-500">{{ $message }}</div>
             </span>
             @enderror
         </div>

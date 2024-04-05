@@ -43,17 +43,12 @@ class ScenarioController extends Controller
     public function show($id)
     {
         $project = Project::with('scenarios.case.step')->findOrFail($id);
-        // $scenarios = Scenario::with('case.step')->where('project_id', $project->id);
-        // dd($project);
-        // $case_data = [];
-        // foreach ($project->scenarios as $data) {
-        //     foreach ($data->case as $cdata) {
-        //         $case_data[] = $cdata->case;
-        //     }
-        // }
 
-        // dd($case_data);
-        return view('project.scenario', compact(['project']));
+        if ($project->scenarios()->exists()) {
+            return view('project.scenario', compact('project'));
+        } else {
+            return back();
+        }
     }
 
     /**

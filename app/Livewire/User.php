@@ -9,12 +9,13 @@ use Livewire\Component;
 #[Lazy(isolate: false)]
 class User extends Component
 {
+    public $users;
 
     public function mount()
     {
-        // $this->users = ModelsUser::whereHas('roles', function ($query) {
-        //     $query->where('role_id', '=', 2);
-        // })->get();
+        $this->users = ModelsUser::whereHas('roles', function ($query) {
+            $query->where('name', 'USER');
+        })->get();
 
         // dd($this->users);
     }
@@ -26,7 +27,7 @@ class User extends Component
 
     public function render()
     {
-        return view('livewire.user', [
+        return view('livewire.users.user', [
             'title' => 'User List',
             'description' => 'List of user joined to test',
         ]);

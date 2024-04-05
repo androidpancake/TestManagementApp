@@ -26,7 +26,7 @@ class ExportController extends Controller
         $members = Members::where('project_id', $project->id)->get();
 
         $project->update([
-            'is_generated' => 'Generated'
+            'published' => 'published'
         ]);
 
         // count

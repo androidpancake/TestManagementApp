@@ -54,10 +54,10 @@ class Project extends Model
         });
     }
 
-    public function users()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+    // public function users()
+    // {
+    //     return $this->belongsTo(User::class, 'user_id');
+    // }
 
     public function members()
     {
@@ -77,10 +77,5 @@ class Project extends Model
     public function test_level()
     {
         return $this->belongsTo(TestLevel::class, 'test_level_id');
-    }
-
-    public function draft()
-    {
-        return $this->hasMany(Draft::class);
     }
 }

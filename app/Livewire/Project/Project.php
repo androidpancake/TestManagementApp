@@ -1,14 +1,19 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Project;
 
 use App\Models\Project as ModelsProject;
 use App\Models\TestLevel;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\Attributes\Locked;
 
 class Project extends Component
 {
-    public $projects;
+    use WithPagination;
+
+    #[Locked]
+    public $projectId;
     public $detail;
     public $title;
     public $description;
@@ -16,12 +21,10 @@ class Project extends Component
     public $chartData;
     public $type;
     public $page;
-    public $project;
 
     public $search;
-    public $filter;
-
-    public $received;
+    public $testlevel = [];
+    public $publish = [];
 
     protected $listeners = ['menuItem'];
 
@@ -45,46 +48,66 @@ class Project extends Component
         HTML;
     }
 
+    public function updatedTestlevel()
+    {
+        if (!is_array($this->testlevel)) return;
+
+        $this->testlevel = array_filter(
+            $this->testlevel,
+            function ($testlevel) {
+                return $testlevel != false;
+            }
+        );
+    }
+
+    public function updatedPublish()
+    {
+        if (!is_array($this->publish)) return;
+
+        $this->publish = array_filter(
+            $this->publish,
+            function ($publish) {
+                return $publish != false;
+            }
+        );
+    }
+
+    public function destroy($projectId)
+    {
+        ModelsProject::find($projectId)->delete();
+        return redirect()->route('project');
+    }
+
     public function render()
     {
-        $test_level = TestLevel::get();
-        $query = ModelsProject::with(['test_level'])->where('user_id', auth()->id());
+        $projects = ModelsProject::with(['test_level'])->where('user_id', auth()->id());
+        $test_level = TestLevel::all();
+
 
         if (!empty($this->search)) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+            $projects->where('name', 'like', '%' . $this->search . '%')
+                ->orWhere('jira_code', 'like', '%' . $this->search . '%');
         }
 
-        if ($this->filter) {
-            $query->where('test_level_id', '=', $test_level->id);
+        if (!empty($this->testlevel)) {
+            $projects->whereHas('test_level')->where('test_level_id', $this->testlevel);
         }
 
-        $query->paginate(10);
-        // if ($this->page) {
-        //     $query->paginate(10);
-        // }
-
-        if ($this->type == 'SIT') {
-            $query->whereHas('test_level', function ($type) {
-                $type->where('type', '=', 'SIT');
-            });
-        } elseif ($this->type == 'UAT') {
-            $query->whereHas('test_level', function ($type) {
-                $type->where('type', '=', 'UAT');
-            });
-        } elseif ($this->type == 'PIR') {
-            $query->whereHas('test_level', function ($type) {
-                $type->where('type', '=', 'PIR');
-            });
+        if (!empty($this->publish)) {
+            $projects->where('published', $this->publish);
         }
 
-        $this->projects = $query->with(['test_level'])->latest()->get();
-
-        if ($this->load) {
-            $this->projects = $this->projects->take($this->load);
+        // final
+        if (route('dashboard')) {
+            $projects = $projects->latest()->paginate(5);
+        } else {
+            $projects = $projects->latest()->paginate(10);
         }
+
 
         return view('livewire.project', [
-            'projects' => $this->projects,
+            'projects' => $projects,
+            'test_level' => $test_level
         ])->with([
             'title' => 'Project',
             'description' => 'Please complete the documents to generate reports'

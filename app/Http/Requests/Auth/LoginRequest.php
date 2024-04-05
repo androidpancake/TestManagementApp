@@ -22,12 +22,12 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required', 'string'],
-            'password' => ['required', 'string'],
+            'username' => 'required',
+            'password' => 'required',
         ];
     }
 
-    public function message()
+    public function message(): array
     {
         return [
             'username.required' => 'Username not found or wrong password',

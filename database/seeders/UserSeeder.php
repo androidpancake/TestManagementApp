@@ -16,20 +16,12 @@ class UserSeeder extends Seeder
     {
         User::create(
             [
-                'name' => 'Metta Berliana',
+                'name' => 'Raissa',
                 'unit' => 'ASP',
                 'department' => 'IT WHA',
-                'username' => 'metta.berliana',
-                'password' => Hash::make('Bandungceria11#')
+                'username' => 'ven.benitaraissa',
+                'password' => Hash::make('Makassarsejahtera04#@')
             ],
-            // [
-            //     'name' => 'Arif Hartato',
-            //     'unit' => 'ASP',
-            //     'department' => 'IT WHA',
-            //     'role' => 'Admin',
-            //     'username' => 'arif.hartato',
-            //     'password' => Hash::make('test1234')
-            // ]
         );
     }
 }

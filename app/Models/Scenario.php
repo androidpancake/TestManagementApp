@@ -11,8 +11,9 @@ class Scenario extends Model
 
     protected $table = 'scenarios';
 
+    protected $foreignKeys = 'project_id';
+
     protected $fillable = [
-        'id',
         'scenario_name',
         'project_id'
     ];
@@ -20,6 +21,11 @@ class Scenario extends Model
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');
+    }
+
+    public function steps()
+    {
+        return $this->hasManyThrough(TestStep::class, TestCase::class, 'test_id', 'case_id', 'id', 'id');
     }
 
     public function case()

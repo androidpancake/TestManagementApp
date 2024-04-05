@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('scenarios', function (Blueprint $table) {
             $table->id();
             $table->string('scenario_name');
-            $table->unsignedBigInteger('project_id');
+            $table->unsignedBigInteger('project_id')->references('id')->on('project')->onDelete('cascade');
             $table->timestamps();
         });
     }

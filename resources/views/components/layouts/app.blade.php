@@ -21,7 +21,7 @@
     </div>
     @stack('test-chart')
     @stack('add-form')
-
+    @livewireScripts
 </body>
 
 </html>
