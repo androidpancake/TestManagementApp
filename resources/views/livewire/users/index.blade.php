@@ -1,5 +1,8 @@
 <div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        @if($editMode)
+        @include('livewire.users.edit')
+        @endif
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -42,10 +45,11 @@
                         @endforelse
                     </td>
                     <td class="px-6 py-4">
-                        <button wire:click="edit({{ $user->id }})" data-modal-target="default-modal" data-modal-toggle="default-modal" type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                        <button wire:click="edit({{ $user->id }})" type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
                     </td>
                 </tr>
                 @endforeach
+
             </tbody>
             <tfoot>
                 <tr>
@@ -57,4 +61,3 @@
         </table>
     </div>
 </div>
-@include('livewire.users.edit')

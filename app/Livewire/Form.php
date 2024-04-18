@@ -365,82 +365,6 @@ class Form extends Component
         }
     }
 
-    public function add_to_draft()
-    {
-        $draft = new Draft;
-        // $project_id + 1;
-        $newProjectId = Project::create([
-            'user_id' => auth()->id(),
-            'published' => 'draft'
-        ]);
-
-        $draft->project_id = $newProjectId->id;
-        $draft->values = [
-            'project' => [
-                'name' => $this->name,
-                'jira_code' => $this->jira_code,
-                'test_level_id' => $this->test_level_id,
-                'test_type' => $this->test_type,
-                'start_date' => $this->start_date,
-                'end_date' => $this->end_date,
-                'desc' => $this->desc,
-                'scope' => $this->scope,
-                'sat_process' => $this->sat_process,
-                'retesting' => $this->retesting,
-                'env' => $this->env,
-                'credentials' => $this->credentials,
-                'tmp' => $this->tmp,
-                'expected_result' => $this->expected_result,
-                'updated_uat' => $this->updated_uat,
-                'uat_attendance' => $this->uat_attendance,
-                'uat_result' => $this->uat_result,
-                'other' => $this->other,
-                'remarks' => $this->remarks,
-                'tmp_remark' => $this->tmp_remark,
-                'updated_remark' => $this->updated_remark,
-                'uat_remark' => $this->uat_remark,
-                'uat_attendance_remark' => $this->uat_attendance_remark,
-                'other_remark' => $this->other_remark,
-                'is_generated' => $this->is_generated,
-                'published' => 'draft',
-                'user_id' => auth()->id()
-            ],
-            'issue' => collect($this->issue)->map(function ($issue) use ($newProjectId) {
-                return [
-                    'project_id' => $newProjectId,
-                    'issue' => $issue['issue'],
-                    'closed_date' => $issue['closed_date'],
-                    'status' => $issue['status']
-                ];
-            })->toArray(),
-            'users' => collect($this->users)->map(function ($user) use ($newProjectId) {
-                return [
-                    'project_id' => $newProjectId,
-                    'user_name' => $user['user_name'],
-                    'unit' => $user['unit'],
-                    'telephone' => $user['telephone'],
-                    'group' => $user['telephone']
-                ];
-            })->toArray(),
-            'scenario' => collect($this->scenarios)->map(function ($scenario) use ($newProjectId) {
-
-                return [
-                    'scenario_name' => $scenario['scenario_name'],
-                    'project_id' => $newProjectId,
-                    'cases' => collect($this->cases)->filter(function ($case) use ($scenario) {
-                        return [
-                            $case['test_id'] == $scenario['id'],
-                            'case' => $case['case']
-                        ];
-                    })->pluck('case')->toArray(),
-                ];
-            })->toArray(),
-
-        ];
-
-        $draft->save();
-    }
-
     public function save_temporary_data()
     {
         //project
@@ -635,7 +559,6 @@ class Form extends Component
             'scenario_name' => $this->scenario_name,
             'cases' => []
         ];
-
     }
 
     public function addTestCase($scenarioIndex)

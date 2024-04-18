@@ -7,7 +7,7 @@ use App\Models\RolesUser;
 use App\Models\User;
 use Livewire\Component;
 
-class Users extends Component
+class CreateUser extends Component
 {
     public $users = [];
     public $user;
@@ -88,23 +88,6 @@ class Users extends Component
         // dd($this->users);
     }
 
-    public function edit(User $user)
-    {
-        $user = User::find($user->id);
-        // $this->user = $user;
-        // dd($this->user);
-        $this->modalEdit();
-    }
-
-    public function modalEdit()
-    {
-        $this->modalEdit = true;
-    }
-
-    public function closeEdit()
-    {
-        $this->modalEdit = false;
-    }
 
     public function render()
     {

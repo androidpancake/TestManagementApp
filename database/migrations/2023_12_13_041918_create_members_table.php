@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('unit');
             $table->string('telephone');
-            $table->unsignedInteger('project_id');
+            $table->foreignUuid('project_id');
             $table->timestamps();
         });
     }

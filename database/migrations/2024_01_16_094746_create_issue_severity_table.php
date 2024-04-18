@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('issue');
             $table->enum('status', ['very high', 'high', 'medium', 'low']);
-            $table->unsignedBigInteger('project_id');
+            $table->foreignUuid('project_id');
             $table->timestamps();
         });
     }

@@ -59,7 +59,6 @@ class Form extends Component
     public $test_step;
     public $case_id;
     public $test_id;
-    public $tmp;
 
     public $users;
 
@@ -69,15 +68,16 @@ class Form extends Component
     public $recentCases;
     public $steps;
     public $recentSteps;
-    public $updated_uat;
     public $scenario_name;
     public $case;
     public $expected_result;
-    public $uat_attendance;
-    public $uat_result;
+    public $tmp;
     public $tmp_remark;
+    public $updated_uat;
     public $updated_remark;
+    public $uat_result;
     public $uat_remark;
+    public $uat_attendance;
     public $uat_attendance_remark;
     public $other;
     public $other_remark;
@@ -118,11 +118,15 @@ class Form extends Component
         $this->sat_process = $this->project->sat_process;
         $this->credentials = $this->project->credentials;
         $this->retesting = $this->project->retesting;
-        $this->other = $this->project->other;
+        $this->tmp = $this->project->tmp;
+        $this->updated_uat = $this->project->updated_uat;
+        $this->uat_result = $this->project->uat_result;
+        $this->uat_attendance = $this->project->uat_attendance;
         $this->tmp_remark = $this->project->tmp_remark;
         $this->updated_remark = $this->project->updated_remark;
         $this->uat_remark = $this->project->uat_remark;
         $this->uat_attendance_remark = $this->project->uat_attendance_remark;
+        $this->other = $this->project->other;
         $this->other_remark = $this->project->other_remark;
 
         $this->issue = [];
@@ -330,7 +334,6 @@ class Form extends Component
             // dd($this->recentScenario);
             foreach ($this->recentScenario as $rScenario) {
                 // scenario
-                dd($rScenario['scenario_name']);
                 $eScenario = Scenario::where('project_id', $this->project->id)
                     ->where('scenario_name', $rScenario['scenario_name'])
                     ->first();
@@ -554,7 +557,39 @@ class Form extends Component
     public function validateForm()
     {
         $messages = [
-            'recentScenario.*.scenario_name.required' => 'Scenario Baru Wajib Diisi'
+            'name.required' => 'Nama project wajib diisi',
+            'jira_code.required' => 'Jira code wajib diisi',
+            'test_type.required' => 'Tipe tes wajib diisi',
+            'test_level_id.required' => 'Wajib memilih tipe tes',
+            'start_date.required' => 'Wajib mengisi tanggal mulai',
+            'end_date.required' => 'Wajib mengisi tanggal akhir',
+            'desc.required' => 'Wajib mengisi deskripsi',
+            'scope.required' => 'Wajib mengisi scope',
+            'env.required' => 'Wajib mengisi environment',
+            'credentials.required' => 'Wajib mengisi credentials',
+            'users.*.user_name.required' => 'Nama wajib diisi',
+            'users.*.unit.required' => 'Wajib diisi',
+            'users.*.telephone.required' => 'Wajib diisi',
+            'users.*.telephone.min' => 'Minimal 9 angka',
+            'users.*.telephone.max' => 'Maksimal 12 angka',
+            'scenarios.*.scenario_name' => 'Wajib diisi',
+            'scenarios.*.cases.*.case' => 'Wajib diisi',
+            'scenarios.*.cases.*.steps.*.test_step_id' => 'Wajib diisi',
+            'scenarios.*.cases.*.steps.*.test_step' => 'Wajib diisi',
+            'scenarios.*.cases.*.steps.*.expected_result' => 'Wajib diisi',
+            'scenarios.*.cases.*.steps.*.category' => 'Wajib diisi',
+            'scenarios.*.cases.*.steps.*.severity' => 'Wajib diisi',
+            'scenarios.*.cases.*.steps.*.status' => 'Wajib diisi',
+            'tmp.required' => 'Wajib diisi',
+            'updated_uat.required' => 'Wajib diisi',
+            'uat_result.required' => 'Wajib diisi',
+            'uat_attendance.required' => 'Wajib diisi',
+            'other.required' => 'Wajib diisi',
+            'tmp_remark.required' => 'Wajib diisi',
+            'updated_remark.required' => 'Wajib diisi',
+            'uat_remark.required' => 'Wajib diisi',
+            'uat_attendance_remark.required' => 'Wajib diisi',
+            'other_remark.required' => 'Wajib diisi',
         ];
 
         if ($this->currentStep === 1) {
@@ -589,7 +624,7 @@ class Form extends Component
                 'users.*.unit' => 'required',
                 'users.*.group' => 'nullable',
                 'users.*.telephone' => 'required|min:9|max:12',
-            ]);
+            ], $messages);
         } elseif ($this->currentStep === 6) {
             $validated = $this->validate([
                 'scenarios.*.scenario_name' => 'required',

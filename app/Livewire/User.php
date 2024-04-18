@@ -5,24 +5,22 @@ namespace App\Livewire;
 use App\Models\User as ModelsUser;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 #[Lazy(isolate: false)]
 class User extends Component
 {
-    public $users;
+    public $user;
+    public $editMode = false;
 
-    public function mount()
-    {
-        $this->users = ModelsUser::whereHas('roles', function ($query) {
-            $query->where('name', 'USER');
-        })->get();
-
-        // dd($this->users);
-    }
-
-    public function redirect_add_user()
+    public function create()
     {
         return redirect()->route('user.create');
+    }
+
+    public function edit()
+    {
+        $this->dispatch('edit');
     }
 
     public function render()

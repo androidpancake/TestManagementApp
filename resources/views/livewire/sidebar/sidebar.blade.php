@@ -25,8 +25,9 @@
                 </a>
             </li>
             <!-- end admin -->
+            @endif
             <!-- user role only -->
-            @elseif(auth()->user()->roles->first()->name === 'USER')
+            @if(auth()->user()->roles->first()->name === 'USER')
             <li>
                 <a href="{{ url('project') }}" class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-[#F5AB2E] hover:text-gray-900 dark:hover:bg-gray-700 group">
                     <div>
@@ -68,12 +69,6 @@
                         </a>
                     </li>
                     <li class="p-2">
-                        <!-- <a href="{{ url('uat/form') }}" class="flex items-center w-full p-2 text-white transition duration-75 rounded-lg pl-11 group hover:bg-[#F5AB2E] hover:text-black dark:text-white dark:hover:bg-gray-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 256 256">
-                                <path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-32-80a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,136Zm0,32a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,168Z"></path>
-                            </svg>
-                            <span class="ms-3">Create UAT Report</span>
-                        </a> -->
                         <button wire:click="uat" class="flex items-center w-full p-2 text-white transition duration-75 rounded-lg pl-11 group hover:bg-[#F5AB2E] hover:text-black dark:text-white dark:hover:bg-gray-700">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
                                 <path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-32-80a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,136Zm0,32a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,168Z"></path>

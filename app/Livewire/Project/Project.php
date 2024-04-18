@@ -13,7 +13,8 @@ class Project extends Component
     use WithPagination;
 
     #[Locked]
-    public $projectId;
+    public $deleteId;
+
     public $detail;
     public $title;
     public $description;
@@ -26,13 +27,11 @@ class Project extends Component
     public $testlevel = [];
     public $publish = [];
 
-    protected $listeners = ['menuItem'];
+    public $deleteMode = false;
 
-    public function mount($load = null, $type = null, $page = null)
+    public function mount($type = null)
     {
-        $this->load = $load;
         $this->type = $type;
-        $this->page = $page;
     }
 
     public function placeholder()
@@ -72,9 +71,19 @@ class Project extends Component
         );
     }
 
-    public function destroy($projectId)
+    public function delete($id)
     {
-        ModelsProject::find($projectId)->delete();
+        $project = ModelsProject::find($id);
+        $project->delete();
+        $project->scenarios()->each(function ($scenario) {
+            $scenario->case()->each(function ($case) {
+                $case->step()->delete();
+            });
+            $scenario->case()->delete();
+        });
+        $project->scenarios()->delete();
+        $project->issue()->delete();
+
         return redirect()->route('project');
     }
 
@@ -90,11 +99,17 @@ class Project extends Component
         }
 
         if (!empty($this->testlevel)) {
-            $projects->whereHas('test_level')->where('test_level_id', $this->testlevel);
+            $projects->whereHas('test_level')->whereIn('test_level_id', $this->testlevel);
         }
 
         if (!empty($this->publish)) {
             $projects->where('published', $this->publish);
+        }
+
+        if (!is_null($this->type)) {
+            $projects->whereHas('test_level', function ($query) {
+                $query->where('type', $this->type);
+            });
         }
 
         // final
@@ -105,7 +120,7 @@ class Project extends Component
         }
 
 
-        return view('livewire.project', [
+        return view('livewire.project.project', [
             'projects' => $projects,
             'test_level' => $test_level
         ])->with([

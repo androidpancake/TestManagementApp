@@ -29,14 +29,9 @@ class ScenarioComponent extends Component
     }
 
     protected $rules = [];
-
+    
     protected $message = [];
 
-    public function update(Request $request, $id)
-    {
-        $scene = Scenario::find($id);
-        dd($scene);
-    }
 
     public function render()
     {

@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'role:user'])->group(
     function () {
         Route::get('project', Project::class)->name('project');
-        Route::get('project/detail/{id}', DetailProject::class)->name('project.detail');
+        // Route::get('project/detail/{id}', DetailProject::class)->name('project.detail');
 
         Route::get('sit', SIT::class)->name('sit.index');
         Route::get('uat', UAT::class)->name('uat.index');
@@ -35,7 +35,6 @@ Route::middleware(['auth', 'role:user'])->group(
 
         Route::get('form/{id}', FormForm::class)->name('form');
         Route::resource('scenario', ScenarioController::class);
-        Route::get('scenario-table/{id}', ScenarioComponent::class)->name('scenario-list');
 
         // test
         Route::get('scenario-list', function () {

@@ -19,6 +19,8 @@
             </div>
             <!-- end search -->
 
+            @if($type)
+            @else
             <!-- filter category -->
             <div class="h-full">
                 <button id="dropdownDefault" data-dropdown-toggle="dropdown" class="text-gray-800 dark:text-white bg-white hover:bg-gray-100 focus:border-bsi-primary focus:outline-none focus:ring-teal-500 font-medium rounded-lg text-sm px-4 py-2 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-primary-800" type="button">
@@ -34,7 +36,6 @@
                         Category
                     </h6>
                     <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
-
                         @foreach($test_level as $data)
                         <div wire:key="{{ $data->id }}">
                             <li class="flex items-center">
@@ -49,6 +50,7 @@
                 </div>
             </div>
             <!-- end filter category -->
+            @endif
 
             <!-- filter draft -->
             <div class="h-full">
@@ -156,7 +158,7 @@
                             <a href="{{ url('form', $data->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Continue</a>
                         </td>
                         <td class="px-6 py-4">
-                            <button wire:click="destroy({{ $data->id }})" wire:confirm="Are you sure?">delete</button>
+                            <button wire:click="delete('{{ $data->id }}')" class="text-red-600">delete</button>
                         </td>
                     </tr>
                     @empty
