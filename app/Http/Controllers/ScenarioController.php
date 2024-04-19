@@ -115,4 +115,10 @@ class ScenarioController extends Controller
     {
         //
     }
+
+    public function deleteScenario($id)
+    {
+        $project = Project::find($id);
+        $project->scenarios->find($id)->delete();
+    }
 }

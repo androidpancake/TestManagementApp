@@ -29,9 +29,13 @@ class ScenarioComponent extends Component
     }
 
     protected $rules = [];
-    
+
     protected $message = [];
 
+    public function delete()
+    {
+        
+    }
 
     public function render()
     {

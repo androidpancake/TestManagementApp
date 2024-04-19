@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Dashboard;
 
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
@@ -42,7 +42,7 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('livewire.dashboard', [
+        return view('livewire.dashboard.dashboard', [
             'chartData' => $this->chartData,
         ]);
     }

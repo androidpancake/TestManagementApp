@@ -11,7 +11,6 @@ class Head extends Component
     public $description;
     public $user_name;
 
-
     public function render()
     {
         return view('livewire.head', [

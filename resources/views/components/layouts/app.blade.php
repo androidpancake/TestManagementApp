@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Management</title>
     @vite(['resources/js/darkmode.js'])
-    <script src="{{ asset('apexCharts/apexcharts.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/phosporIcons/style.css') }}" />
+    <script src="{{ asset('js/apexCharts/apexcharts.js') }}"></script>
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 

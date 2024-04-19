@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\auth\AuthUserController;
 use App\Http\Controllers\DraftController;
-use App\Livewire\Dashboard;
+use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\DraftProject;
 use Illuminate\Support\Facades\Route;
 

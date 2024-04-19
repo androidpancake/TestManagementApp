@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Project;
 
 use App\Models\Project;
+use App\Models\TestLevel;
 use Livewire\Component;
 
 class PIT extends Component
 {
     public $projects;
+    public $title;
     public $desc;
 
     public function mount()
@@ -16,14 +18,19 @@ class PIT extends Component
             $query->where('type', 'PIR');
         })->get();
 
-        $this->desc =  $this->projects->pluck('test_level.description')->implode(' ');
-        // dd($this->desc);
+        $record = TestLevel::where('type', 'PIR')->first();
+        $this->title = $record->type;
+        $this->desc = $record->description;
+
     }
 
     public function render()
     {
-        return view('livewire.pit.pit', ['projects' => $this->projects])->with(
-            ['title' => 'PIR', 'description' => $this->desc]
+        return view('livewire.pit.pit')->with(
+            [
+                'title' => $this->title,
+                'description' => $this->desc
+            ]
         );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Project;
 
 use App\Models\Project;
 use Livewire\Component;
@@ -16,13 +16,13 @@ class UAT extends Component
             $query->where('type', 'UAT');
         })->get();
 
-        $this->desc =  $this->projects->pluck('test_level.description')->implode(' ');
+        $this->desc = $this->projects->pluck('test_level.description')->implode(' ');
     }
     public function render()
     {
-        return view('livewire.uat.uat', [
+        return view('livewire.uat.uat')->with([
             'title' => 'UAT',
-            'projects' => $this->projects,
-        ])->with(['description' => $this->desc]);
+            'description' => $this->desc
+        ]);
     }
 }

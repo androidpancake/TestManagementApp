@@ -338,9 +338,6 @@ class Form extends Component
                     ->where('scenario_name', $rScenario['scenario_name'])
                     ->first();
 
-
-                dd($eScenario);
-
                 if ($eScenario) {
                     $eScenario->update([
                         'scenario_name' => $rScenario['scenario_name']
@@ -635,7 +632,7 @@ class Form extends Component
                 'scenarios.*.cases.*.steps.*.category' => 'required',
                 'scenarios.*.cases.*.steps.*.severity' => 'required',
                 'scenarios.*.cases.*.steps.*.status' => 'required'
-            ]);
+            ], $messages);
 
             // dd($validated);
         } elseif ($this->currentStep === 7) {

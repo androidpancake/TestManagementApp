@@ -23,10 +23,10 @@ class Scenario extends Model
         return $this->belongsTo(Project::class, 'project_id');
     }
 
-    // public function steps()
-    // {
-    //     return $this->hasManyThrough(TestStep::class, TestCase::class, 'test_id', 'case_id', 'id', 'id');
-    // }
+    public function steps()
+    {
+        return $this->hasManyThrough(TestStep::class, TestCase::class, 'test_id', 'case_id', 'id', 'id');
+    }
 
     public function case()
     {
