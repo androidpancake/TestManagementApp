@@ -50,14 +50,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // public static function boot()
-    // {
-    //     parent::boot();
+    public static function boot()
+    {
+        parent::boot();
 
-    //     static::creating(function ($model) {
-    //         $model->id = Str::uuid();
-    //     });
-    // }
+        static::creating(function ($model) {
+            $model->id = Str::uuid();
+        });
+    }
 
     public function roles()
     {
@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function project()
     {
-        return $this->hasMany(Project::class, 'id');
+        return $this->hasMany(Project::class);
     }
 
     public function authorizeRoles($roles)

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('issue');
             $table->enum('status', ['very high', 'high', 'medium', 'low']);
+            $table->date('closed_date');
             $table->foreignUuid('project_id');
             $table->timestamps();
         });

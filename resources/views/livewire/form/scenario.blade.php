@@ -5,7 +5,7 @@
             <span>Tambah Skenario</span>
         </button>
         @if($this->project->scenarios()->exists())
-        <a href="{{ route('test', $this->project->id) }}" wire:navigate class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+        <a href="{{ url('scenario', $this->project->id) }}" wire:navigate class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
             Edit Scenario-Case-Step
         </a>
         @else
@@ -93,7 +93,7 @@
                 <td></td>
                 <td colspan="2"></td>
                 <td class="px-6 py-4">
-                    <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.test_step_id" class="w-full rounded border border-gray-300" value="TS-{{ $stepIndex }}">
+                    <input type="text" wire:model="scenarios.{{ $scenarioIndex }}.cases.{{ $caseIndex }}.steps.{{ $stepIndex }}.test_step_id" class="w-full rounded border border-gray-300" value="TS-{{ $stepIndex }}" readonly>
                     @error('scenarios.*.cases.*.steps.*.test_step_id')
                     <span class="text-red-800">{{$message}}</span>
                     @enderror

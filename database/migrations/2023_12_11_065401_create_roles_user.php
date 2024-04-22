@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('roles_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('role_id');
+            $table->foreignUuid('user_id');
+            $table->unsignedBigInteger('roles_id');
             $table->timestamps();
         });
     }

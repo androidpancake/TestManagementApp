@@ -111,14 +111,19 @@ class ScenarioController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-    public function deleteScenario($id)
+    public function destroy($id)
     {
         $project = Project::find($id);
-        $project->scenarios->find($id)->delete();
+        dd($project);
+        $project->scenarios()->each(function ($scenario) {
+            $scenario->case()->each(function ($case) {
+                $case->step()->delete();
+            });
+            $scenario->case()->delete();
+        });
+
+        $project->scenarios()->delete();
+
+        return redirect()->route('scenario.show', $project->id);
     }
 }

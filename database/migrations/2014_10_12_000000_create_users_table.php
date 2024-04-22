@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('unit');
             $table->string('department');
             $table->string('username')->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

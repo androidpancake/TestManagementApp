@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('user_name');
             $table->string('unit');
             $table->string('telephone');
+            $table->string('group');
             $table->foreignUuid('project_id');
             $table->timestamps();
         });

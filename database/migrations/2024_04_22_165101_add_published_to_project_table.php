@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('members', function (Blueprint $table) {
-            $table->string('group');
+        Schema::table('project', function (Blueprint $table) {
+            $table->enum('published', ['draft', 'published']);
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('members', function (Blueprint $table) {
+        Schema::table('project', function (Blueprint $table) {
             //
         });
     }

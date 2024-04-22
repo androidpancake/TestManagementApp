@@ -14,7 +14,8 @@ class TestLevelSeeder extends Seeder
     public function run(): void
     {
         TestLevel::create([
-            'type' => 'Business Functionality'
+            'type' => 'UAT',
+            'description' => 'User Acceptance Testing'
         ]);
     }
 }

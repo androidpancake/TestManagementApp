@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('test_levels', function (Blueprint $table) {
             $table->id();
             $table->string('type');
+            $table->string('description');
             $table->timestamps();
         });
     }

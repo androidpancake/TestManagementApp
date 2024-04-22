@@ -11,12 +11,27 @@ class TestComponent extends Component
     #[Locked]
     public $projectId;
     public $project;
+    public $scenario_name;
+    public $case;
+    public $test_step_id;
+    public $test_step;
+    public $expected_result;
+    public $category;
+    public $severity;
+    public $status;
 
     public function mount($id)
     {
         $this->project = Project::findOrFail($id);
-        // dd($this->project->scenarios);
         $this->projectId = $this->project->id;
+        $this->scenario_name = [];
+        $this->case = [];
+        $this->test_step_id = [];
+        $this->test_step = [];
+        $this->expected_result = [];
+        $this->category = [];
+        $this->severity = [];
+        $this->status = [];
     }
 
     public function deleteScenario($id)
@@ -32,35 +47,19 @@ class TestComponent extends Component
         $project->scenarios()->delete();
     }
 
-    public function deleteCase($id)
-    {
-        $project = Project::find($id);
-        $project->scenarios()->each(function ($scenario) {
-            $scenario->case()->each(function ($case) {
-                $case->step()->delete();
-            });
-            $scenario->case()->delete();
-        });
-    }
-
-    public function deleteStep($id)
-    {
-        $project = Project::find($id);
-        $project->scenarios()->each(function ($scenario) {
-            $scenario->case()->each(function ($case) {
-                $case->step()->delete();
-            });
-        });
-    }
-
     public function update()
     {
         $this->validate();
 
-        $this->project->update([
-            'scenario_name' => $this->scenario_name
-        ]);
+        foreach ($this->project->scenarios as $sIndex => $scenario) {
+            $scenario->scenario_name = $this->scenario_name[$sIndex];
+            $scenario->save();
+        }
     }
+
+    protected $rules = [
+        'scenarios.*.scenario_name' => 'required',
+    ];
 
     public function render()
     {

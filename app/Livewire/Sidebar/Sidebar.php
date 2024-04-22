@@ -16,7 +16,8 @@ class Sidebar extends Component
     {
         $data = Project::create([
             'user_id' => auth()->id(),
-            'test_level_id' => 2
+            'test_level_id' => 2,
+            'published' => 'draft'
         ]);
 
         return redirect()->route('form', $data->id);
@@ -26,7 +27,8 @@ class Sidebar extends Component
     {
         $data = Project::create([
             'user_id' => auth()->id(),
-            'test_level_id' => 1
+            'test_level_id' => 1,
+            'published' => 'draft'
 
         ]);
 
@@ -37,7 +39,8 @@ class Sidebar extends Component
     {
         $data = Project::create([
             'user_id' => auth()->id(),
-            'test_level_id' => 3
+            'test_level_id' => 3,
+            'published' => 'draft'
 
         ]);
 

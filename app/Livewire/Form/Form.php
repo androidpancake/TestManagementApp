@@ -255,27 +255,6 @@ class Form extends Component
         $this->update_data();
     }
 
-
-    public function update_scenario(Request $request, $id)
-    {
-        $scenario = Scenario::where('id', $request->id)->find($id);
-        $data = $this->validateScenario();
-        // dd($data);
-        if (is_array($this->recentScenario)) {
-            // dd($this->recentScenario);
-            foreach ($this->recentScenario as $rScenario) {
-                // scenario
-                dd($rScenario);
-
-                if ($scenario) {
-                    $scenario->update([
-                        'scenario_name' => $rScenario['scenario_name']
-                    ]);
-                }
-            }
-        }
-    }
-
     public function update_data()
     {
         $this->validateForm();
@@ -349,7 +328,7 @@ class Form extends Component
         if (is_array($this->scenarios)) {
             // dd($this->scenarios);
             foreach ($this->scenarios as $scene) {
-                $newScenario = Scenario::updateOrCreate([
+            $newScenario = Scenario::updateOrCreate([
                     'project_id' => $this->project->id,
                     'scenario_name' => $scene['scenario_name'],
                 ]);

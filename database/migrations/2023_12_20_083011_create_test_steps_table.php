@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('category');
             $table->string('severity');
             $table->string('status');
-            $table->string('remarks');
             $table->unsignedBigInteger('case_id');
             $table->timestamps();
         });
