@@ -24,18 +24,13 @@ class ScenarioComponent extends Component
 
     public function mount($id)
     {
-        $this->project = Project::with(['test_level', 'members', 'issue', 'scenarios.case.step'])->findOrFail($id);
+        $this->project = Project::with(['test_level', 'members', 'issue', 'scenarios.cases.step'])->findOrFail($id);
         $this->id = $this->project;
     }
 
     protected $rules = [];
 
     protected $message = [];
-
-    public function delete()
-    {
-        
-    }
 
     public function render()
     {

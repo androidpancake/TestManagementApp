@@ -88,14 +88,14 @@ class Form extends Component
     public function mount($id)
     {
         // data
-        $this->project = Project::with(['test_level', 'members', 'issue', 'scenarios.case.step'])->findOrFail($id);
+        $this->project = Project::with(['test_level', 'members', 'issue', 'scenarios.cases.step'])->findOrFail($id);
         $this->members = Members::where('project_id', $this->project->id)->get();
         // $this->sceneData = Scenario::with(['case.step'])->where('project_id', $this->project->id)->get();
         $this->issues = $this->project->issue;
 
         foreach ($this->project->scenarios as $scenario) {
             $totalStep = 0;
-            foreach ($scenario->case as $testcase) {
+            foreach ($scenario->cases as $testcase) {
                 $totalStep += $testcase->step->count();
             }
             // dd($totalStep);
@@ -226,11 +226,6 @@ class Form extends Component
                         session()->put([
                             'scenarios.*.cases.*.case' => $case['case'],
                         ]);
-
-                        // $caseId = $case->id;
-                        // session()->put('case_id');
-
-                        // dd($this->case);
                     }
 
                     //step
@@ -251,6 +246,9 @@ class Form extends Component
                 }
             }
         }
+
+        // recentTest
+
 
         $this->update_data();
     }
@@ -328,7 +326,7 @@ class Form extends Component
         if (is_array($this->scenarios)) {
             // dd($this->scenarios);
             foreach ($this->scenarios as $scene) {
-            $newScenario = Scenario::updateOrCreate([
+                $newScenario = Scenario::updateOrCreate([
                     'project_id' => $this->project->id,
                     'scenario_name' => $scene['scenario_name'],
                 ]);
@@ -340,7 +338,7 @@ class Form extends Component
                     foreach ($scene['cases'] as $case) {
                         // dd($case);
 
-                        $newCase = $newScenario->case()->updateOrCreate([
+                        $newCase = $newScenario->cases()->updateOrCreate([
                             'case' => $case['case'],
                             'test_id' => $newScenario->id
                         ]);
@@ -464,7 +462,7 @@ class Form extends Component
     public function addTestStep($scenarioIndex, $caseIndex, Project $project, Scenario $scenario, TestCase $case)
     {
         $project = Project::where('id', $this->project->id)->first();
-        $scenario = $scenario->with('case')->where('project_id', $project->id)->first();
+        $scenario = $scenario->with('cases')->where('project_id', $project->id)->first();
         if ($scenario) {
             $step = $scenario->steps()->count();
             $totalSteps = $step;

@@ -1,11 +1,13 @@
 <div class="flex justify-between space-x-2 w-full">
     <div class="flex flex-row gap-2 order-last">
-        <button wire:click="addScenario" class="bg-bsi-primary px-2.5 py-2 text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
-            <i class="ph ph-plus"></i>
+        <button wire:click="addScenario" class="bg-bsi-primary px-2.5 py-2 text-sm inline-flex items-center gap-2 text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+            </svg>
             <span>Tambah Skenario</span>
         </button>
         @if($this->project->scenarios()->exists())
-        <a href="{{ url('scenario', $this->project->id) }}" wire:navigate class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+        <a href="{{ route('test', $this->project->id) }}" wire:navigate class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
             Edit Scenario-Case-Step
         </a>
         @else

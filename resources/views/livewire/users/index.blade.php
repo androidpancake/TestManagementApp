@@ -18,7 +18,7 @@
                     <th scope="col" class="px-6 py-3">
                         Project
                     </th>
-                    <th>
+                    <th colspan="2">
                         Action
                     </th>
                 </tr>
@@ -46,6 +46,9 @@
                     </td>
                     <td class="px-6 py-4">
                         <button wire:click="edit('{{ $user->id }}')" type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button wire:click="destroy('{{ $user->id }}')" type="button" class="font-medium text-red-600 dark:text-blue-500 hover:underline">Delete</button>
                     </td>
                 </tr>
                 @endforeach

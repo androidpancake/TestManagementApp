@@ -28,7 +28,7 @@ class Scenario extends Model
         return $this->hasManyThrough(TestStep::class, TestCase::class, 'test_id', 'case_id', 'id', 'id');
     }
 
-    public function case()
+    public function cases()
     {
         return $this->hasMany(TestCase::class, 'test_id');
     }

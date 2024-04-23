@@ -76,7 +76,6 @@ class CreateUser extends Component
                 'department' => $user['department'],
                 'username' => $user['username'],
             ]);
-            // dd($data);
             RolesUser::create([
                 'user_id' => $data->id,
                 'roles_id' => $user['role']

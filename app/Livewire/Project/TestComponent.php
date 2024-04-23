@@ -3,6 +3,7 @@
 namespace App\Livewire\Project;
 
 use App\Models\Project;
+use App\Models\Scenario;
 use Livewire\Component;
 use Livewire\Attributes\Locked;
 
@@ -11,27 +12,16 @@ class TestComponent extends Component
     #[Locked]
     public $projectId;
     public $project;
-    public $scenario_name;
-    public $case;
-    public $test_step_id;
-    public $test_step;
-    public $expected_result;
-    public $category;
-    public $severity;
-    public $status;
+    public $scenario_name = [];
+    public $cases = [];
 
     public function mount($id)
     {
         $this->project = Project::findOrFail($id);
         $this->projectId = $this->project->id;
-        $this->scenario_name = [];
-        $this->case = [];
-        $this->test_step_id = [];
-        $this->test_step = [];
-        $this->expected_result = [];
-        $this->category = [];
-        $this->severity = [];
-        $this->status = [];
+        $this->scenario_name = $this->project->scenarios->map(function ($scenario) {
+            return $scenario->scenario_name;
+        });
     }
 
     public function deleteScenario($id)
@@ -49,17 +39,22 @@ class TestComponent extends Component
 
     public function update()
     {
-        $this->validate();
-
         foreach ($this->project->scenarios as $sIndex => $scenario) {
+            $this->validate([
+                'scenarios.$sIndex.scenario_name' => 'required'
+            ]);
+
             $scenario->scenario_name = $this->scenario_name[$sIndex];
             $scenario->save();
         }
     }
 
-    protected $rules = [
-        'scenarios.*.scenario_name' => 'required',
-    ];
+    public function validateForm()
+    {
+        $this->validate([
+            'scenarios.*.scenario_name' => 'required'
+        ]);
+    }
 
     public function render()
     {

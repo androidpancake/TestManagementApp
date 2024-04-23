@@ -4,14 +4,14 @@
     @php
     $scenarioNumber++;
     $totalSteps = 0;
-    foreach($recentScenario->case as $cs)
+    foreach($recentScenario->cases as $cs)
     $totalSteps += $cs->step->count();
 
     $isFirstRow = true;
     $isLastRow = true;
     @endphp
 
-    @foreach($recentScenario->case as $recentCaseIndex => $recentCase)
+    @foreach($recentScenario->cases as $recentCaseIndex => $recentCase)
 
     <!-- row count -->
     @php

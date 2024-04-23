@@ -73,6 +73,12 @@ class UserList extends Component
         $this->editMode = false;
     }
 
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->roles()->detach();
+    }
+
     public function render()
     {
         $users = User::with('roles')->whereHas('roles', function ($query) {

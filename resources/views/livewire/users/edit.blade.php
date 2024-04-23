@@ -45,8 +45,8 @@
                     @enderror
                 </td>
                 <td class="px-6 py-3 space-x-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <button wire:click="update" class="hover:underline">Update</button>
-                    <button wire:click="cancel" class="text-red-400">Cancel</button>
+                    <button wire:click="update" class="text-bsi-primary hover:underline">Update</button>
+                    <button wire:click="cancel" class="text-gray-500 hover:underline">Cancel</button>
                 </td>
             </tr>
         </tbody>
