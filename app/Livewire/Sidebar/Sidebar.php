@@ -7,6 +7,8 @@ use Livewire\Component;
 
 class Sidebar extends Component
 {
+    public $sidebar;
+
     public function menuItem($data)
     {
         $this->emit('menuItem', $data);
@@ -20,6 +22,8 @@ class Sidebar extends Component
             'published' => 'draft'
         ]);
 
+        $this->sidebar = $data->test_level->type;
+
         return redirect()->route('form', $data->id);
     }
 
@@ -27,10 +31,12 @@ class Sidebar extends Component
     {
         $data = Project::create([
             'user_id' => auth()->id(),
-            'test_level_id' => 1,
+            'test_level_id' => 3,
             'published' => 'draft'
 
         ]);
+
+        $this->sidebar = $data->test_level->type;
 
         return redirect()->route('form', $data->id);
     }
@@ -39,10 +45,12 @@ class Sidebar extends Component
     {
         $data = Project::create([
             'user_id' => auth()->id(),
-            'test_level_id' => 3,
+            'test_level_id' => 1,
             'published' => 'draft'
 
         ]);
+
+        $this->sidebar = $data->test_level->type;
 
         return redirect()->route('form', $data->id);
     }

@@ -76,7 +76,7 @@ class Project extends Component
         $project = ModelsProject::find($id);
         $project->delete();
         $project->scenarios()->each(function ($scenario) {
-            $scenario->case()->each(function ($case) {
+            $scenario->cases()->each(function ($case) {
                 $case->step()->delete();
             });
             $scenario->case()->delete();

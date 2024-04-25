@@ -12,16 +12,13 @@ class TestComponent extends Component
     #[Locked]
     public $projectId;
     public $project;
-    public $scenario_name = [];
+    public $scenarios = [];
     public $cases = [];
 
     public function mount($id)
     {
         $this->project = Project::findOrFail($id);
         $this->projectId = $this->project->id;
-        $this->scenario_name = $this->project->scenarios->map(function ($scenario) {
-            return $scenario->scenario_name;
-        });
     }
 
     public function deleteScenario($id)
@@ -39,12 +36,11 @@ class TestComponent extends Component
 
     public function update()
     {
-        foreach ($this->project->scenarios as $sIndex => $scenario) {
-            $this->validate([
-                'scenarios.$sIndex.scenario_name' => 'required'
-            ]);
+        $this->validateForm();
 
-            $scenario->scenario_name = $this->scenario_name[$sIndex];
+        foreach ($this->project->scenarios as $sIndex => $scenario) {
+
+            $scenario->scenario_name = $this->scenario_name[$sIndex]['scenario_name'];
             $scenario->save();
         }
     }

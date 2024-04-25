@@ -68,6 +68,9 @@
                 <option value="failed">Failed</option>
             </select>
         </td>
+        <td class="border border-white dark:border-gray-800">
+            <button wire:click="deleteTest('{{ $recentScenario->id }}')" class="text-red-600 hover:underline">Delete Test {{ $recentScenario->id }}</button>
+        </td>
     </tr>
     @endforeach
     @endforeach

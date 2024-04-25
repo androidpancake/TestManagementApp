@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('test_type')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->string('desc')->nullable();
-            $table->string('scope')->nullable();
+            $table->longText('desc')->nullable();
+            $table->longText('scope')->nullable();
             $table->string('credentials')->nullable();
             $table->string('sat_process')->nullable();
             $table->string('retesting')->nullable();

@@ -3,6 +3,7 @@
         <div class="flex flex-col gap-2">
             <div class="bg-white p-2 rounded-lg mb-2 dark:bg-gray-800">
                 @foreach($this->project->scenarios as $sIndex => $scenario)
+                @if($scenario)
                 <div class="flex items-center gap-2 mb-3">
                     <div class="w-full gap-2">
                         <label for="scenario" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Scenarios {{ $sIndex }}</label>
@@ -19,7 +20,7 @@
                 @error('scenarios.*.scenario_name')
                 <span class="text-red-800">{{$message}}</span>
                 @enderror
-
+                @endif
                 @endforeach
             </div>
             <!-- footer -->

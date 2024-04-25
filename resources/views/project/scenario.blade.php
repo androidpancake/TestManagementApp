@@ -27,7 +27,7 @@
             <span class="text-red-800">{{$message}}</span>
             @enderror
 
-            @foreach($scenario->case as $cIndex => $case)
+            @foreach($scenario->cases as $cIndex => $case)
             <div class="font-bold text-sm text-white">Case</div>
             <div class="mb-3">
                 <label for="case" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Scenarios {{ $sIndex }} Case {{ $cIndex }}</label>

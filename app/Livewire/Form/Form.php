@@ -515,6 +515,19 @@ class Form extends Component
         return redirect()->route('project');
     }
 
+    public function deleteTest($id)
+    {
+        $scenario = Scenario::find($id);
+        $scenario->each(function ($scenario) {
+            $scenario->cases()->each(function ($case) {
+                $case->step()->delete();
+            });
+            $scenario->cases()->delete();
+        });
+
+        $scenario->delete();
+    }
+
     public function validateScenario()
     {
         $this->validate([
@@ -540,7 +553,6 @@ class Form extends Component
             'desc.required' => 'Wajib mengisi deskripsi',
             'scope.required' => 'Wajib mengisi scope',
             'env.required' => 'Wajib mengisi environment',
-            'credentials.required' => 'Wajib mengisi credentials',
             'users.*.user_name.required' => 'Nama wajib diisi',
             'users.*.unit.required' => 'Wajib diisi',
             'users.*.telephone.required' => 'Wajib diisi',
@@ -583,7 +595,7 @@ class Form extends Component
         } elseif ($this->currentStep === 3) {
             $validated = $this->validate([
                 'env' => 'required',
-                'credentials' => 'required',
+                'credentials' => 'nullable',
                 'other_notes' => 'nullable'
             ]);
         } elseif ($this->currentStep === 4) {

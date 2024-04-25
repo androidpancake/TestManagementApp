@@ -42,7 +42,7 @@ class ScenarioController extends Controller
      */
     public function show($id)
     {
-        $project = Project::with('scenarios.case.step')->findOrFail($id);
+        $project = Project::with('scenarios.cases.step')->findOrFail($id);
 
         if ($project->scenarios()->exists()) {
             return view('project.scenario', compact('project'));
