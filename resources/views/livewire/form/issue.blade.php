@@ -28,6 +28,12 @@
                 <option>Low</option>
             </select>
         </div>
+        <div>
+            <button wire:click="deleteIssue({{ $data->id }})" id="removeIssue" type="button" class="text-white bg-red-400 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800 dark:bg-red-800">
+                <i class="ph ph-minus"></i>
+                <span class="sr-only">Icon description</span>
+            </button>
+        </div>
     </div>
     @empty
     <p>Tidak ada data</p>

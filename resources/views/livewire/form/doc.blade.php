@@ -37,7 +37,7 @@
             </tr>
             <tr class="bg-white dark:bg-gray-800">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Updated UAT
+                    Updated {{ $project->test_level->type }}
                 </th>
                 <td class="px-6 py-4">
                     <select wire:model="updated_uat" id="updated_uat" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
@@ -58,7 +58,7 @@
             </tr>
             <tr class="bg-white dark:bg-gray-800">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    UAT Result
+                {{ $project->test_level->type }} Result
                 </th>
                 <td class="px-6 py-4">
                     <select wire:model="uat_result" id="uat_result" class="rounded-full bg-gray-100  border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select
@@ -79,7 +79,7 @@
             </tr>
             <tr class="bg-white dark:bg-gray-800">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    UAT Attendance
+                {{ $project->test_level->type }} Attendance
                 </th>
                 <td class="px-6 py-4">
                     <select wire:model="uat_attendance" id="uat_attendance" class="rounded-full bg-gray-100 border-0 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-teal-300 dark:bg-gray-700 dark:text-white">Select

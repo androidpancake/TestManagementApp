@@ -90,7 +90,6 @@ class Form extends Component
         // data
         $this->project = Project::with(['test_level', 'members', 'issue', 'scenarios.cases.step'])->findOrFail($id);
         $this->members = Members::where('project_id', $this->project->id)->get();
-        // $this->sceneData = Scenario::with(['case.step'])->where('project_id', $this->project->id)->get();
         $this->issues = $this->project->issue;
 
         foreach ($this->project->scenarios as $scenario) {
@@ -426,6 +425,12 @@ class Form extends Component
         $this->issue = array_values($this->issue);
     }
 
+    public function deleteIssue($id)
+    {
+        $issue = Issue::findOrFail($id);
+        $issue->delete();
+    }
+
     public function addScenario()
     {
         $this->scenarios[] = [
@@ -609,7 +614,7 @@ class Form extends Component
                 'users.*.user_name' => 'required',
                 'users.*.unit' => 'required',
                 'users.*.group' => 'nullable',
-                'users.*.telephone' => 'required|min:9|max:12',
+                'users.*.telephone' => 'nullable|min:9|max:12',
             ], $messages);
         } elseif ($this->currentStep === 6) {
             $validated = $this->validate([

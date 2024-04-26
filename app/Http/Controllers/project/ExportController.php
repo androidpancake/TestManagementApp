@@ -21,8 +21,8 @@ class ExportController extends Controller
 
     public static function export($id)
     {
-        $project = Project::with(['members', 'scenarios.case.step', 'issue'])->findOrFail($id);
-        $scenarios = Scenario::with(['case.step'])->where('project_id', $project->id)->get();
+        $project = Project::with(['members', 'scenarios.cases.step', 'issue'])->findOrFail($id);
+        $scenarios = Scenario::with(['cases.step'])->where('project_id', $project->id)->get();
         $members = Members::where('project_id', $project->id)->get();
 
         $project->update([
@@ -41,9 +41,9 @@ class ExportController extends Controller
         $l_def = 0;
 
         foreach ($project->scenarios as $scenario) {
-            foreach ($scenario->case as $case) {
-                $planned += $scenario->case->count();
-                $executed += $scenario->case->count();
+            foreach ($scenario->cases as $case) {
+                $planned += $scenario->cases->count();
+                $executed += $scenario->cases->count();
                 $passed += $case->step->where('status', 'passed')->count();
                 $failed += $case->step->where('status', 'failed')->count();
             }
@@ -318,10 +318,11 @@ class ExportController extends Controller
         Made
         ");
         $table6->addCell(1000)->addText("Introduction");
+        $table6->addCell(1000)->addText($project->desc);
 
         $table6->addRow();
         $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Scope of Testing");
-        $table6->addCell(8000)->addText($project->scope);
+        $table6->addCell(1000)->addText($project->scope);
 
         $table6->addRow();
         $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Test Environment");
@@ -738,12 +739,12 @@ class ExportController extends Controller
             $totalSteps = 0;
 
             // Menghitung total langkah untuk skenario ini
-            foreach ($scenario->case as $case) {
+            foreach ($scenario->cases as $case) {
                 $totalSteps += count($case->step);
             }
 
             $firstCase = true;
-            foreach ($scenario->case as $case) {
+            foreach ($scenario->cases as $case) {
                 $rowCount = count($case->step); // Langkah dalam kasus ini
 
                 foreach ($case->step as $stepIndex => $step) {
@@ -841,7 +842,7 @@ class ExportController extends Controller
             $scenarioNum++;
             $section->addTitle("Skenario " . $scenarioNum . ". " . $scenario->scenario_name, 1);
 
-            foreach ($scenario->case as $case) {
+            foreach ($scenario->cases as $case) {
                 $section->addText("Test Case : " . $case->case, $caseFont);
                 $section->addText("Action Test : ");
                 $section->addText("Expected Result : ");
