@@ -51,6 +51,7 @@
         <div class="mb-5 w-2/4">
             <label for="status-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
             <select wire:model="issue.{{ $index }}.status" id="status-input" class="w-full bg-white border border-gray-200 rounded-lg">
+                <option value="">Select</option>
                 <option>very high</option>
                 <option>high</option>
                 <option>medium</option>

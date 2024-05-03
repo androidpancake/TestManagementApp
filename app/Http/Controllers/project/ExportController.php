@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Members;
 use App\Models\Project;
 use App\Models\Scenario;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -317,12 +318,20 @@ class ExportController extends Controller
         Flow / Changes 
         Made
         ");
-        $table6->addCell(1000)->addText("Introduction");
-        $table6->addCell(1000)->addText($project->desc);
+        $tableDesc = $table6->addCell(1000);
+        $tableDesc->addText('Introduction');
+        $formattedDesc = explode("\n", $project->desc);
+        foreach ($formattedDesc as $line) {
+            $tableDesc->addText($line);
+        }
 
         $table6->addRow();
         $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Scope of Testing");
-        $table6->addCell(1000)->addText($project->scope);
+        $tableScope = $table6->addCell(1000);
+        $formattedScope = explode("\n", $project->scope);
+        foreach ($formattedScope as $line) {
+            $tableScope->addText($line);
+        }
 
         $table6->addRow();
         $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Test Environment");
@@ -388,8 +397,7 @@ class ExportController extends Controller
             $tableCellL->addListItem("The nature of defects that have not been specified under Very high, high or medium will come under low");
         } else if ($project->test_level->type == 'PIR') {
             $table7->addRow();
-            $table7->addCell(2000)->addText("Critical
-            ");
+            $table7->addCell(2000)->addText("Critical");
             $tableCellVH = $table7->addCell(7000);
             $tableCellVH->addListItem("Sistem mengalami shut-down total dan tidak dapat melanjutkan testing ke proses berikutnya (force close/terminate");
 
@@ -861,6 +869,8 @@ class ExportController extends Controller
 
         $temp_file = tempnam(sys_get_temp_dir(), $file_name);
         $writer->save($temp_file);
+
+        session()->flash('success', 'Sukses Generate Dokumen');
 
         return response()->download($temp_file, $file_name, [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'

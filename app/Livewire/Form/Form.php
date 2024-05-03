@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Form;
 
+use App\Http\Controllers\project\ExportController;
 use App\Models\Issue;
 use App\Models\Members;
 use App\Models\Project;
@@ -111,8 +112,8 @@ class Form extends Component
         $this->test_type = 'Business Functionality';
         $this->start_date = $this->project->start_date;
         $this->end_date = $this->project->end_date;
-        $this->desc = $this->project->desc;
-        $this->scope = $this->project->scope;
+        $this->desc = str_replace('<br />', ' ', $this->project->desc);
+        $this->scope = str_replace('<br />', ' ', $this->project->scope);
         $this->env = $this->project->env;
         $this->sat_process = $this->project->sat_process;
         $this->credentials = $this->project->credentials;
@@ -410,6 +411,12 @@ class Form extends Component
         $this->users = array_values($this->users);
     }
 
+    public function deleteMember($id)
+    {
+        $member = Issue::findOrFail($id);
+        $member->delete();
+    }
+
     public function addIssue()
     {
         $this->issue[] = [
@@ -511,6 +518,7 @@ class Form extends Component
     public function generate()
     {
         $this->update_data();
+        session()->flash('success', 'Sukses Generate Dokumen');
         return redirect()->route('generate', $this->project->id);
     }
 

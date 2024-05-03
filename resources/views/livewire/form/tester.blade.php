@@ -37,10 +37,17 @@
             <span class="text-red-800">{{$message}}</span>
             @enderror
         </div>
+        <div>
+            <button wire:click="deleteMember('{{ $data->id }}')" wire:confirm="Anda yakin menghapus tester?" id="minUser" type="button" class="text-white bg-red-400 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800 dark:bg-red-800">
+                <i class="ph ph-minus"></i>
+                <span class="sr-only">Icon description</span>
+            </button>
+        </div>
     </div>
     @endforeach
     @foreach($this->users as $index => $user)
     <div wire:key="{{ $index }}" id="forms" class="flex flex-row gap-2 w-full bg-white p-2 rounded-lg dark:border-2 dark:border-gray-600 dark:bg-gray-800">
+
         <div class="mb-5 w-full">
             <label for="name-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
             <input type="text" wire:model="users.{{ $index }}.user_name" id="name-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-bsi-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-bsi-primary">
@@ -60,6 +67,9 @@
             <label for="group-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Group (UAT)</label>
             <input type="text" wire:model="users.{{ $index }}.group" id="unit-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-bsi-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-bsi-primary">
         </div>
+        @error('users.*.group')
+        <span class="text-red-800">{{$message}}</span>
+        @enderror
         @endif
         <div class="mb-5 w-full">
             <label for="telephone-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Telephone</label>
@@ -74,6 +84,7 @@
                 <span class="sr-only">Icon description</span>
             </button>
         </div>
+
     </div>
     @endforeach
 </div>

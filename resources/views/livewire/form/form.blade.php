@@ -1,7 +1,17 @@
 <div class="pt-4 flex flex-col w-full space-y-2">
-    <div class="w-full justify-start">
-        <div id="title" class="font-semibold text-lg text-gray-900 uppercase dark:text-gray-100">{{ $title }}</div>
-        <div id="subtitle" class="font-base text-sm text-gray-700 dark:text-gray-200">{{ $description }}</div>
+    @if(session()->has('success'))
+    <script>
+        Swal.fire("Sukses Generate");
+    </script>
+    @endif
+    <div class="w-full flex items-center justify-between">
+        <div>
+            <div id="title" class="font-semibold text-lg text-gray-900 uppercase dark:text-gray-100">{{ $title }}</div>
+            <div id="subtitle" class="font-base text-sm text-gray-700 dark:text-gray-200">{{ $description }}</div>
+        </div>
+        <div>
+            <button wire:click="generate" class="bg-bsi-primary px-2 py-2.5 text-white rounded hover:bg-teal-800 focus:ring-4 ring-teal-600">Generate</button>
+        </div>
     </div>
     <div class="flex justify-between">
         <div class="bg-gray-500 p-2 rounded-full text-sm text-white">{{ $currentStep }} out of {{ $total_steps }}</div>
