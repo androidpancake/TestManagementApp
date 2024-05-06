@@ -36,4 +36,10 @@ class ScenarioComponent extends Component
     {
         return view('livewire.project.scenario-component');
     }
+
+    public function updateTest()
+    {
+        $data = $this->validate();
+        dd($data);
+    }
 }

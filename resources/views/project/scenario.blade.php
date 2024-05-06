@@ -1,19 +1,24 @@
 @extends('base.app')
 @section('content')
 @if($project->scenarios)
-
+@if(session('success'))
+<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+    <span class="font-medium">Success!</span> {{ session('success') }}.
+</div>
+@endif
 <form action="{{ route('scenario.update', $project->id ) }}" method="POST" class="max-w-lg mx-auto my-5 items-center min-h-screen" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="flex flex-col gap-2">
-        <div class="bg-white p-2 rounded-lg mb-2 dark:bg-gray-800">
+        <div class="bg-white p-2 rounded-lg mb-2 max-h-screen overflow-y-auto dark:bg-gray-800">
             @php $sIndex=1; @endphp
             @foreach($project->scenarios as $sIndex => $scenario)
             <!-- <input type="hidden" value="{{ $scenario->id }}" name="id"> -->
             <div class="flex gap-2 items-center">
                 <div class="w-full mb-3">
                     <label for="scenario" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Scenarios {{ $sIndex }}</label>
-                    <input type="text" name="scenario_name[]" value="{{ $scenario->scenario_name }}" id="scenario" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" name="scenarios[{{ $sIndex }}][id]" value="{{ $scenario->id }}">
+                    <input type="text" name="scenarios[{{ $sIndex }}][scenario_name]" value="{{ $scenario->scenario_name }}" id="scenario" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div>
                     <a href="{{ route('scenario.destroy', $project->id) }}" class="block p-2 hover:rounded-full hover:bg-gray-100 focus:ring-4 focus:ring-gray-300">
@@ -31,45 +36,47 @@
             <div class="font-bold text-sm text-white">Case</div>
             <div class="mb-3">
                 <label for="case" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Scenarios {{ $sIndex }} Case {{ $cIndex }}</label>
-                <input type="text" name="case[]" value="{{ $case->case }}" id="case" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="hidden" name="scenarios[{{ $sIndex }}][cases][{{$cIndex}}][id]" value="{{ $case->id }}" id="id" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" name="scenarios[{{ $sIndex }}][cases][{{$cIndex}}][cases]" value="{{ $case->case }}" id="case" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             @error('case')
             <span class="text-red-800">{{$message}}</span>
             @enderror
             @foreach($case->step as $stIndex => $step)
             <div class="font-bold text-sm text-white">Step</div>
+            <input type="hidden" name="scenarios[{{ $sIndex }}][cases][{{$cIndex}}][steps][{{ $stIndex }}][id]" value="{{ $step->id }}" id="id" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly>
 
             <div class="mb-3">
                 <label for="test_step_id" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Test Step ID {{ $step->test_step_id }}</label>
-                <input type="text" name="test_step_id[]" value="{{ $step->test_step_id }}" id="test_step_id" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly>
+                <input type="text" name="scenarios[{{ $sIndex }}][cases][{{$cIndex}}][steps][{{ $stIndex }}][test_step_id]" value="{{ $step->test_step_id }}" id="test_step_id" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly>
             </div>
             @error('test_step_id')
             <span class="text-red-800">{{$message}}</span>
             @enderror
             <div class="mb-3">
                 <label for="test_step_id" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Test Step</label>
-                <input type="text" name="test_step[]" value="{{ $step->test_step }}" id="test_step" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" name="scenarios[{{ $sIndex }}][cases][{{$cIndex}}][steps][{{ $stIndex }}][test_step]" value="{{ $step->test_step }}" id="test_step" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             @error('test_step')
             <span class="text-red-800">{{$message}}</span>
             @enderror
             <div class="mb-3">
                 <label for="expected_result" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Expected Result</label>
-                <input type="text" name="expected_result[]" value="{{ $step->expected_result }}" id="expected_result" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" name="scenarios[{{ $sIndex }}][cases][{{$cIndex}}][steps][{{ $stIndex }}][expected_result]" value="{{ $step->expected_result }}" id="expected_result" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             @error('expected_result')
             <span class="text-red-800">{{$message}}</span>
             @enderror
             <div class="mb-3">
                 <label for="category" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Category</label>
-                <input type="text" name="category[]" value="{{ $step->category }}" id="category" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" name="scenarios[{{ $sIndex }}][cases][{{$cIndex}}][steps][{{ $stIndex }}][category]" value="{{ $step->category }}" id="category" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             @error('category')
             <span class="text-red-800">{{$message}}</span>
             @enderror
             <div class="mb-3">
                 <label for="severity" class="block mb-2 text-sm font-normal text-gray-900 dark:text-white">Severity</label>
-                <input type="text" name="severity[]" value="{{ $step->severity }}" id="severity" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" name="scenarios[{{ $sIndex }}][cases][{{$cIndex}}][steps][{{ $stIndex }}][severity]" value="{{ $step->severity }}" id="severity" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             @error('severity')
             <span class="text-red-800">{{$message}}</span>

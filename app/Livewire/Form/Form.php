@@ -62,6 +62,7 @@ class Form extends Component
     public $test_id;
 
     public $users;
+    public $existingUsers;
 
     public $scenarios;
     public $recentScenario;
@@ -131,10 +132,12 @@ class Form extends Component
 
         $this->issue = [];
 
+
         $this->users = [];
-        $this->user_name;
-        $this->unit;
-        $this->telephone;
+        $this->existingUsers = [];
+        // $this->user_name;
+        // $this->unit;
+        // $this->telephone;
 
         $this->scenarios = [];
         $this->recentScenario = [];
@@ -200,6 +203,9 @@ class Form extends Component
                 ]);
             }
         }
+
+        // dd($this->existingUsers)
+
 
         //members
         if (is_array($this->users)) {
@@ -302,7 +308,7 @@ class Form extends Component
                     'user_name' => $user['user_name'],
                     'unit' => $user['unit'],
                     'group' => $user['group'] ?? '',
-                    'telephone' => $user['telephone']
+                    'telephone' => $user['telephone'] ?? ''
                 ]);
             }
         }
@@ -417,6 +423,12 @@ class Form extends Component
         $member->delete();
     }
 
+    public function updateMember(Request $request)
+    {
+        $data = $this->validate($request->all());
+        dd($data);
+    }
+
     public function addIssue()
     {
         $this->issue[] = [
@@ -526,7 +538,9 @@ class Form extends Component
     {
         $this->update_data();
         return redirect()->route('project');
+        session()->flash('save');
     }
+
 
     public function deleteTest($id)
     {
@@ -541,19 +555,6 @@ class Form extends Component
         $scenario->delete();
     }
 
-    public function validateScenario()
-    {
-        $this->validate([
-            'recentScenario.*.scenario_name' => 'required',
-            // 'case.*' => 'required',
-            // 'test_step.*' => 'required',
-            // 'expected_result.*' => 'required',
-            // 'category.*' => 'required',
-            // 'severity.*' => 'required',
-            // 'status.*' => 'required'
-        ]);
-    }
-
     public function validateForm()
     {
         $messages = [
@@ -566,6 +567,7 @@ class Form extends Component
             'desc.required' => 'Wajib mengisi deskripsi',
             'scope.required' => 'Wajib mengisi scope',
             'env.required' => 'Wajib mengisi environment',
+            'members.*.user_name.required' => 'Nama wajib diisi',
             'users.*.user_name.required' => 'Nama wajib diisi',
             'users.*.unit.required' => 'Wajib diisi',
             'users.*.telephone.required' => 'Wajib diisi',
@@ -619,6 +621,7 @@ class Form extends Component
             ]);
         } elseif ($this->currentStep === 5) {
             $validated = $this->validate([
+                'members.*.user_name' => 'required',
                 'users.*.user_name' => 'required',
                 'users.*.unit' => 'required',
                 'users.*.group' => 'nullable',

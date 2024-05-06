@@ -1,4 +1,4 @@
-<form>
+<form wire:submit="updateTest">
     @php $scenarioNumber = 0; @endphp
     @foreach($this->project->scenarios as $recentScIndex => $recentScenario)
     @php
@@ -13,7 +13,6 @@
 
     @foreach($recentScenario->cases as $recentCaseIndex => $recentCase)
 
-    <!-- row count -->
     @php
     $rowCount = $recentCase->step->count();
     @endphp
@@ -68,9 +67,16 @@
                 <option value="failed">Failed</option>
             </select>
         </td>
-        <td class="border border-white dark:border-gray-800">
-            <button wire:click="deleteTest('{{ $recentScenario->id }}')" class="text-red-600 hover:underline">Delete Test {{ $recentScenario->id }}</button>
+        @if ($isLastRow)
+        <td class="border border-white dark:border-gray-800" rowspan="{{ $totalSteps }}">
+            <button wire:click="deleteTest('{{ $recentScenario->id }}')" wire:confirm="Are your sure want to delete {{ $recentScenario->scenario_name }}" class="text-red-600 hover:underline">Delete Test {{ $recentScenario->id }}</button>
         </td>
+        <td class="border border-white dark:border-gray-800" rowspan="{{ $totalSteps }}">
+            <button wire:click="updateTest" class="text-red-600 hover:underline">Update Test {{ $recentScenario->id }}</button>
+        </td>
+        @php $isLastRow = false; @endphp
+
+        @endif
     </tr>
     @endforeach
     @endforeach

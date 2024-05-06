@@ -65,46 +65,27 @@ class ScenarioController extends Controller
     public function update(Request $request, $id)
     {
         $project = Project::find($id);
-        $scenarios = $request->input('scenario_name');
-        $cases = $request->input('case');
-        $testSteps = $request->input('test_step');
-        $expectedResults = $request->input('expected_result');
-        $categories = $request->input('category');
-        $severities = $request->input('severity');
+        $data = $request->all();
 
-        // dd($testSteps);
+        foreach ($data['scenarios'] as $scenarioData) {
+            $scenarioId = $scenarioData['id'];
+            $scenario = $project->scenarios()->findOrFail($scenarioId);
+            $scenario->update($scenarioData);
 
-        DB::beginTransaction();
-        try {
-            foreach ($project->scenarios as $sIndex => $scenario) {
-                if (isset($scenarios[$sIndex])) {
-                    // dd($scenario->scenario_name);
-                    $scenario->scenario_name = $scenarios[$sIndex];
-                    $scenario->save();
-                }
+            foreach ($scenarioData['cases'] as $caseData) {
+                $caseId = $caseData['id'];
+                $case = $scenario->cases()->findOrFail($caseId);
+                $case->update(['case' => $caseData['cases']]);
 
-                foreach ($scenario->case as $cIndex => $case) {
-                    if (isset($cases[$cIndex])) {
-                        $case->case = $cases[$cIndex];
-                        $case->save();
-                    }
-                    foreach ($case->step as $stIndex => $step) {
-                        if (isset($testSteps[$stIndex], $expectedResults[$stIndex], $categories[$stIndex], $severities[$stIndex])) {
-                            $step->test_step = $testSteps[$stIndex];
-                            $step->expected_result = $expectedResults[$stIndex];
-                            $step->category = $categories[$stIndex];
-                            $step->severity = $severities[$stIndex];
-                            $step->save();
-                        }
-                    }
+                foreach ($caseData['steps'] as $stepData) {
+                    $stepId = $stepData['id'];
+                    $step = $case->step()->findOrFail($stepId);
+                    $step->update($stepData);
                 }
             }
-            DB::commit();
-            return redirect()->route('scenario.show', $project->id)->with('success', 'Project updated successfully');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Error updating project: ' . $e->getMessage());
         }
+
+        return redirect()->back()->with('success', 'Success updating data');
     }
 
 

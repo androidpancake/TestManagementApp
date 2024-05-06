@@ -4,6 +4,11 @@
         Swal.fire("Sukses Generate");
     </script>
     @endif
+    @if(session()->has('save'))
+    <script>
+        Swal.fire("Sukses Menyimpan Data");
+    </script>
+    @endif
     <div class="w-full flex items-center justify-between">
         <div>
             <div id="title" class="font-semibold text-lg text-gray-900 uppercase dark:text-gray-100">{{ $title }}</div>
@@ -16,7 +21,7 @@
     <div class="flex justify-between">
         <div class="bg-gray-500 p-2 rounded-full text-sm text-white">{{ $currentStep }} out of {{ $total_steps }}</div>
     </div>
-    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-300 dark:text-gray-400 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px">
             <li class="me-2">
                 <button type="button" wire:click="toStep(1)" class="inline-block p-4 border-b-2 {{ $currentStep == 1 ? 'border-bsi-primary text-bsi-primary' : 'border-transparent' }} rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" aria-current="page">Project Info</button>
