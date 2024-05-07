@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Management</title>
     @vite(['resources/js/darkmode.js'])
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/phosporIcons/style.css') }}" />
+    <script src="{{ asset('js/apexCharts/apexcharts.js') }}"></script>
+    <script src="{{ asset('js/quill/quill.js') }}"></script>
+    <script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/sweetalert2/sweetalert2.js') }}"></script>
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 

@@ -7,18 +7,10 @@
     <title>Test Management</title>
     @vite(['resources/js/darkmode.js'])
     <link rel="stylesheet" type="text/css" href="{{ asset('css/phosporIcons/style.css') }}" />
-    <!-- <link rel="stylesheet" href="{{ asset('js/ckeditor/contents.css') }}"> -->
-    <!-- <link rel="stylesheet" href="{{ asset('js/ckeditor/skins/bootstrap/editor.css') }}"> -->
-    <!-- <link rel="stylesheet" href="{{ asset('js/ckeditor/skins/moono-lisa/editor_gecko.css') }}"> -->
     <script src="{{ asset('js/apexCharts/apexcharts.js') }}"></script>
     <script src="{{ asset('js/quill/quill.js') }}"></script>
     <script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('js/sweetalert2/sweetalert2.js') }}"></script>
-
-    <!-- <script src="{{ asset('js/ckeditor/styles.js') }}"></script> -->
-    <!-- <script src="{{ asset('js/ckeditor/config.js') }}"></script> -->
-    <!-- <script src="{{ asset('js/ckeditor/lang/en.js') }}"></script> -->
-
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 

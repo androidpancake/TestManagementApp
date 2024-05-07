@@ -13,6 +13,21 @@ use Illuminate\Support\Facades\DB;
 
 class ScenarioController extends Controller
 {
+
+    public function getSearch(Request $request, $id)
+    {
+        $project = Project::with('scenarios.cases.step')->findOrFail($id);
+
+        $scenarios = Scenario::whereHas('cases.step', function ($q) use ($request) {
+            $q->where('scenario_name', 'like', '%' . $request->q . '%')
+                ->orWhere('case', 'like', '%' . $request->q . '%')
+                ->orWhere('test_step_id', 'like', '%' . $request->q . '%')
+                ->orWhere('test_step', 'like', '%' . $request->q . '%');
+        })->where('project_id', $project->id)->get();
+
+        return response()->json(data: $scenarios, status: 200);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -40,15 +55,18 @@ class ScenarioController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $project = Project::with('scenarios.cases.step')->findOrFail($id);
 
-        if ($project->scenarios()->exists()) {
-            return view('project.scenario', compact('project'));
-        } else {
-            return back();
-        }
+        $scenarios = Scenario::whereHas('cases.step', function ($q) use ($request) {
+            $q->where('scenario_name', 'like', '%' . $request->q . '%')
+                ->orWhere('case', 'like', '%' . $request->q . '%')
+                ->orWhere('test_step_id', 'like', '%' . $request->q . '%')
+                ->orWhere('test_step', 'like', '%' . $request->q . '%');
+        })->where('project_id', $project->id)->get();
+
+        return view('project.scenario', compact('project', 'scenarios'));
     }
 
     /**

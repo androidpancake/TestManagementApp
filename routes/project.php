@@ -36,6 +36,7 @@ Route::middleware(['auth', 'role:user'])->group(
 
         Route::get('form/{id}', FormForm::class)->name('form');
         Route::resource('scenario', ScenarioController::class);
+        Route::get('test-search/{id}', [ScenarioController::class, 'getSearch']);
         Route::get('form/test/{id}', TestComponent::class)->name('test');
 
         // test

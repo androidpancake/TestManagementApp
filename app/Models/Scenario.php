@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Scenario extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $table = 'scenarios';
 
@@ -17,6 +19,13 @@ class Scenario extends Model
         'scenario_name',
         'project_id'
     ];
+
+    public function toSearchableArray()
+    {
+        return [
+            'scenario_name' => $this->scenario_name
+        ];
+    }
 
     public function project()
     {

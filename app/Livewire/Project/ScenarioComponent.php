@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Scenario;
 use Illuminate\Http\Client\Request;
 use Livewire\Component;
+use Livewire\Attributes\Locked;
 
 class ScenarioComponent extends Component
 {
@@ -13,6 +14,7 @@ class ScenarioComponent extends Component
     public $data;
 
     // field
+    #[Locked]
     public $id;
     public $scenario_name;
     public $case;
@@ -21,6 +23,8 @@ class ScenarioComponent extends Component
     public $expected_result;
     public $category;
     public $severity;
+
+    public $editMode = false;
 
     public function mount($id)
     {
@@ -37,9 +41,4 @@ class ScenarioComponent extends Component
         return view('livewire.project.scenario-component');
     }
 
-    public function updateTest()
-    {
-        $data = $this->validate();
-        dd($data);
-    }
 }

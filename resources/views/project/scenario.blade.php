@@ -1,18 +1,24 @@
 @extends('base.app')
 @section('content')
-@if($project->scenarios)
+@if($project)
 @if(session('success'))
 <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
     <span class="font-medium">Success!</span> {{ session('success') }}.
 </div>
 @endif
+
+<!-- search -->
+<form action="{{ route('scenario.show', $project->id) }}" method="get">
+    <input type="text" name="q" id="search" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search scenario name..">
+</form>
+
 <form action="{{ route('scenario.update', $project->id ) }}" method="POST" class="max-w-lg mx-auto my-5 items-center min-h-screen" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="flex flex-col gap-2">
         <div class="bg-white p-2 rounded-lg mb-2 max-h-screen overflow-y-auto dark:bg-gray-800">
             @php $sIndex=1; @endphp
-            @foreach($project->scenarios as $sIndex => $scenario)
+            @foreach($scenarios as $sIndex => $scenario)
             <!-- <input type="hidden" value="{{ $scenario->id }}" name="id"> -->
             <div class="flex gap-2 items-center">
                 <div class="w-full mb-3">

@@ -11,6 +11,7 @@ use App\Models\TestCase;
 use App\Models\TestStep;
 use Illuminate\Http\Request;
 use Livewire\Component;
+use Livewire\Attributes\Locked;
 
 class Form extends Component
 {
@@ -62,7 +63,14 @@ class Form extends Component
     public $test_id;
 
     public $users;
-    public $existingUsers;
+    public $editUsers = false;
+
+    #[Locked]
+    public $member_id;
+    public $existingUsername;
+    public $existingUnit;
+    public $existingGroup;
+    public $existingTelephone;
 
     public $scenarios;
     public $recentScenario;
@@ -86,6 +94,17 @@ class Form extends Component
     public $category;
     public $severity;
     public $test_status;
+
+    public $editScenario = false;
+    public $scenario_id;
+    public $existingScenario;
+
+    public $editIssue = false;
+    #[Locked]
+    public $issue_id;
+    public $existingIssue;
+    public $existingClosedDate;
+    public $existingIssueStatus;
 
     public function mount($id)
     {
@@ -134,10 +153,6 @@ class Form extends Component
 
 
         $this->users = [];
-        $this->existingUsers = [];
-        // $this->user_name;
-        // $this->unit;
-        // $this->telephone;
 
         $this->scenarios = [];
         $this->recentScenario = [];
@@ -204,8 +219,7 @@ class Form extends Component
             }
         }
 
-        // dd($this->existingUsers)
-
+        //existing members
 
         //members
         if (is_array($this->users)) {
@@ -419,14 +433,44 @@ class Form extends Component
 
     public function deleteMember($id)
     {
-        $member = Issue::findOrFail($id);
+        $member = Members::findOrFail($id);
         $member->delete();
     }
 
-    public function updateMember(Request $request)
+    public function editMember($id)
     {
-        $data = $this->validate($request->all());
-        dd($data);
+        $member = Members::findOrFail($id);
+        $this->member_id = $member->id;
+        $this->existingUsername = $member->user_name;
+        $this->existingUnit = $member->unit;
+        $this->existingGroup = $member->group;
+        $this->existingTelephone = $member->telephone;
+        $this->editUsers = true;
+    }
+
+    public function cancelEditMember()
+    {
+        $this->editUsers = false;
+    }
+
+    public function updateMember()
+    {
+        $this->validate([
+            'existingUsername' => 'required',
+            'existingUnit' => 'required',
+            'existingGroup' => 'nullable',
+            'existingTelephone' => 'nullable'
+        ]);
+
+        $member = Members::find($this->member_id);
+        $member->update([
+            'user_name' => $this->existingUsername,
+            'unit' => $this->existingUnit,
+            'group' => $this->existingGroup,
+            'telephone' => $this->existingTelephone
+        ]);
+
+        $this->editUsers = false;
     }
 
     public function addIssue()
@@ -448,6 +492,34 @@ class Form extends Component
     {
         $issue = Issue::findOrFail($id);
         $issue->delete();
+    }
+
+    public function updateIssue($id)
+    {
+        $issue = Issue::findOrFail($id);
+        $this->issue_id = $issue->id;
+        $this->existingIssue = $issue->issue;
+        $this->existingClosedDate = $issue->closed_date;
+        $this->existingIssueStatus = $issue->status;
+        $this->editIssue = true;
+    }
+
+    public function update_issue()
+    {
+        $this->validate([
+            'existingIssue' => 'required',
+            'existingClosedDate' => 'required',
+            'existingIssueStatus' => 'required',
+        ]);
+
+        $issue = Issue::find($this->issue_id);
+        $issue->update([
+            'issue' => $this->existingIssue,
+            'closed_date' => $this->existingClosedDate,
+            'status' => $this->existingIssueStatus,
+        ]);
+
+        $this->editIssue = false;
     }
 
     public function addScenario()
@@ -522,9 +594,24 @@ class Form extends Component
         }
     }
 
-    public function reset_test($scenarios)
+    public function updateScenario($id)
     {
-        unset($this->scenarios);
+        $scenarios = Scenario::with('cases.step')->findOrFail($id);
+
+        $this->editScenario = true;
+    }
+
+    public function deleteTest($id)
+    {
+        $scenario = Scenario::find($id);
+        $scenario->each(function ($scenario) {
+            $scenario->cases()->each(function ($case) {
+                $case->step()->delete();
+            });
+            $scenario->cases()->delete();
+        });
+
+        $scenario->delete();
     }
 
     public function generate()
@@ -542,18 +629,6 @@ class Form extends Component
     }
 
 
-    public function deleteTest($id)
-    {
-        $scenario = Scenario::find($id);
-        $scenario->each(function ($scenario) {
-            $scenario->cases()->each(function ($case) {
-                $case->step()->delete();
-            });
-            $scenario->cases()->delete();
-        });
-
-        $scenario->delete();
-    }
 
     public function validateForm()
     {

@@ -135,7 +135,9 @@
     @elseif($currentStep===4)
     <div class="w-full flex justify-end">
         <button wire:click="addIssue" id="addIssue" type="button" class="text-white bg-bsi-primary hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800">
-            <i class="ph ph-plus"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+            </svg>
             <span class="sr-only">Icon description</span>
         </button>
     </div>
@@ -161,7 +163,9 @@
             </div>
             <div>
                 <button wire:click="removeIssue({{ $index }})" id="removeIssue" type="button" class="text-white bg-red-400 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800 dark:bg-red-800">
-                    <i class="ph ph-minus"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path>
+                    </svg>
                     <span class="sr-only">Icon description</span>
                 </button>
             </div>
@@ -172,7 +176,9 @@
     @elseif($currentStep===5)
     <div class="w-full flex justify-end">
         <button wire:click="addUser" id="addUser" type="button" class="text-white bg-bsi-primary hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800">
-            <i class="ph ph-plus"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+            </svg>
             <span class="sr-only">Icon description</span>
         </button>
     </div>
@@ -211,7 +217,9 @@
             </div>
             <div>
                 <button wire:click="removeUser({{ $index }})" id="minUser" type="button" class="text-white bg-red-400 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800 dark:bg-red-800">
-                    <i class="ph ph-minus"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path>
+                    </svg>
                     <span class="sr-only">Icon description</span>
                 </button>
             </div>
@@ -222,7 +230,9 @@
     @elseif($currentStep===6)
     <div class="flex justify-end space-x-2 w-full">
         <button wire:click="addScenario" class="bg-bsi-primary px-2.5 py-2 text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
-            <i class="ph ph-plus"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+            </svg>
             <span>Tambah Skenario</span>
         </button>
     </div>
@@ -280,7 +290,9 @@
                             <span class="text-red-800">{{$message}}</span>
                             @enderror
                             <button wire:click="addTestCase({{ $scenarioIndex }})" class="bg-bsi-primary px-2.5 py-2 text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
-                                <i class="ph ph-plus"></i>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
+                                    <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+                                </svg>
                                 <span>Tambah Test Case</span>
                             </button>
                             <button wire:click="removeScenario({{ $scenarioIndex }})" class="bg-red-400 px-2.5 py-2 text-sm text-white rounded-lg">Hapus</button>
@@ -297,7 +309,9 @@
                         <span class="text-red-800">{{$message}}</span>
                         @enderror
                         <button wire:click="addTestStep({{ $scenarioIndex }}, {{ $caseIndex }})" class="bg-bsi-primary px-2.5 py-2 text-sm text-white rounded-lg hover:bg-teal-600 focus:ring-4 focus:ring-teal-300 dark:text-white dark:bg-bsi-primary">
-                            <i class="ph ph-plus"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+                            </svg>
                             <span>Tambah Test Step</span>
                         </button>
                         <button wire:click="removeCase({{ $scenarioIndex}}, {{ $caseIndex }})" class="bg-red-400 px-2.5 py-2 text-sm text-white rounded-lg">Hapus</button>
