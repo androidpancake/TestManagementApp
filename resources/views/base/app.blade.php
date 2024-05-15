@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Management</title>
-    @vite(['resources/js/darkmode.js'])
     <link rel="stylesheet" type="text/css" href="{{ asset('css/phosporIcons/style.css') }}" />
     <script src="{{ asset('js/apexCharts/apexcharts.js') }}"></script>
     <script src="{{ asset('js/quill/quill.js') }}"></script>
@@ -20,9 +19,8 @@
     <div class="p-4 pt-16 sm:ml-64 bg-gray-200 dark:bg-gray-900">
         @yield('content')
     </div>
-    @stack('test-chart')
-    @stack('add-form')
-
+    @stack('wysiwyg')
+    @stack('darkmode')
 </body>
 
 </html>

@@ -1,5 +1,5 @@
-@extends('auth.layout')
-@section('content')
+@extends('components.layouts.app')
+@section('auth')
 
 <div class="w-1/2">
     <form action="{{ route('auth') }}" method="POST" class="bg-white p-2 rounded-lg justify-center dark:bg-gray-800">

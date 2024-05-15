@@ -612,6 +612,29 @@ class Form extends Component
         });
 
         $scenario->delete();
+
+        return redirect()->back()->with('success', 'Success Delete Case and child');
+    }
+
+    public function destroy_case($id)
+    {
+        $case = TestCase::find($id);
+        dd($case);
+        $case->each(function ($c) {
+            $c->step()->delete();
+        });
+
+        $case->delete();
+
+        return redirect()->back()->with('success', 'Success Delete Case and child');
+    }
+
+    public function destroy_step($id)
+    {
+        $step = TestStep::find($id);
+        $step->delete();
+
+        return redirect()->back()->with('success', 'Success Delete Step');
     }
 
     public function generate()

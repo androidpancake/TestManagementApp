@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Management</title>
-    @vite(['resources/js/darkmode.js'])
     <link rel="stylesheet" type="text/css" href="{{ asset('css/phosporIcons/style.css') }}" />
     <script src="{{ asset('js/apexCharts/apexcharts.js') }}"></script>
     <script src="{{ asset('js/quill/quill.js') }}"></script>
@@ -16,12 +15,17 @@
 
 <body>
     @include('layouts.header')
+    @auth
     <livewire:sidebar.sidebar />
     <div class="p-4 pt-16 sm:ml-64 min-h-screen bg-gray-200 dark:bg-gray-900">
         {{ $slot }}
     </div>
-    @livewireScripts
+    @endauth
+    <div class="flex justify-center items-center h-screen bg-gray-200 dark:bg-gray-900">
+        @yield('auth')
+    </div>
     @stack('wysiwyg')
+    @stack('darkmode')
 </body>
 
 </html>

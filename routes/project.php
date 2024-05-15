@@ -9,8 +9,7 @@ use App\Livewire\DetailDraft;
 use App\Livewire\DetailProject;
 use App\Livewire\Project\Draft;
 use App\Livewire\DraftProject;
-use App\Livewire\Form;
-use App\Livewire\Form\Form as FormForm;
+use App\Livewire\Form\Form;
 use App\Livewire\Project\PIT;
 use App\Livewire\Project\Project;
 use App\Livewire\Project\ScenarioComponent;
@@ -34,12 +33,17 @@ Route::middleware(['auth', 'role:user'])->group(
 
         Route::get('export/{id}', [ExportController::class, 'export'])->name('generate');
 
-        Route::get('form/{id}', FormForm::class)->name('form');
-        Route::resource('scenario', ScenarioController::class);
-        Route::get('test-search/{id}', [ScenarioController::class, 'getSearch']);
+        Route::get('form/{id}', Form::class)->name('form');
+        Route::resource('form/scenario', ScenarioController::class);
+        Route::post('attach_case', [ScenarioController::class, 'attach_case'])->name('scenario.attach_case');
+        Route::post('attach_step', [ScenarioController::class, 'attach_step'])->name('scenario.attach_step');
+        Route::delete('delete_case/{id}', [ScenarioController::class, 'destroy_case'])->name('case.delete');
+        Route::delete('delete_step/{id}', [ScenarioController::class, 'destroy_step'])->name('step.delete');
+
         Route::get('form/test/{id}', TestComponent::class)->name('test');
 
         // test
+        Route::get('test-search/{id}', [ScenarioController::class, 'getSearch']);
         Route::get('scenario-list', function () {
             return ModelsProject::with('scenarios.case.step')->get();
         });

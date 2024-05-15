@@ -80,6 +80,8 @@ class ExportController extends Controller
 
         // Font style
         $fontStyle = ['size' => 10, 'bold' => true];
+        $finalStyle = ['size' => 26, 'bold' => true];
+        $resultStyle = ['size' => 28, 'bold' => true];
         $tableHeadFont = ['size' => 9, 'bold' => true];
         $titleFont = ['size' => 14];
         $caseFont = ['bold' => true];
@@ -87,6 +89,9 @@ class ExportController extends Controller
 
         //style title
         $phpWord->addTitleStyle(1, $fontStyle);
+
+        //final and result title style
+
 
         // Membuat header
         $header = $section->addHeader();
@@ -291,7 +296,7 @@ class ExportController extends Controller
         if ($project->test_level->type == 'UAT' || $project->test_level->type == 'SIT') {
             $table5->addRow();
             $table5->addCell(null, ['vMerge' => 'continue']);
-            $table5->addCell(1750)->addText($project->test_level->type . "Result");
+            $table5->addCell(1750)->addText($project->test_level->type . " Result");
             $table5->addCell(1750)->addText($project->tmp);
             $table5->addCell(1750)->addText($project->uat_remark);
 
@@ -319,7 +324,7 @@ class ExportController extends Controller
         Made
         ");
         $tableDesc = $table6->addCell(1000);
-        $tableDesc->addText('Introduction');
+        $tableDesc->addText("Introduction");
         $formattedDesc = explode("\n", $project->desc);
         foreach ($formattedDesc as $line) {
             $tableDesc->addText($line);
@@ -329,8 +334,8 @@ class ExportController extends Controller
         $table6->addCell(1000, ['bgColor' => 'dedede'])->addText("Scope of Testing");
         $tableScope = $table6->addCell(1000);
         $formattedScope = explode("\n", $project->scope);
-        foreach ($formattedScope as $line) {
-            $tableScope->addText($line);
+        foreach ($formattedScope as $scopeLine) {
+            $tableScope->addText($scopeLine);
         }
 
         $table6->addRow();
@@ -713,10 +718,12 @@ class ExportController extends Controller
             $section->addTextBreak(2);
         } elseif ($project->test_level->type == 'SIT') {
             $section->addPageBreak();
+            $phpWord->getSettings()->setUpdateFields(true);
 
             // Add TOC #1
             $section->addText('Daftar Isi', $titleFont, ['align' => 'center']);
             $section->addTextBreak(2);
+            $section->addTOC($fontStyle, 1, 1);
 
 
             $section->addPageBreak();
@@ -753,7 +760,7 @@ class ExportController extends Controller
 
             $firstCase = true;
             foreach ($scenario->cases as $case) {
-                $rowCount = count($case->step); // Langkah dalam kasus ini
+                $rowCount = count($case->step); // Langkah case
 
                 foreach ($case->step as $stepIndex => $step) {
                     $table8->addRow();
@@ -841,6 +848,16 @@ class ExportController extends Controller
             $cellAccScript2->addTextBreak(4);
             $cellAccScript2->addText("Name:", $fontStyle, ['align' => 'center']);
             $cellAccScript2->addText("User", $fontStyle, ['align' => 'center']);
+        }
+
+        // final result
+        $section->addTextBreak(25);
+        $section->addTitle("Final Result", 1);
+
+        if ($failed > 0) {
+            $section->addTitle("[FAIL]", 1);
+        } else {
+            $section->addTitle("[PASS]", 1);
         }
 
         $section->addPageBreak();

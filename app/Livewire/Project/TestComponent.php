@@ -83,6 +83,6 @@ class TestComponent extends Component
 
     public function render()
     {
-        return view('livewire.project.test-component');
+        return view('livewire.scenario.test-component');
     }
 }
