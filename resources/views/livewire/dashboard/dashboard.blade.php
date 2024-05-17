@@ -1,6 +1,6 @@
 <div class="pt-4 h-screen space-y-2">
     <!-- title -->
-    <livewire:head title="Dashboard" description="Selamat Datang" user_name="{{ auth()->user()->name }}" />
+    <livewire:head.head title="Dashboard" description="Selamat Datang" user_name="{{ auth()->user()->name }}" />
     <!-- section1 -->
     <div class="flex flex-col gap-2 lg:flex-row">
         <!-- Chart section -->

@@ -9,7 +9,7 @@
         Swal.fire("Sukses Menyimpan Data");
     </script>
     @endif
-    <livewire:head />
+    <livewire:head.head />
     <div class="w-full flex items-center justify-between">
         <div>
             <div id="title" class="font-semibold text-lg text-gray-900 uppercase dark:text-gray-100">{{ $title }}</div>

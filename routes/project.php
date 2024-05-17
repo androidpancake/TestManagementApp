@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'role:user'])->group(
     function () {
         Route::get('project', Project::class)->name('project');
-        // Route::get('project/detail/{id}', DetailProject::class)->name('project.detail');
 
         Route::get('sit', SIT::class)->name('sit.index');
         Route::get('uat', UAT::class)->name('uat.index');
@@ -33,8 +32,8 @@ Route::middleware(['auth', 'role:user'])->group(
 
         Route::get('export/{id}', [ExportController::class, 'export'])->name('generate');
 
-        Route::get('form/{id}', Form::class)->name('form');
-        Route::resource('form/scenario', ScenarioController::class);
+        Route::get('project/form/{project}', Form::class)->name('form');
+        Route::resource('project/form/scenario', ScenarioController::class);
         Route::post('attach_case', [ScenarioController::class, 'attach_case'])->name('scenario.attach_case');
         Route::post('attach_step', [ScenarioController::class, 'attach_step'])->name('scenario.attach_step');
         Route::delete('delete_case/{id}', [ScenarioController::class, 'destroy_case'])->name('case.delete');

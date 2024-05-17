@@ -56,11 +56,11 @@ class AuthUserController extends Controller
         User::where('username', $username)->exists();
     }
 
-    public function ldap($username, $password)
+    public function ldap(Request $request)
     {
-        // $credentials = $request->only('username', 'password');
+        $credentials = $request->only('username', 'password');
 
-        // $remember_me = $request->has('remember') ? true : false;
+        $remember_me = $request->has('remember') ? true : false;
 
         $domain = 'bankbsi.co.id';
 
@@ -77,7 +77,7 @@ class AuthUserController extends Controller
         $dn = $ldapconfig['usersdn'] . "," . $ldapconfig['basedn'];
 
         try {
-            $bind = ldap_bind($connection, $username . '@bankbsi.co.id', $password);
+            $bind = ldap_bind($connection, $credentials['username'] . '@bankbsi.co.id', $credentials['password']);
             if ($bind) {
                 // if (Auth::attempt($credentials['username'], $remember_me)) {
                 //     // dd(User::with('roles')->first());

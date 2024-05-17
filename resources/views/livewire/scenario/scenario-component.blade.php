@@ -1,7 +1,4 @@
 <form>
-    <div class="py-2">
-        <button wire:click="$refresh" class="text-white bg-gray-900 hover:bg-black focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800">Refresh</button>
-    </div>
     @if($editMode)
     @include('livewire.scenario.edit-scenario')
     @endif

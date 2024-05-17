@@ -55,18 +55,17 @@ class ScenarioController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, Project $scenario)
     {
-        $project = Project::with('scenarios.cases.step')->findOrFail($id);
-
+        $projectData = Project::with('scenarios.cases.step')->findOrFail($scenario->id);
         $scenarios = Scenario::whereHas('cases.step', function ($q) use ($request) {
             $q->where('scenario_name', 'like', '%' . $request->q . '%')
                 ->orWhere('case', 'like', '%' . $request->q . '%')
                 ->orWhere('test_step_id', 'like', '%' . $request->q . '%')
                 ->orWhere('test_step', 'like', '%' . $request->q . '%');
-        })->where('project_id', $project->id)->get();
+        })->where('project_id', $projectData->id)->get();
 
-        return view('project.scenario', compact('project', 'scenarios'));
+        return view('project.scenario', compact('projectData', 'scenarios'));
     }
 
     /**
@@ -124,7 +123,7 @@ class ScenarioController extends Controller
 
         $case = TestCase::create([
             'test_id' => $data['scenario_id'],
-        'case' => $data['case']
+            'case' => $data['case']
         ]);
 
         return redirect()->back()->with('success', 'Success attach case ' . $case->case);

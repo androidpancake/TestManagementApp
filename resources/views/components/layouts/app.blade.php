@@ -11,21 +11,25 @@
     <script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('js/sweetalert2/sweetalert2.js') }}"></script>
     @vite(['resources/css/app.css','resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body>
     @include('layouts.header')
     @auth
     <livewire:sidebar.sidebar />
-    <div class="p-4 pt-16 sm:ml-64 min-h-screen bg-gray-200 dark:bg-gray-900">
+    <div class="p-4 pt-16 sm:ml-64 h-screen overflow-auto bg-gray-200 dark:bg-gray-900">
         {{ $slot }}
     </div>
-    @endauth
+    @else
     <div class="flex justify-center items-center h-screen bg-gray-200 dark:bg-gray-900">
         @yield('auth')
     </div>
+    @endauth
+
     @stack('wysiwyg')
     @stack('darkmode')
+    @livewireScriptConfig
 </body>
 
 </html>

@@ -10,7 +10,6 @@ use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Locked;
 
-#[Lazy(isolate: false)]
 class UserList extends Component
 {
     use WithPagination;
@@ -24,22 +23,22 @@ class UserList extends Component
     public $editMode = false;
     public $user;
 
-    public function placeholder()
-    {
-        return <<<'HTML'
-        <div>
-            <div role="status" class="max-w-sm animate-pulse">
-                <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
-                <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
-                <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-                <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
-                <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
-                <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        HTML;
-    }
+    // public function placeholder()
+    // {
+    //     return <<<'HTML'
+    //     <div>
+    //         <div role="status" class="max-w-sm animate-pulse">
+    //             <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+    //             <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
+    //             <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+    //             <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
+    //             <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
+    //             <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
+    //             <span class="sr-only">Loading...</span>
+    //         </div>
+    //     </div>
+    //     HTML;
+    // }
 
     public function edit($id)
     {

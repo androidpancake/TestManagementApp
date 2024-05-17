@@ -1,9 +1,9 @@
-<form action="{{ route('scenario.show', $project->id) }}" method="get">
+<form action="{{ route('scenario.show', $projectData->id) }}" method="get">
     <div class="my-2">
         <input type="text" name="q" id="search" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search scenario name..">
     </div>
 </form>
-<form action="{{ route('scenario.update', $project->id ) }}" method="POST" class="w-full mx-auto my-5 items-center" enctype="multipart/form-data">
+<form action="{{ route('scenario.update', $projectData->id ) }}" method="POST" class="w-full mx-auto my-5 items-center" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="flex flex-col gap-2">
@@ -121,7 +121,7 @@
         </div>
         <!-- footer -->
         <div class="flex items-center border-t border-gray-300 rounded-b dark:border-gray-800 gap-2 py-4">
-            <a href="{{ route('form', $project->id) }}">
+            <a href="{{ route('form', $projectData->id) }}">
                 <button type="button" class="text-white bg-gray-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Close</button>
             </a>
             <button type="submit" class="text-white bg-bsi-primary hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-bsi-primary dark:hover:bg-teal-700 dark:focus:ring-teal-800">Update</button>

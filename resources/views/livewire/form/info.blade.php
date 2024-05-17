@@ -16,7 +16,7 @@
     <label for="test_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Test Level</label>
 
     <select wire:model="test_level_id" id="test_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-bsi-primary focus:border-bsi-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-bsi-primary dark:focus:border-bsi-primary">
-        <option value="{{ $test_level_id }}" selected>{{ $project->test_level->type }}</option>
+        <option value="{{ $test_level_id }}" selected>{{ $this->project->test_level->type }}</option>
     </select>
     @error('test_level_id')
     <span class="text-red-800">{{$message}}</span>

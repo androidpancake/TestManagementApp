@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\user\UserController;
-use App\Livewire\User;
 use App\Livewire\Users\CreateUser;
+use App\Livewire\Users\User;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'role:admin'])->group(

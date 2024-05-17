@@ -4,6 +4,8 @@ namespace App\Livewire\Project;
 
 use App\Models\Project as ModelsProject;
 use App\Models\TestLevel;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Locked;
@@ -87,7 +89,7 @@ class Project extends Component
         return redirect()->route('project');
     }
 
-    public function render()
+    public function render(Request $request)
     {
         $projects = ModelsProject::with(['test_level'])->where('user_id', auth()->id());
         $test_level = TestLevel::all();
@@ -113,14 +115,14 @@ class Project extends Component
         }
 
         // final
-        if (route('dashboard')) {
+        if ($request->route()->getName() == 'dashboard') {
             $projects = $projects->latest()->paginate(5);
         } else {
             $projects = $projects->latest()->paginate(10);
         }
 
 
-        return view('livewire.project.project', [
+        return view('livewire.project.index', [
             'projects' => $projects,
             'test_level' => $test_level
         ])->with([

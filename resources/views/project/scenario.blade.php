@@ -1,7 +1,7 @@
 @extends('base.app')
 @section('content')
-@if($project)
-<div>
+@if($projectData)
+<div class="h-screen overflow-auto">
     @if(session('success'))
     <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
         <span class="font-medium">Success!</span> {{ session('success') }}.
@@ -15,7 +15,7 @@
     @endif
 
     <div class="py-2">
-        <livewire:head title="CRUD" description="Scenario-Case-Step" />
+        <livewire:head.head title="CRUD" description="Scenario-Case-Step" />
     </div>
     <!-- test table -->
     <div id="table-collapse" data-accordion="collapse">
@@ -65,7 +65,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <livewire:Project.ScenarioComponent :id="$project->id" />
+                        <livewire:Project.ScenarioComponent :id="$projectData->id" />
                     </tbody>
                 </table>
             </div>

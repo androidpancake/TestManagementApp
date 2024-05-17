@@ -100,20 +100,24 @@ class Form extends Component
     public $existingScenario;
 
     public $editIssue = false;
+
     #[Locked]
     public $issue_id;
     public $existingIssue;
     public $existingClosedDate;
     public $existingIssueStatus;
 
-    public function mount($id)
+    public function mount(Project $project)
     {
+        // dd($project);
         // data
-        $this->project = Project::with(['test_level', 'members', 'issue', 'scenarios.cases.step'])->findOrFail($id);
-        $this->members = Members::where('project_id', $this->project->id)->get();
-        $this->issues = $this->project->issue;
+        $this->project = $project->with(['test_level', 'members', 'issue', 'scenarios.cases.step'])->find($project->id);
+        $this->members = Members::where('project_id', $project->id)->get();
+        $this->issues = $project->issue;
 
-        foreach ($this->project->scenarios as $scenario) {
+        // dd($this->project);
+
+        foreach ($project->scenarios as $scenario) {
             $totalStep = 0;
             foreach ($scenario->cases as $testcase) {
                 $totalStep += $testcase->step->count();
@@ -122,32 +126,32 @@ class Form extends Component
         }
 
         // view
-        $this->title = $this->project->test_level->type . ' Report';
-        $this->description = 'Please complete to generate ' . $this->project->test_level->description . ' Report';
+        $this->title = $project->test_level->type . ' Report';
+        $this->description = 'Please complete to generate ' . $project->test_level->description . ' Report';
 
         // field input
-        $this->name = $this->project->name;
-        $this->jira_code = $this->project->jira_code;
-        $this->test_level_id = $this->project->test_level_id;
+        $this->name = $project->name;
+        $this->jira_code = $project->jira_code;
+        $this->test_level_id = $project->test_level_id;
         $this->test_type = 'Business Functionality';
-        $this->start_date = $this->project->start_date;
-        $this->end_date = $this->project->end_date;
-        $this->desc = str_replace('<br />', ' ', $this->project->desc);
-        $this->scope = str_replace('<br />', ' ', $this->project->scope);
-        $this->env = $this->project->env;
-        $this->sat_process = $this->project->sat_process;
-        $this->credentials = $this->project->credentials;
-        $this->retesting = $this->project->retesting;
-        $this->tmp = $this->project->tmp;
-        $this->updated_uat = $this->project->updated_uat;
-        $this->uat_result = $this->project->uat_result;
-        $this->uat_attendance = $this->project->uat_attendance;
-        $this->tmp_remark = $this->project->tmp_remark;
-        $this->updated_remark = $this->project->updated_remark;
-        $this->uat_remark = $this->project->uat_remark;
-        $this->uat_attendance_remark = $this->project->uat_attendance_remark;
-        $this->other = $this->project->other;
-        $this->other_remark = $this->project->other_remark;
+        $this->start_date = $project->start_date;
+        $this->end_date = $project->end_date;
+        $this->desc = str_replace('<br />', ' ', $project->desc);
+        $this->scope = str_replace('<br />', ' ', $project->scope);
+        $this->env = $project->env;
+        $this->sat_process = $project->sat_process;
+        $this->credentials = $project->credentials;
+        $this->retesting = $project->retesting;
+        $this->tmp = $project->tmp;
+        $this->updated_uat = $project->updated_uat;
+        $this->uat_result = $project->uat_result;
+        $this->uat_attendance = $project->uat_attendance;
+        $this->tmp_remark = $project->tmp_remark;
+        $this->updated_remark = $project->updated_remark;
+        $this->uat_remark = $project->uat_remark;
+        $this->uat_attendance_remark = $project->uat_attendance_remark;
+        $this->other = $project->other;
+        $this->other_remark = $project->other_remark;
 
         $this->issue = [];
 
@@ -178,7 +182,7 @@ class Form extends Component
     public function render()
     {
         return view('livewire.form.form')->with([
-            'issues' => $this->project->issue,
+            'issues' => $this->issue,
             'project' => $this->project,
             'members' => $this->members,
             'description' => $this->description

@@ -5,6 +5,7 @@ use App\Http\Controllers\DraftController;
 use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\DraftProject;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,9 @@ Route::get('/users', function () {
 
 // Route::get('draft', [DraftController::class,'index'])->name('draft');
 
+Livewire::setScriptRoute(function ($handle) {
+    return Route::get('/testManagementApp/livewire/livewire.js', $handle);
+});
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/project.php';

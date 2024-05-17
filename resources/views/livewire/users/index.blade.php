@@ -36,7 +36,7 @@
                         {{ $user->username }}
                     </td>
                     <td class="px-6 py-4">
-                        @forelse($user->project as $data)
+                        @forelse($user->project()->latest()->take(5)->get() as $data)
                         <ul>
                             <li>{{ $data->name }}</li>
                         </ul>
