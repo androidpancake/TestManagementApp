@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Shared\ZipArchive;
 use PhpOffice\PhpWord\Shared\Html;
 use PhpOffice\PhpWord\PhpWord\Table;
 use PhpOffice\PhpWord\SimpleType\Jc;

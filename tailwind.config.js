@@ -18,10 +18,5 @@ export default {
             "bsi-secondary": "#F6AD3C",
         },
     },
-    plugins: [
-        require('flowbite/plugin')({
-            charts: true,
-        }),
-    ],
     darkMode: "class",
 };

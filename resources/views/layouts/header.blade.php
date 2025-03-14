@@ -11,7 +11,8 @@
         </button>
         @endauth
         <a href="{{ route('dashboard') }}" class="flex ms-2 md:me-24">
-          <img src="{{ asset('storage/image/logo/bsi.png') }}" class="h-8 me-3" alt="Bank Syariah Indonesia" />
+          <img src="{{ asset('storage/image/logo/bsi.png') }}" class="h-8 me-3 sm:hidden" alt="Bank Syariah Indonesia" />
+          <div class="font-bold text-lg text-gray-200 hidden sm:flex dark:text-white">Test Management</div>
         </a>
       </div>
       <div class="flex items-center lg:space-x-3">
